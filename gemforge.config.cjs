@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const SALT = "0xf8aac9c60a8577e3e439a5639f65f9eca367e2c6de7086f4b4076c0a895d1902"
+const SALT = "0xc1b2d3e4f5a6b7c8d9e0f1d2c3b4a5e6f7d8c9b0e1f2d3a4b5c6e7f8d9c0b1a1"
 
 module.exports = {
   version: 2,
@@ -13,7 +13,7 @@ module.exports = {
   // commands to execute
   commands: {
     // the build command
-    build: "forge build --names --sizes",
+    build: "forge build --names --sizes"
   },
   paths: {
     // contract built artifacts folder
