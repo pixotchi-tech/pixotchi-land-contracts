@@ -105,48 +105,71 @@ $ pnpm build -v
 $ pnpm dep -v
 ```
 
-## LAND Specific Features
+## Features, Roadmap, and TODOs
 
-- **Coordinate System**: Each LAND token is assigned unique X and Y coordinates.
-- **Quadrant-based Minting**: Tokens are minted in a spiral pattern across four quadrants.
-- **Supply Limit**: A maximum of 10,000 LAND tokens can be minted.
-- **Coordinate Bounds**: X and Y coordinates are limited to the range of -50 to 50.
+### Core Functionality
+- [X] Implement ERC721A for gas-efficient NFT minting
+- [X] Utilize diamond pattern for upgradeable smart contracts
+- [X] Assign unique coordinates to each LAND token
+- [X] Implement quadrant-based minting in a spiral pattern
+- [X] Enforce maximum supply of 10,000 LAND tokens
+- [X] Set coordinate bounds from -50 to 50 on both X and Y axes
+- [X] Develop efficient storage management using LibNFTStorage
+- [X] Create version-based initialization system
+- [X] Implement coordinate occupation tracking
+- [X] Develop clamp function for coordinate boundaries
+- [X] Enable batch minting of multiple LAND tokens
+- [X] Integrate with existing Pixotchi v2 game ecosystem
 
-## Integration with Pixotchi v2
+### Short-term Goals
 
-LAND extends the existing Pixotchi v2 game, adding a new dimension of gameplay and asset ownership. While SEED remains the primary token, LAND introduces new possibilities for territorial gameplay and asset management within the Pixotchi ecosystem.
-
-## Roadmap and TODOs
-
-### Migration from ERC-7504 Draft Implementation
+#### Migration from ERC-7504 Draft Implementation
 - [ ] Migrate upgradable building functionality
-- [ ] Implement airdrop logic
+- [ ] Implement airdrop logic for early adopters and community rewards
 
-### New Features
-- [ ] Develop marketplace functionality
+#### New Features
+- [ ] Develop marketplace functionality for LAND token trading
 - [ ] Implement naming logic for LAND tokens
 - [ ] Create pricing logic with currency-based pricing via oracle
 - [ ] Design and implement quest logic
   - [ ] Incorporate on-chain random value reading without external oracle
+- [ ] Integrate non-tradable LEAF token into LAND ecosystem
+
+### Medium-term Goals
+
+- [ ] Implement LAND staking mechanism for passive rewards
+- [ ] Develop inter-LAND interactions and shared boundaries logic
+- [ ] Create governance system for LAND owners
+- [ ] Design and implement resource generation on LAND parcels
+- [ ] Develop crafting system utilizing LAND resources and LEAF tokens
+
+### Long-term Vision
+
+- [ ] Create fully decentralized virtual world built on LAND tokens
+- [ ] Establish partnerships for third-party development on LAND platform
 
 ### Ongoing Development
 - [ ] Continuous refinement of smart contract architecture
 - [ ] Regular security audits and optimizations
-- [ ] Community feedback integration
+- [ ] Community feedback integration and feature prioritization
+- [ ] Performance optimization for gas-efficient operations
+- [ ] Documentation expansion and developer resources creation
 
 ## Current Project Status
 
-The LAND project is actively under development, with core NFT functionality implemented. We are now focusing on migrating additional features from the ERC-7504 draft and developing new functionalities to enhance the Pixotchi ecosystem.
+The LAND project has made significant progress, with core NFT functionality and unique coordinate-based features already implemented. We are now focusing on migrating additional features from the ERC-7504 draft and developing new functionalities to enhance the Pixotchi ecosystem.
 
 Key areas of ongoing work include:
-1. Finalizing the upgradable building system
-2. Implementing a fair and efficient airdrop mechanism
-3. Designing a robust marketplace for LAND tokens
+1. Finalizing the upgradable building system for dynamic LAND development
+2. Implementing a fair and efficient airdrop mechanism to reward early adopters
+3. Designing a robust marketplace for seamless LAND token trading
 4. Developing an intuitive naming system for LAND parcels
 5. Creating a dynamic pricing system that reflects real-world currency values
 6. Implementing an engaging quest system with on-chain randomness
+7. Expanding the ecosystem with staking, resource generation, and crafting mechanics
+8. Integrating the non-tradable LEAF token into the LAND ecosystem
 
-We welcome community contributions and feedback as we continue to expand and improve the LAND project within the Pixotchi universe.
+We welcome community contributions and feedback as we continue to expand and improve the LAND project within the Pixotchi universe. Our goal is to create a rich, interactive, and decentralized virtual world that offers unique opportunities for creativity, ownership, and economic activity.
 
 ## License
 
