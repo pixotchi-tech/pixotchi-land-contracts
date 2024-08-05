@@ -48,40 +48,35 @@ contract NFTFacet is ERC721AUpgradeable {
     uint256 step = (tokenId - 1) / 4 + 1;
 
     if (quadrant == 0) { // Right top
-      x = int256(step);
-      y = int256(step);
+        x = int256(step);
+        y = int256(step);
     } else if (quadrant == 1) { // Right bottom
-      x = int256(step);
-      y = -int256(step);
+        x = int256(step);
+        y = -int256(step);
     } else if (quadrant == 2) { // Left bottom
-      x = -int256(step);
-      y = -int256(step);
+        x = -int256(step);
+        y = -int256(step);
     } else { // Left top
-      x = -int256(step);
-      y = int256(step);
+        x = -int256(step);
+        y = int256(step);
     }
 
-    // Ensure coordinates are within bounds
-    x = _clamp(x, _sN().minX, _sN().maxX);
-    y = _clamp(y, _sN().minY, _sN().maxY);
+    // Ensure coordinates are within bounds using custom errors
+    if (x < _sN().minX || x > _sN().maxX) {
+        revert NFTCoordinateOutOfBounds(x, "X");
+    }
+    if (y < _sN().minY || y > _sN().maxY) {
+        revert NFTCoordinateOutOfBounds(y, "Y");
+    }
 
     // Check if the coordinate is already occupied
-    require(_sN().coordinateToTokenId[x][y] == 0, "Coordinate already occupied");
+    if (_sN().coordinateToTokenId[x][y] != 0) {
+        revert NFTCoordinateOccupied(x, y);
+    }
 
     // Assign coordinates
     _sN().tokenCoordinates[tokenId] = LibNFTStorage.Coordinates(x, y, true);
     _sN().coordinateToTokenId[x][y] = tokenId;
-  }
-
-  /// @notice Clamps a value between a minimum and maximum
-  /// @param value The value to clamp
-  /// @param min The minimum allowed value
-  /// @param max The maximum allowed value
-  /// @return The clamped value
-  function _clamp(int256 value, int256 min, int256 max) internal pure returns (int256) {
-    if (value < min) return min;
-    if (value > max) return max;
-    return value;
   }
 
   /// @notice Public function to mint NFTs
@@ -106,3 +101,6 @@ contract NFTFacet is ERC721AUpgradeable {
     data = LibNFTStorage.data();
   }
 }
+
+error NFTCoordinateOutOfBounds(int256 coordinate, string axis);
+error NFTCoordinateOccupied(int256 x, int256 y);
