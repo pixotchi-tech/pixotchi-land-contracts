@@ -116,6 +116,38 @@ $ pnpm dep -v
 
 LAND extends the existing Pixotchi v2 game, adding a new dimension of gameplay and asset ownership. While SEED remains the primary token, LAND introduces new possibilities for territorial gameplay and asset management within the Pixotchi ecosystem.
 
+## Roadmap and TODOs
+
+### Migration from ERC-7504 Draft Implementation
+- [ ] Migrate upgradable building functionality
+- [ ] Implement airdrop logic
+
+### New Features
+- [ ] Develop marketplace functionality
+- [ ] Implement naming logic for LAND tokens
+- [ ] Create pricing logic with currency-based pricing via oracle
+- [ ] Design and implement quest logic
+  - [ ] Incorporate on-chain random value reading without external oracle
+
+### Ongoing Development
+- [ ] Continuous refinement of smart contract architecture
+- [ ] Regular security audits and optimizations
+- [ ] Community feedback integration
+
+## Current Project Status
+
+The LAND project is actively under development, with core NFT functionality implemented. We are now focusing on migrating additional features from the ERC-7504 draft and developing new functionalities to enhance the Pixotchi ecosystem.
+
+Key areas of ongoing work include:
+1. Finalizing the upgradable building system
+2. Implementing a fair and efficient airdrop mechanism
+3. Designing a robust marketplace for LAND tokens
+4. Developing an intuitive naming system for LAND parcels
+5. Creating a dynamic pricing system that reflects real-world currency values
+6. Implementing an engaging quest system with on-chain randomness
+
+We welcome community contributions and feedback as we continue to expand and improve the LAND project within the Pixotchi universe.
+
 ## License
 
 MIT - see [LICSENSE.md](LICENSE.md)
