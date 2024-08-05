@@ -39,24 +39,20 @@ library LibNFTStorage {
         s.initializationNumber = version;
     }
 
+    struct Coordinates {
+        int256 x;
+        int256 y;
+        bool occupied;
+    }
+
     struct Data {
         uint256 initializationNumber;
-        //bool diamondInitialized;
         uint256 reentrancyStatus;
         MetaTxContextStorage metaTxContext;
 
-        /*
-        TODO: Customize storage variables here
-
-        NOTE: Once contracts have been deployed you cannot modify the existing entries here. You can only append
-        new entries. Otherwise, any subsequent upgrades you perform will break the memory structure of your
-        deployed contracts.
-        */
-        //mapping(address => ERC20Token) erc20s;
         uint256 maxSupply;
-        // Mappings to store coordinates for each token ID
-        mapping(uint256 => int256) tokenIdToX;
-        mapping(uint256 => int256) tokenIdToY;
+        // Mapping to store coordinates for each token ID
+        mapping(uint256 => Coordinates) tokenCoordinates;
 
         // Boundaries for x and y coordinates
         int256 minX;
@@ -64,33 +60,7 @@ library LibNFTStorage {
         int256 minY;
         int256 maxY;
 
-        // Add these new fields
-        mapping(int256 => mapping(int256 => bool)) coordinateOccupied;
-    }
-
-    /// @notice Get the X coordinate for a given token ID
-    /// @param tokenId The token ID to get the X coordinate for
-    /// @return x The X coordinate
-    function nftGetX(uint256 tokenId) internal view returns (int256 x) {
-        return data().tokenIdToX[tokenId];
-    }
-
-    /// @notice Get the Y coordinate for a given token ID
-    /// @param tokenId The token ID to get the Y coordinate for
-    /// @return y The Y coordinate
-    function nftGetY(uint256 tokenId) internal view returns (int256 y) {
-        return data().tokenIdToY[tokenId];
-    }
-
-    /// @notice Set the coordinates for a given token ID
-    /// @param tokenId The token ID to set the coordinates for
-    /// @param x The X coordinate
-    /// @param y The Y coordinate
-    function nftSetCoordinates(uint256 tokenId, int256 x, int256 y) internal {
-        Data storage s = data();
-        require(!s.coordinateOccupied[x][y], "Coordinate already occupied");
-        s.tokenIdToX[tokenId] = x;
-        s.tokenIdToY[tokenId] = y;
-        s.coordinateOccupied[x][y] = true;
+        // Mapping to access coordinates directly
+        mapping(int256 => mapping(int256 => uint256)) coordinateToTokenId;
     }
 }
