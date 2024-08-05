@@ -1,19 +1,39 @@
-# @gemstation/contracts-foundry
+# LAND - Pixotchi v3
 
-Example smart contracts repo for [Gemforge](https://gemforge.xyz) using [Foundry](https://github.com/foundry-rs/foundry).
+This project is an extension of the Pixotchi v2 game, introducing a new NFT (ERC721A) component called LAND. It leverages the diamond pattern for upgradeable smart contracts and uses [Gemforge](https://gemforge.xyz) with [Foundry](https://github.com/foundry-rs/foundry) for development and deployment.
 
-This contains the optimal folder structure for use with Gemforge:
+## Project Overview
 
-* Build and deploy commands already setup
-* Pre-configured config file
-* Post-deploy hook for Etherscan verification
+LAND is an NFT project built on the ERC721A standard, which allows for gas-efficient minting of multiple NFTs in a single transaction. The main token of the Pixotchi ecosystem remains SEED, while LAND introduces a new dimension to the game.
 
-There are two facets provided:
+Key features of the LAND contract:
 
-* `ExampleFacet` - a simple example of a facet with a single function. Try adding and removing functions to/from this facet to see how the Gemforge deployment changes.
-* `ERC20Facet` - a complex example demonstrating how to deploy multiple separate ERC20s token contracts all internally backed by the same upgradeable diamond proxy ([read more](https://hiddentao.com/archives/2023/08/08/building-multiple-nft-and-erc-20-tokens-backed-by-a-single-upgradeable-smart-contract)).
+- Utilizes the diamond pattern for upgradeability
+- Implements ERC721A for efficient minting
+- Assigns unique coordinates to each minted NFT
+- Manages a maximum supply of 10,000 LANDs
+- Coordinates range from -50 to 50 on both X and Y axes
 
-_Note: A Hardhat equivalent of this repo is available at https://github.com/gemstation/contracts-hardhat_
+## Smart Contract Structure
+
+The project consists of two main components:
+
+1. `NFTFacet.sol`: Implements the core NFT functionality
+   - Minting of LAND tokens
+   - Coordinate assignment for each token
+   - Utilizes ERC721AUpgradeable for gas-efficient operations
+
+2. `LibNFTStorage.sol`: Manages the storage for the NFT contract
+   - Defines the structure for storing token data and coordinates
+   - Implements initialization and storage access functions
+
+## Development and Deployment
+
+This project uses Gemforge for streamlined development and deployment:
+
+- Build and deploy commands are pre-configured
+- Includes a pre-configured config file
+- Features a post-deploy hook for Etherscan verification
 
 ## Requirements
 
@@ -84,6 +104,17 @@ For verbose output simply add `-v`:
 $ pnpm build -v
 $ pnpm dep -v
 ```
+
+## LAND Specific Features
+
+- **Coordinate System**: Each LAND token is assigned unique X and Y coordinates.
+- **Quadrant-based Minting**: Tokens are minted in a spiral pattern across four quadrants.
+- **Supply Limit**: A maximum of 10,000 LAND tokens can be minted.
+- **Coordinate Bounds**: X and Y coordinates are limited to the range of -50 to 50.
+
+## Integration with Pixotchi v2
+
+LAND extends the existing Pixotchi v2 game, adding a new dimension of gameplay and asset ownership. While SEED remains the primary token, LAND introduces new possibilities for territorial gameplay and asset management within the Pixotchi ecosystem.
 
 ## License
 
