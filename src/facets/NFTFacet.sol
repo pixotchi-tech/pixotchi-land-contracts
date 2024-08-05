@@ -9,7 +9,7 @@ import {ERC721AUpgradeable} from "lib_fork/ERC721A-Upgradeable/contracts/ERC721A
 //import "lib/ERC721A-Upgradeable/contracts/ERC721AUpgradeable.sol";
 
 contract NFTFacet is ERC721AUpgradeable {
-  // Take note of the initializer modifiers.
+  // Take note of the initializer modifier_sN().
   // - `initializerERC721A` for `ERC721AUpgradeable`.
   // - `initializer` for OpenZeppelin's `OwnableUpgradeable`.
   function initialize() initializerERC721A  public {
@@ -26,9 +26,9 @@ contract NFTFacet is ERC721AUpgradeable {
   /// @param to The address to mint the NFT to
   /// @param quantity The number of NFTs to mint
   function _nftMint(address to, uint256 quantity) internal {
-    LibNFTStorage.Data storage s = _sN();
+    //LibNFTStorage.Data storage s = _sN();
     uint256 supply = totalSupply();
-    require(supply + quantity <= s.maxSupply, "Exceeds max supply");
+    require(supply + quantity <= _sN().maxSupply, "Exceeds max supply");
 
     _mint(to, quantity);
 
@@ -41,7 +41,7 @@ contract NFTFacet is ERC721AUpgradeable {
   /// @notice Assigns coordinates to a newly minted token
   /// @param tokenId The ID of the token to assign coordinates to
   function _assignCoordinates(uint256 tokenId) internal {
-    LibNFTStorage.Data storage s = _sN();
+    //LibNFTStorage.Data storage s = _sN();
     int256 x = 0;
     int256 y = 0;
     uint256 quadrant = (tokenId - 1) % 4;
@@ -62,15 +62,15 @@ contract NFTFacet is ERC721AUpgradeable {
     }
 
     // Ensure coordinates are within bounds
-    x = _clamp(x, s.minX, s.maxX);
-    y = _clamp(y, s.minY, s.maxY);
+    x = _clamp(x, _sN().minX, _sN().maxX);
+    y = _clamp(y, _sN().minY, _sN().maxY);
 
     // Check if the coordinate is already occupied
-    require(s.coordinateToTokenId[x][y] == 0, "Coordinate already occupied");
+    require(_sN().coordinateToTokenId[x][y] == 0, "Coordinate already occupied");
 
     // Assign coordinates
-    s.tokenCoordinates[tokenId] = LibNFTStorage.Coordinates(x, y, true);
-    s.coordinateToTokenId[x][y] = tokenId;
+    _sN().tokenCoordinates[tokenId] = LibNFTStorage.Coordinates(x, y, true);
+    _sN().coordinateToTokenId[x][y] = tokenId;
   }
 
   /// @notice Clamps a value between a minimum and maximum
@@ -88,6 +88,18 @@ contract NFTFacet is ERC721AUpgradeable {
   /// @param quantity The number of NFTs to mint
   function nftMint(uint256 quantity) external payable {
     _nftMint(msg.sender, quantity);
+  }
+
+  /// @notice Get the coordinates of a specific land token
+  /// @param tokenId The ID of the token to get coordinates for
+  /// @return x The x-coordinate of the land
+  /// @return y The y-coordinate of the land
+  function nftGetLandCoordinates(uint256 tokenId) external view returns (int256 x, int256 y) {
+    //LibNFTStorage.Data storage s = _sN();
+    require(_exists(tokenId), "Token does not exist");
+    LibNFTStorage.Coordinates memory coords = _sN().tokenCoordinates[tokenId];
+    require(coords.occupied, "Coordinates not assigned");
+    return (coords.x, coords.y);
   }
 
   function _sN() internal pure returns (LibNFTStorage.Data storage data) {
