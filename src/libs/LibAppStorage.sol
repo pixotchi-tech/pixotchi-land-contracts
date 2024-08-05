@@ -11,8 +11,8 @@ struct AppStorage {
     /*
     TODO: Customize storage variables here
 
-    NOTE: Once contracts have been deployed you cannot modify the existing entries here. You can only append 
-    new entries. Otherwise, any subsequent upgrades you perform will break the memory structure of your 
+    NOTE: Once contracts have been deployed you cannot modify the existing entries here. You can only append
+    new entries. Otherwise, any subsequent upgrades you perform will break the memory structure of your
     deployed contracts.
     */
     //mapping(address => ERC20Token) erc20s;
