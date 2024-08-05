@@ -3,8 +3,6 @@ pragma solidity >=0.8.21;
 
 import { MetaTxContextStorage } from "../shared/Structs.sol";
 
-
-
 library LibNFTStorage {
     bytes32 internal constant DIAMOND_STORAGE_POSITION = keccak256("eth.pixotchi.land.nft.storage");
 
@@ -66,5 +64,33 @@ library LibNFTStorage {
         int256 minY;
         int256 maxY;
 
+        // Add these new fields
+        mapping(int256 => mapping(int256 => bool)) coordinateOccupied;
+    }
+
+    /// @notice Get the X coordinate for a given token ID
+    /// @param tokenId The token ID to get the X coordinate for
+    /// @return x The X coordinate
+    function nftGetX(uint256 tokenId) internal view returns (int256 x) {
+        return data().tokenIdToX[tokenId];
+    }
+
+    /// @notice Get the Y coordinate for a given token ID
+    /// @param tokenId The token ID to get the Y coordinate for
+    /// @return y The Y coordinate
+    function nftGetY(uint256 tokenId) internal view returns (int256 y) {
+        return data().tokenIdToY[tokenId];
+    }
+
+    /// @notice Set the coordinates for a given token ID
+    /// @param tokenId The token ID to set the coordinates for
+    /// @param x The X coordinate
+    /// @param y The Y coordinate
+    function nftSetCoordinates(uint256 tokenId, int256 x, int256 y) internal {
+        Data storage s = data();
+        require(!s.coordinateOccupied[x][y], "Coordinate already occupied");
+        s.tokenIdToX[tokenId] = x;
+        s.tokenIdToY[tokenId] = y;
+        s.coordinateOccupied[x][y] = true;
     }
 }
