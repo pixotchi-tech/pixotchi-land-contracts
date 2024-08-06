@@ -1,20 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 
-import { AppStorage, LibAppStorage } from "../libs/LibAppStorage.sol";
+//import { AppStorage, LibAppStorage } from "../libs/LibAppStorage.sol";
 import { LibNFTStorage } from "../libs/LibNFTStorage.sol";
 
-error DiamondAlreadyInitialized();
+//error DiamondAlreadyInitialized();
 
 contract InitDiamond {
   event InitializeDiamond(address sender);
 
   function init() external {
-    AppStorage storage s = LibAppStorage.diamondStorage();
-    if (s.diamondInitialized) {
-      revert DiamondAlreadyInitialized();
-    }
-    s.diamondInitialized = true;
+    // AppStorage storage s = LibAppStorage.diamondStorage();
+    // if (s.diamondInitialized) {
+    //   revert DiamondAlreadyInitialized();
+    // }
+    // s.diamondInitialized = true;
 
     // Initialize LibNFTStorage
     LibNFTStorage.initializeNFTStorage();
