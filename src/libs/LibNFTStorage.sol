@@ -20,10 +20,10 @@ library LibNFTStorage {
     function initializeNFTStorage() internal initializer(1) {
         Data storage s = data();
         s.maxSupply = 10000;
-        s.minX = -50;
-        s.maxX = 50;
-        s.minY = -50;
-        s.maxY = 50;
+        s.minX = -56;
+        s.maxX = 56;
+        s.minY = -56;
+        s.maxY = 56;
     }
 
     error AlreadyInitialized(uint256 currentVersion, uint256 newVersion);
