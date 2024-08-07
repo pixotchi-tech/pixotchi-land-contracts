@@ -1,0 +1,13 @@
+{
+  "cuts": [
+    {
+      "facetAddress": "0x0000000000000000000000000000000000000000",
+      "action": 2,
+      "functionSelectors": [
+        "0x9e74e975"
+      ]
+    }
+  ],
+  "initContractAddress": "0xA4aE50aD843fd864CBDDc92af5936C8a1C6aAe3A",
+  "initData": "0x"
+}
