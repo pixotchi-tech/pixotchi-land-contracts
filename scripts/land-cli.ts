@@ -1,6 +1,7 @@
 import { createInterface } from 'readline/promises';
 import { landContract } from './contracts';
 import { client } from './client';
+import { parseEventLogs } from 'viem';
 
 async function mint(quantity: bigint): Promise<void> {
     const { request } = await landContract.simulate.mint([quantity]);
@@ -15,6 +16,18 @@ async function mint(quantity: bigint): Promise<void> {
         hash
     });
     console.log('Transaction receipt status:', receipt.status);
+
+    // Parse and log all events
+    const logs = parseEventLogs({
+        abi: landContract.abi,
+        logs: receipt.logs
+    });
+
+    console.log('Event logs:');
+    logs.forEach(log => {
+        console.log(`- Event: ${log.eventName}`);
+        console.log(`  Arguments:`, log.args);
+    });
 }
 
 function helloWorld(): void {
