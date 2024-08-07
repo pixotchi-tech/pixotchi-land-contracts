@@ -28,5 +28,9 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "engineStrict": true
+  "engineStrict": true,
+  "dependencies": {
+    "@wagmi/core": "^2.13.3",
+    "viem": "^2.19.1"
+  }
 }
