@@ -1,5 +1,5 @@
 import { parseEventLogs, ContractFunctionExecutionError } from 'viem';
-import { client } from './client';
+import { publicClient } from './client';
 
 // Generic function to execute a contract write and log results
 export async function executeContractWrite<
@@ -19,7 +19,7 @@ export async function executeContractWrite<
         console.log('Transaction hash:', hash);
 
         console.log('Waiting for transaction to be mined...');
-        const receipt = await client.waitForTransactionReceipt({ hash });
+        const receipt = await publicClient.waitForTransactionReceipt({ hash });
         console.log('Transaction receipt status:', receipt.status);
 
         // Parse and log all events
