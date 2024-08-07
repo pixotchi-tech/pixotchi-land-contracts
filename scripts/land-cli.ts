@@ -1,7 +1,8 @@
 import { createInterface } from 'readline/promises';
 import { landContract } from './contracts';
-import {executeContractWrite} from "./viem-generics";
-
+import { executeContractWrite } from "./viem-generics";
+import { getContract } from 'viem';
+import { publicClient } from './client';
 
 // Specific function for minting land
 async function mint(quantity: bigint): Promise<void> {
@@ -10,6 +11,23 @@ async function mint(quantity: bigint): Promise<void> {
 
 function helloWorld(): void {
     console.log('Hello, World!');
+}
+
+async function getLandCoordinates(tokenIds: bigint[]): Promise<void> {
+    const contract = getContract({
+        address: landContract.address,
+        abi: landContract.abi,
+        client: publicClient
+    });
+
+    for (const tokenId of tokenIds) {
+        try {
+            const [x, y] = await contract.read.nftGetLandCoordinates([tokenId]);
+            console.log(`Token ID ${tokenId}: (x: ${x}, y: ${y})`);
+        } catch (error) {
+            console.error(`Error getting coordinates for Token ID ${tokenId}:`, error);
+        }
+    }
 }
 
 async function main(): Promise<void> {
@@ -22,9 +40,10 @@ async function main(): Promise<void> {
         console.log("\nWhat would you like to do?");
         console.log("1. Mint land");
         console.log("2. Say Hello World");
-        console.log("3. Exit");
+        console.log("3. Get Land Coordinates");
+        console.log("4. Exit");
 
-        const action = await rl.question("Enter your choice (1-3): ");
+        const action = await rl.question("Enter your choice (1-4): ");
 
         switch (action) {
             case '1':
@@ -36,6 +55,11 @@ async function main(): Promise<void> {
                 helloWorld();
                 break;
             case '3':
+                const tokenIdsInput = await rl.question("Enter token IDs (comma-separated): ");
+                const tokenIds = tokenIdsInput.split(',').map(id => BigInt(id.trim()));
+                await getLandCoordinates(tokenIds);
+                break;
+            case '4':
                 console.log("Exiting CLI...");
                 rl.close();
                 return;
