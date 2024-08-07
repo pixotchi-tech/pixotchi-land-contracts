@@ -75,7 +75,7 @@ module.exports = {
     // shell command to execute before build
     preBuild: "",
     // shell command to execute after build
-    postBuild: "",
+    postBuild: "npx hrabi parse src/generated/abi.json src/generated/abi-human.js",
     // shell command to execute before deploy
     preDeploy: "",
     // shell command to execute after deploy
