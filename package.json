@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.16.16",
+    "@wagmi/cli": "^2.1.15",
     "dotenv": "^16.3.1",
     "execa": "^8.0.1",
     "gemforge": "^2.7.0",
