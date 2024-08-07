@@ -14,7 +14,7 @@
     "deploy:testnet": "gemforge build && gemforge deploy testnet"
   },
   "devDependencies": {
-    "@types/node": "^18.16.16",
+    "@types/node": "^18.19.43",
     "@wagmi/cli": "^2.1.15",
     "dotenv": "^16.3.1",
     "execa": "^8.0.1",
@@ -23,7 +23,8 @@
     "solc": "^0.8.21",
     "solhint": "^3.3.7",
     "solidity-coverage": "^0.7.21",
-    "solidity-docgen": "^0.5.17"
+    "solidity-docgen": "^0.5.17",
+    "typescript": "^5.5.4"
   },
   "engines": {
     "node": ">=20.0.0"
