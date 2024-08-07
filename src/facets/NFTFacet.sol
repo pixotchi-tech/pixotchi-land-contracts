@@ -19,7 +19,7 @@ contract NFTFacet is ERC721AUpgradeable {
 
   function mint(uint256 quantity) external payable {
     // `_mint`'s second argument now takes in a `quantity`, not a `tokenId`.
-    _mint(msg.sender, quantity);
+    _nftMint(msg.sender, quantity);
   }
 
   /// @notice Internal function to mint NFTs with specific coordinate assignment
