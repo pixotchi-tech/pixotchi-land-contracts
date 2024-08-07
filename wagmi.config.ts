@@ -1,6 +1,8 @@
 // @ts-check
 
-import abi from './src/generated/abi.json' assert { type: 'json' };
+import abi from './src/generated/abi.json';
+//import abi from './src/generated/abi.json' assert { type: 'json' };
+//const abi = require('./src/generated/abi.json');
 import {actions} from "@wagmi/cli/plugins";
 
 /** @type {import('@wagmi/cli').Config} */
