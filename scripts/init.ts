@@ -2,7 +2,8 @@ import dotenv from 'dotenv';
 import { createWalletClient, getAddress, http, parseEther, publicActions } from 'viem';
 import { baseSepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
-import {landAbi} from "./landabi";
+import { landAbi } from "./landabi";
+import { getContract } from 'viem';
 
 dotenv.config();
 
@@ -23,18 +24,21 @@ const client = createWalletClient({
     transport: http(SEPOLIA_RPC_URL),
 }).extend(publicActions);
 
+// Create land contract instance
+const landContract = getContract({
+    address: getAddress(SEPOLIA_LAND_CONTRACT_ADDRESS!),
+    abi: landAbi,
+    client: client,
+});
+
 async function main(): Promise<void> {
     try {
-        // Simulate the contract call
-        const { request } = await client.simulateContract({
-            address: getAddress(SEPOLIA_LAND_CONTRACT_ADDRESS!), // Replace with your contract address
-            abi: landAbi,
-            functionName: 'initFacet'
-        });
+        // Use the contract instance to simulate the call
+        const { request } = await landContract.simulate.initFacet();
 
         // If simulation is successful, proceed with the actual transaction
         if (request) {
-            const hash = await client.writeContract(request);
+            const hash = await landContract.write.initFacet(request);
             console.log('Transaction hash:', hash);
 
             // Wait for the transaction receipt
