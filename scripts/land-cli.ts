@@ -9,18 +9,14 @@ async function mint(quantity: bigint): Promise<void> {
     await executeContractWrite(landContract, 'mint', [quantity]);
 }
 
-function helloWorld(): void {
-    console.log('Hello, World!');
-}
-
-async function getLandCoordinates(tokenIds: bigint[]): Promise<void> {
+async function getLandCoordinates(fromTokenId: bigint, toTokenId: bigint): Promise<void> {
     const contract = getContract({
         address: landContract.address,
         abi: landContract.abi,
         client: publicClient
     });
 
-    for (const tokenId of tokenIds) {
+    for (let tokenId = fromTokenId; tokenId <= toTokenId; tokenId++) {
         try {
             const [x, y] = await contract.read.nftGetLandCoordinates([tokenId]);
             console.log(`Token ID ${tokenId}: (x: ${x}, y: ${y})`);
@@ -39,11 +35,10 @@ async function main(): Promise<void> {
     while (true) {
         console.log("\nWhat would you like to do?");
         console.log("1. Mint land");
-        console.log("2. Say Hello World");
-        console.log("3. Get Land Coordinates");
-        console.log("4. Exit");
+        console.log("2. Get Land Coordinates");
+        console.log("3. Exit");
 
-        const action = await rl.question("Enter your choice (1-4): ");
+        const action = await rl.question("Enter your choice (1-3): ");
 
         switch (action) {
             case '1':
@@ -52,14 +47,13 @@ async function main(): Promise<void> {
                 await mint(quantity);
                 break;
             case '2':
-                helloWorld();
+                const rangeInput = await rl.question("Enter token ID range (e.g., 9-22): ");
+                const [fromStr, toStr] = rangeInput.split('-').map(s => s.trim());
+                const fromTokenId = BigInt(fromStr);
+                const toTokenId = BigInt(toStr);
+                await getLandCoordinates(fromTokenId, toTokenId);
                 break;
             case '3':
-                const tokenIdsInput = await rl.question("Enter token IDs (comma-separated): ");
-                const tokenIds = tokenIdsInput.split(',').map(id => BigInt(id.trim()));
-                await getLandCoordinates(tokenIds);
-                break;
-            case '4':
                 console.log("Exiting CLI...");
                 rl.close();
                 return;
