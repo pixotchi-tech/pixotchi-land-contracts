@@ -7,7 +7,7 @@ import { LibNFTStorage } from "../libs/LibNFTStorage.sol";
 contract InitFacet {
   event InitializeDiamond(address sender);
 
-  function init() external {
+  function initFacet() external {
     LibNFTStorage.initializeNFTStorage();
 
     emit InitializeDiamond(msg.sender);
