@@ -29,14 +29,21 @@ async function main(): Promise<void> {
         const { request } = await client.simulateContract({
             address: getAddress(SEPOLIA_LAND_CONTRACT_ADDRESS!), // Replace with your contract address
             abi: landAbi,
-            functionName: 'init',
-            account: account.address
+            functionName: 'initFacet'
         });
 
         // If simulation is successful, proceed with the actual transaction
         if (request) {
             const hash = await client.writeContract(request);
             console.log('Transaction hash:', hash);
+
+            // Wait for the transaction receipt
+            const receipt = await client.waitForTransactionReceipt({
+                hash
+            });
+
+            console.log('Transaction receipt:', receipt.status);
+            console.log('Transaction status:', receipt.status === 'success' ? 'Success' : 'Failed');
         } else {
             console.error('Simulation failed');
         }
