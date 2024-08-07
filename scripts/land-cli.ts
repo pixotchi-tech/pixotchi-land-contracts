@@ -1,33 +1,11 @@
 import { createInterface } from 'readline/promises';
 import { landContract } from './contracts';
-import { client } from './client';
-import { parseEventLogs } from 'viem';
+import {executeContractWrite} from "./viem-generics";
 
+
+// Specific function for minting land
 async function mint(quantity: bigint): Promise<void> {
-    const { request } = await landContract.simulate.mint([quantity]);
-
-    if (!request) throw new Error('Simulation failed');
-
-    const hash = await landContract.write.mint([quantity], request);
-    console.log('Transaction hash:', hash);
-
-    console.log('waiting for transaction to be mined...');
-    const receipt = await client.waitForTransactionReceipt({
-        hash
-    });
-    console.log('Transaction receipt status:', receipt.status);
-
-    // Parse and log all events
-    const logs = parseEventLogs({
-        abi: landContract.abi,
-        logs: receipt.logs
-    });
-
-    console.log('Event logs:');
-    logs.forEach(log => {
-        console.log(`- Event: ${log.eventName}`);
-        console.log(`  Arguments:`, log.args);
-    });
+    await executeContractWrite(landContract, 'mint', [quantity]);
 }
 
 function helloWorld(): void {
