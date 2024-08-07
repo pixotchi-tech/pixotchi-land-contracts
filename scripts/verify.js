@@ -22,7 +22,7 @@
 
   // Toggles for Etherscan and Blockscout verification
   const useEtherscan = true
-  const useBlockscout = true
+  const useBlockscout = false
 
   // skip localhost
   if (target === 'local') {
