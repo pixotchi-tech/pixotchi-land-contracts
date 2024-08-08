@@ -4,8 +4,6 @@
   "function facetAddresses() view returns (address[] facetAddresses_)",
   "function facetFunctionSelectors(address _facet) view returns (bytes4[] facetFunctionSelectors_)",
   "function facets() view returns (tuple(address facetAddress, bytes4[] functionSelectors)[] facets_)",
-  "function initFacet()",
-  "function initNFTFacet()",
   "function mint(uint256 quantity) payable",
   "function nftGetLandCoordinates(uint256 tokenId) view returns (int256 x, int256 y)",
   "function nftMint(uint256 quantity) payable",
