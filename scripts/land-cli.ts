@@ -26,6 +26,11 @@ async function getLandCoordinates(fromTokenId: bigint, toTokenId: bigint): Promi
     }
 }
 
+// Add this new function for initializing
+async function initialize(): Promise<void> {
+    await executeContractWrite(landContract, 'initNFTFacet', []);
+}
+
 async function main(): Promise<void> {
     const rl = createInterface({
         input: process.stdin,
@@ -36,9 +41,10 @@ async function main(): Promise<void> {
         console.log("\nWhat would you like to do?");
         console.log("1. Mint land");
         console.log("2. Get Land Coordinates");
-        console.log("3. Exit");
+        console.log("3. Initialize (ERC721A)");
+        console.log("4. Exit");
 
-        const action = await rl.question("Enter your choice (1-3): ");
+        const action = await rl.question("Enter your choice (1-4): ");
 
         switch (action) {
             case '1':
@@ -54,6 +60,10 @@ async function main(): Promise<void> {
                 await getLandCoordinates(fromTokenId, toTokenId);
                 break;
             case '3':
+                await initialize();
+                console.log("Initialization completed.");
+                break;
+            case '4':
                 console.log("Exiting CLI...");
                 rl.close();
                 return;
