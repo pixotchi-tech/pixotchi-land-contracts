@@ -1,8 +1,9 @@
 import { createInterface } from 'readline/promises';
 import { executeContractWrite } from "./viem-generics";
 import { getContract } from 'viem';
-import {landAbi, landContract, publicClient} from './viemUtils';
-import {landAbiHuman} from "./landabi-human";
+import {landContract, publicClient} from './viemUtils';
+import {landAbi} from "./landabi";
+
 
 // Specific function for minting land
 async function mint(quantity: bigint): Promise<void> {
@@ -10,15 +11,16 @@ async function mint(quantity: bigint): Promise<void> {
 }
 
 async function getLandCoordinates(fromTokenId: bigint, toTokenId: bigint): Promise<void> {
-    const contract = getContract({
-        address: landContract.address,
-        abi: landAbi,
-        client: publicClient
-    });
+    // const contract = getContract({
+    //     address: landContract.address,
+    //     abi: landAbi,
+    //     client: publicClient
+    // });
 
     for (let tokenId = fromTokenId; tokenId <= toTokenId; tokenId++) {
         try {
-            const [x, y] = await contract.read.nftGetLandCoordinates([tokenId]);
+            const [x, y] = await landContract.read.nftGetLandCoordinates([tokenId]);
+            //const [x, y] = await contract.read.nftGetLandCoordinates([tokenId]);
             console.log(`Token ID ${tokenId}: (x: ${x}, y: ${y})`);
         } catch (error) {
             console.error(`Error getting coordinates for Token ID ${tokenId}:`, error);
@@ -28,7 +30,7 @@ async function getLandCoordinates(fromTokenId: bigint, toTokenId: bigint): Promi
 
 // Add this new function for initializing
 async function initialize(): Promise<void> {
-    await executeContractWrite(landContract, 'initNFTFacet', []);
+    await executeContractWrite(landContract, 'initNFTFacet', {} as const);
 }
 
 async function main(): Promise<void> {
