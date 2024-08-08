@@ -1,16 +1,29 @@
-import { createWalletClient, createPublicClient, http, publicActions, Chain, getContract, getAddress } from 'viem';
+import {
+    createWalletClient,
+    createPublicClient,
+    http,
+    publicActions,
+    Chain,
+    getContract,
+    getAddress, parseAbi,
+    // parseAbiParameters
+} from 'viem';
 import { base, baseSepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 import dotenv from 'dotenv';
 import { getProxyAddressByChainId } from './getProxyAddress';
-import { landAbi } from "./landabi";
+import {landAbiHuman} from "./landabi-human";
+//import landAbiHumanReadable from '../src/generated/abi-human';
 
 dotenv.config();
 
 // Environment variables
-const RPC_URL = process.env.RPC_URL;
+const RPC_URL = process.env.SEPOLIA_RPC_URL; //process.env.RPC_URL
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const CHAIN_ID = process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : undefined;
+
+//const landAbi = parseAbiParameters(landAbiHumanReadable);
+export const landAbi = parseAbi(landAbiHuman);
 
 // Validate environment variables
 if (!RPC_URL || !PRIVATE_KEY || !CHAIN_ID) {
