@@ -124,6 +124,13 @@ export const landAbi = [
   },
   {
     "type": "function",
+    "name": "initNFTFacet",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "mint",
     "inputs": [
       {
@@ -216,19 +223,6 @@ export const landAbi = [
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
-  },
-  {
-    "type": "event",
-    "name": "InitializeDiamond",
-    "inputs": [
-      {
-        "name": "sender",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
   },
   {
     "type": "event",
@@ -398,20 +392,17 @@ export const landAbi = [
     "anonymous": false
   },
   {
-    "type": "error",
-    "name": "AlreadyInitialized",
+    "type": "event",
+    "name": "InitializeDiamond",
     "inputs": [
       {
-        "name": "currentVersion",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "newVersion",
-        "type": "uint256",
-        "internalType": "uint256"
+        "name": "sender",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
       }
-    ]
+    ],
+    "anonymous": false
   },
   {
     "type": "error",
@@ -537,6 +528,22 @@ export const landAbi = [
   },
   {
     "type": "error",
+    "name": "AlreadyInitialized",
+    "inputs": [
+      {
+        "name": "currentVersion",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "newVersion",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ]
+  },
+  {
+    "type": "error",
     "name": "InitializationFunctionReverted",
     "inputs": [
       {
@@ -552,11 +559,10 @@ export const landAbi = [
     ]
   }
 ] as const
-  
+
   /**
    * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xc7EdFFa05A3D65F340048E28d5DA06CFf1EB2Eba)
    */
   export const landAddress = {
     84532: '0xc7EdFFa05A3D65F340048E28d5DA06CFf1EB2Eba',
   } as const
-  
