@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const SALT = "0xc1b2d3e4f5a6b7c8d9e0f1d2c3b4a5e6f7d8c9b0e1f2d3a4b5c6e7f8d9c0b1a1"
+const SALT = process.env.SALT;
 
 module.exports = {
   version: 2,
