@@ -12,10 +12,10 @@ contract NFTFacet is ERC721AUpgradeable {
   // Take note of the initializer modifier_sN().
   // - `initializerERC721A` for `ERC721AUpgradeable`.
   // - `initializer` for OpenZeppelin's `OwnableUpgradeable`.
-  function initNFTFacet() initializerERC721A external {
-    __ERC721A_init("Land01", "LAND01");
-    //__Ownable_init();
-  }
+//  function initNFTFacet() initializerERC721A public {
+//    __ERC721A_init("Land01", "LAND01");
+//    //__Ownable_init();
+//  }
 
   function mint(uint256 quantity) external payable {
     // `_mint`'s second argument now takes in a `quantity`, not a `tokenId`.
