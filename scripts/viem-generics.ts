@@ -1,5 +1,5 @@
 import { parseEventLogs, ContractFunctionExecutionError } from 'viem';
-import { publicClient } from './client';
+import { publicClient } from './viemUtils';
 
 // Generic function to execute a contract write and log results
 export async function executeContractWrite<
