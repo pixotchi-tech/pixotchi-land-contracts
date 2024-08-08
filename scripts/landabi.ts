@@ -560,9 +560,3 @@ export const landAbi = [
   }
 ] as const
 
-  /**
-   * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xc7EdFFa05A3D65F340048E28d5DA06CFf1EB2Eba)
-   */
-  export const landAddress = {
-    84532: '0xc7EdFFa05A3D65F340048E28d5DA06CFf1EB2Eba',
-  } as const
