@@ -1,5 +1,6 @@
-import { landContract } from './contracts';
-import { client } from './client';
+import {landContract} from "./viemUtils";
+import {client} from "../.history/scripts/client_20240807224430";
+
 
 async function main(): Promise<void> {
     try {
