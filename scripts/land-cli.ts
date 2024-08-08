@@ -1,8 +1,6 @@
 import { createInterface } from 'readline/promises';
 import { executeContractWrite } from "./viem-generics";
-import { getContract } from 'viem';
-import {landContract, publicClient} from './viemUtils';
-import {landAbi} from "./landabi";
+import {landContract} from './viemUtils';
 
 
 // Specific function for minting land
