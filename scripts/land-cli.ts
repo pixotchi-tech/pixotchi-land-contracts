@@ -1,7 +1,8 @@
 import { createInterface } from 'readline/promises';
 import { executeContractWrite } from "./viem-generics";
 import { getContract } from 'viem';
-import {landContract, publicClient} from './viemUtils';
+import {landAbi, landContract, publicClient} from './viemUtils';
+import {landAbiHuman} from "./landabi-human";
 
 // Specific function for minting land
 async function mint(quantity: bigint): Promise<void> {
@@ -11,7 +12,7 @@ async function mint(quantity: bigint): Promise<void> {
 async function getLandCoordinates(fromTokenId: bigint, toTokenId: bigint): Promise<void> {
     const contract = getContract({
         address: landContract.address,
-        abi: landContract.abi,
+        abi: landAbi,
         client: publicClient
     });
 
