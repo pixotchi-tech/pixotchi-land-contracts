@@ -26,9 +26,14 @@ async function getLandCoordinates(fromTokenId: bigint, toTokenId: bigint): Promi
     }
 }
 
-// Add this new function for initializing
-async function initialize(): Promise<void> {
+// Renamed function
+async function initNFTFacet(): Promise<void> {
     await executeContractWrite(landContract, 'initNFTFacet', {} as const);
+}
+
+// New function for initFacet
+async function initFacet(): Promise<void> {
+    await executeContractWrite(landContract, 'initFacet', {} as const);
 }
 
 async function main(): Promise<void> {
@@ -41,10 +46,11 @@ async function main(): Promise<void> {
         console.log("\nWhat would you like to do?");
         console.log("1. Mint land");
         console.log("2. Get Land Coordinates");
-        console.log("3. Initialize (ERC721A)");
-        console.log("4. Exit");
+        console.log("3. Initialize NFT Facet (ERC721A)");
+        console.log("4. Initialize Facet");
+        console.log("5. Exit");
 
-        const action = await rl.question("Enter your choice (1-4): ");
+        const action = await rl.question("Enter your choice (1-5): ");
 
         switch (action) {
             case '1':
@@ -53,17 +59,21 @@ async function main(): Promise<void> {
                 await mint(quantity);
                 break;
             case '2':
-                const rangeInput = await rl.question("Enter token ID range (e.g., 9-22): ");
+                const rangeInput = await rl.question("Enter token ID range (e.g., 0-999): ");
                 const [fromStr, toStr] = rangeInput.split('-').map(s => s.trim());
                 const fromTokenId = BigInt(fromStr);
                 const toTokenId = BigInt(toStr);
                 await getLandCoordinates(fromTokenId, toTokenId);
                 break;
             case '3':
-                await initialize();
-                console.log("Initialization completed.");
+                await initNFTFacet();
+                //console.log("NFT Facet initialization completed.");
                 break;
             case '4':
+                await initFacet();
+                //console.log("Facet initialization completed.");
+                break;
+            case '5':
                 console.log("Exiting CLI...");
                 rl.close();
                 return;
