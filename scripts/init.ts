@@ -1,5 +1,5 @@
-import {landContract} from "./viemUtils";
-import {client} from "../.history/scripts/client_20240807224430";
+import {landContract, publicClient} from "./viemUtils";
+
 
 
 async function main(): Promise<void> {
@@ -13,7 +13,7 @@ async function main(): Promise<void> {
             console.log('Transaction hash:', hash);
 
             // Wait for the transaction receipt
-            const receipt = await client.waitForTransactionReceipt({
+            const receipt = await publicClient.waitForTransactionReceipt({
                 hash
             });
 
