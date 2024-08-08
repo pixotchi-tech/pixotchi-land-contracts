@@ -1,8 +1,7 @@
 import { createInterface } from 'readline/promises';
-import { landContract } from './contracts';
 import { executeContractWrite } from "./viem-generics";
 import { getContract } from 'viem';
-import { publicClient } from './client';
+import {landContract, publicClient} from './viemUtils';
 
 // Specific function for minting land
 async function mint(quantity: bigint): Promise<void> {
