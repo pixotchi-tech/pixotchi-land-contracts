@@ -37,6 +37,41 @@ async function initFacet(): Promise<void> {
     throw new Error("Not implemented");
 }
 
+async function landGetBoundaries(): Promise<void> {
+    const [minX, maxX, minY, maxY] = await landContract.read.landGetBoundaries();
+    console.log(`Boundaries: minX: ${minX}, maxX: ${maxX}, minY: ${minY}, maxY: ${maxY}`);
+}
+
+async function landGetCoordinates(tokenId: bigint): Promise<void> {
+    const [x, y, occupied] = await landContract.read.landGetCoordinates([tokenId]);
+    console.log(`Token ID ${tokenId}: x: ${x}, y: ${y}, occupied: ${occupied}`);
+}
+
+async function landGetDiamondInitialized(): Promise<void> {
+    const initialized = await landContract.read.landGetDiamondInitialized();
+    console.log(`Diamond initialized: ${initialized}`);
+}
+
+async function landGetMaxSupply(): Promise<void> {
+    const maxSupply = await landContract.read.landGetMaxSupply();
+    console.log(`Max supply: ${maxSupply}`);
+}
+
+async function landGetTokenIdByCoordinates(x: bigint, y: bigint): Promise<void> {
+    const tokenId = await landContract.read.landGetTokenIdByCoordinates([x, y]);
+    console.log(`Token ID for coordinates (${x}, ${y}): ${tokenId}`);
+}
+
+async function getOwner(): Promise<void> {
+    const owner = await landContract.read.owner();
+    console.log(`Contract owner: ${owner}`);
+}
+
+async function supportsInterface(interfaceId: `0x${string}`): Promise<void> {
+    const supported = await landContract.read.supportsInterface([interfaceId]);
+    console.log(`Interface ${interfaceId} supported: ${supported}`);
+}
+
 async function main(): Promise<void> {
     const rl = createInterface({
         input: process.stdin,
@@ -49,9 +84,16 @@ async function main(): Promise<void> {
         console.log("2. Get Land Coordinates");
         console.log("3. Initialize NFT Facet (ERC721A)");
         console.log("4. Initialize Facet");
-        console.log("5. Exit");
+        console.log("5. Get Land Boundaries");
+        console.log("6. Get Coordinates for Token ID");
+        console.log("7. Check Diamond Initialization");
+        console.log("8. Get Max Supply");
+        console.log("9. Get Token ID by Coordinates");
+        console.log("10. Get Contract Owner");
+        console.log("11. Check Interface Support");
+        console.log("12. Exit");
 
-        const action = await rl.question("Enter your choice (1-5): ");
+        const action = await rl.question("Enter your choice (1-12): ");
 
         switch (action) {
             case '1':
@@ -75,6 +117,31 @@ async function main(): Promise<void> {
                 //console.log("Facet initialization completed.");
                 break;
             case '5':
+                await landGetBoundaries();
+                break;
+            case '6':
+                const tokenIdInput = await rl.question("Enter token ID: ");
+                await landGetCoordinates(BigInt(tokenIdInput));
+                break;
+            case '7':
+                await landGetDiamondInitialized();
+                break;
+            case '8':
+                await landGetMaxSupply();
+                break;
+            case '9':
+                const xInput = await rl.question("Enter x coordinate: ");
+                const yInput = await rl.question("Enter y coordinate: ");
+                await landGetTokenIdByCoordinates(BigInt(xInput), BigInt(yInput));
+                break;
+            case '10':
+                await getOwner();
+                break;
+            case '11':
+                const interfaceIdInput = await rl.question("Enter interface ID (as hex string): ");
+                await supportsInterface(interfaceIdInput as `0x${string}`);
+                break;
+            case '12':
                 console.log("Exiting CLI...");
                 rl.close();
                 return;

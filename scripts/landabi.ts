@@ -181,6 +181,19 @@ export const landAbi = [
   },
   {
     "type": "function",
+    "name": "landGetDiamondInitialized",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "landGetMaxSupply",
     "inputs": [],
     "outputs": [
