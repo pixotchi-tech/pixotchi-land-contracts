@@ -33,7 +33,8 @@ async function initNFTFacet(): Promise<void> {
 
 // New function for initFacet
 async function initFacet(): Promise<void> {
-    await executeContractWrite(landContract, 'initFacet', {} as const);
+    //await executeContractWrite(landContract, 'initFacet', {} as const);
+    throw new Error("Not implemented");
 }
 
 async function main(): Promise<void> {

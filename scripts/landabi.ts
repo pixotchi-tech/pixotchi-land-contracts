@@ -124,6 +124,100 @@ export const landAbi = [
   },
   {
     "type": "function",
+    "name": "landGetBoundaries",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "minX",
+        "type": "int256",
+        "internalType": "int256"
+      },
+      {
+        "name": "maxX",
+        "type": "int256",
+        "internalType": "int256"
+      },
+      {
+        "name": "minY",
+        "type": "int256",
+        "internalType": "int256"
+      },
+      {
+        "name": "maxY",
+        "type": "int256",
+        "internalType": "int256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "landGetCoordinates",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "x",
+        "type": "int256",
+        "internalType": "int256"
+      },
+      {
+        "name": "y",
+        "type": "int256",
+        "internalType": "int256"
+      },
+      {
+        "name": "occupied",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "landGetMaxSupply",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "landGetTokenIdByCoordinates",
+    "inputs": [
+      {
+        "name": "x",
+        "type": "int256",
+        "internalType": "int256"
+      },
+      {
+        "name": "y",
+        "type": "int256",
+        "internalType": "int256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "mint",
     "inputs": [
       {
@@ -158,19 +252,6 @@ export const landAbi = [
       }
     ],
     "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "nftMint",
-    "inputs": [
-      {
-        "name": "quantity",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "payable"
   },
   {
     "type": "function",
