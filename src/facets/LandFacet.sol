@@ -24,28 +24,14 @@ contract LandFacet {
         return (coords.x, coords.y, coords.occupied);
     }
 
-    /// @notice Get the minimum x-coordinate
-    /// @return The minimum x-coordinate
-    function landGetMinX() external view returns (int256) {
-        return _sN().minX;
-    }
-
-    /// @notice Get the maximum x-coordinate
-    /// @return The maximum x-coordinate
-    function landGetMaxX() external view returns (int256) {
-        return _sN().maxX;
-    }
-
-    /// @notice Get the minimum y-coordinate
-    /// @return The minimum y-coordinate
-    function landGetMinY() external view returns (int256) {
-        return _sN().minY;
-    }
-
-    /// @notice Get the maximum y-coordinate
-    /// @return The maximum y-coordinate
-    function landGetMaxY() external view returns (int256) {
-        return _sN().maxY;
+    /// @notice Get the land boundaries
+    /// @return minX The minimum x-coordinate
+    /// @return maxX The maximum x-coordinate
+    /// @return minY The minimum y-coordinate
+    /// @return maxY The maximum y-coordinate
+    function landGetBoundaries() external view returns (int256 minX, int256 maxX, int256 minY, int256 maxY) {
+        LibNFTStorage.Data storage s = _sN();
+        return (s.minX, s.maxX, s.minY, s.maxY);
     }
 
     /// @notice Get the token ID for specific coordinates
