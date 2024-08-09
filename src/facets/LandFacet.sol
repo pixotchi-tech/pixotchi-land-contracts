@@ -2,7 +2,6 @@
 pragma solidity >=0.8.21;
 
 import { LibNFTStorage } from "../libs/LibNFTStorage.sol";
-
 import { LibAppStorage, AppStorage } from "../libs/LibAppStorage.sol";
 
 contract LandFacet {
@@ -10,7 +9,7 @@ contract LandFacet {
         data = LibNFTStorage.data();
     }
 
-        function _sA() internal pure returns (AppStorage storage data) {
+    function _sA() internal pure returns (AppStorage storage data) {
         data = LibAppStorage.diamondStorage();
     }
 
@@ -46,5 +45,11 @@ contract LandFacet {
     /// @return The token ID at the given coordinates
     function landGetTokenIdByCoordinates(int256 x, int256 y) external view returns (uint256) {
         return _sN().coordinateToTokenId[x][y];
+    }
+
+    /// @notice Get the diamond initialization status
+    /// @return Whether the diamond is initialized
+    function landGetDiamondInitialized() external view returns (bool) {
+        return _sA().diamondInitialized;
     }
 }
