@@ -8,6 +8,7 @@
   "function landGetBoundaries() view returns (int256 minX, int256 maxX, int256 minY, int256 maxY)",
   "function landGetCoordinates(uint256 tokenId) view returns (int256 x, int256 y, bool occupied)",
   "function landGetDiamondInitialized() view returns (bool)",
+  "function landGetInitializationNumber() view returns (uint256)",
   "function landGetMaxSupply() view returns (uint256)",
   "function landGetTokenIdByCoordinates(int256 x, int256 y) view returns (uint256)",
   "function mint(uint256 quantity) payable",

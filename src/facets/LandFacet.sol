@@ -56,4 +56,10 @@ contract LandFacet {
     function landGetDiamondInitialized() external view returns (bool) {
         return _sA().diamondInitialized;
     }
+
+    /// @notice Get the initialization number of the NFT storage
+    /// @return The initialization number
+    function landGetInitializationNumber() external view returns (uint256) {
+        return _sN().initializationNumber;
+    }
 }
