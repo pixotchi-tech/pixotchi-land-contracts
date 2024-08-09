@@ -11,11 +11,16 @@ export async function executeContractWrite<
     args: Parameters<TContract['write'][TFunctionName]>[0]
 ): Promise<void> {
     try {
-        const { request } = await contract.simulate[functionName](args);
+        const simulate = true;
+        let hash;
+        if (simulate) {
+            const { request } = await contract.simulate[functionName](args);
+            if (!request) throw new Error('Simulation failed');
+            hash = await contract.write[functionName](args, request);
+        } else {
+            hash = await contract.write[functionName](args);
+        }
 
-        if (!request) throw new Error('Simulation failed');
-
-        const hash = await contract.write[functionName](args, request);
         console.log('Transaction hash:', hash);
 
         console.log('Waiting for transaction to be mined...');
