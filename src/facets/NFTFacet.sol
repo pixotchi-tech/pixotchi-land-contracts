@@ -12,7 +12,7 @@ contract NFTFacet is ERC721AUpgradeable {
   // Take note of the initializer modifier_sN().
   // - `initializerERC721A` for `ERC721AUpgradeable`.
   // - `initializer` for OpenZeppelin's `OwnableUpgradeable`.
-  function initNFTFacet() initializerERC721A external {
+  function initNFTFacet() external initializerERC721A {
     __ERC721A_init("Land01", "LAND01");
     //__Ownable_init();
   }
@@ -79,11 +79,7 @@ contract NFTFacet is ERC721AUpgradeable {
     _sN().coordinateToTokenId[x][y] = tokenId;
   }
 
-  /// @notice Public function to mint NFTs
-  /// @param quantity The number of NFTs to mint
-  function nftMint(uint256 quantity) external payable {
-    _nftMint(msg.sender, quantity);
-  }
+
 
   /// @notice Get the coordinates of a specific land token
   /// @param tokenId The ID of the token to get coordinates for
