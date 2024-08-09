@@ -194,6 +194,19 @@ export const landAbi = [
   },
   {
     "type": "function",
+    "name": "landGetInitializationNumber",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "landGetMaxSupply",
     "inputs": [],
     "outputs": [

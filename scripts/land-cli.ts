@@ -72,6 +72,11 @@ async function supportsInterface(interfaceId: `0x${string}`): Promise<void> {
     console.log(`Interface ${interfaceId} supported: ${supported}`);
 }
 
+async function landGetInitializationNumber(): Promise<void> {
+    const initNumber = await landContract.read.landGetInitializationNumber();
+    console.log(`Initialization number: ${initNumber}`);
+}
+
 async function main(): Promise<void> {
     const rl = createInterface({
         input: process.stdin,
@@ -91,9 +96,10 @@ async function main(): Promise<void> {
         console.log("9. Get Token ID by Coordinates");
         console.log("10. Get Contract Owner");
         console.log("11. Check Interface Support");
-        console.log("12. Exit");
+        console.log("12. Get Initialization Number");
+        console.log("13. Exit");
 
-        const action = await rl.question("Enter your choice (1-12): ");
+        const action = await rl.question("Enter your choice (1-13): ");
 
         switch (action) {
             case '1':
@@ -142,6 +148,9 @@ async function main(): Promise<void> {
                 await supportsInterface(interfaceIdInput as `0x${string}`);
                 break;
             case '12':
+                await landGetInitializationNumber();
+                break;
+            case '13':
                 console.log("Exiting CLI...");
                 rl.close();
                 return;
