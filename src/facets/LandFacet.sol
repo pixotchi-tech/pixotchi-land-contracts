@@ -5,10 +5,14 @@ import { LibNFTStorage } from "../libs/LibNFTStorage.sol";
 import { LibAppStorage, AppStorage } from "../libs/LibAppStorage.sol";
 
 contract LandFacet {
+    /// @notice Internal function to access NFT storage
+    /// @return data The LibNFTStorage.Data struct
     function _sN() internal pure returns (LibNFTStorage.Data storage data) {
         data = LibNFTStorage.data();
     }
 
+    /// @notice Internal function to access AppStorage
+    /// @return data The AppStorage struct
     function _sA() internal pure returns (AppStorage storage data) {
         data = LibAppStorage.diamondStorage();
     }
