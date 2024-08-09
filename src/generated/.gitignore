@@ -1,4 +1,4 @@
 *.json
 *.sol
 *.log
-abi-human.js
+/abi-human.js
