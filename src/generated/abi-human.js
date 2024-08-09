@@ -7,7 +7,6 @@
   "function initNFTFacet()",
   "function mint(uint256 quantity) payable",
   "function nftGetLandCoordinates(uint256 tokenId) view returns (int256 x, int256 y)",
-  "function nftMint(uint256 quantity) payable",
   "function owner() view returns (address owner_)",
   "function supportsInterface(bytes4 interfaceId) view returns (bool)",
   "function transferOwnership(address _newOwner)",
