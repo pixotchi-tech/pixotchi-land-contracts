@@ -117,13 +117,6 @@ export const landAbi = [
   },
   {
     "type": "function",
-    "name": "initFacet",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "initNFTFacet",
     "inputs": [],
     "outputs": [],
