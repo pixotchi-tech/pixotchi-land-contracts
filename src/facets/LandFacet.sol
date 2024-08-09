@@ -3,9 +3,15 @@ pragma solidity >=0.8.21;
 
 import { LibNFTStorage } from "../libs/LibNFTStorage.sol";
 
+import { LibAppStorage, AppStorage } from "../libs/LibAppStorage.sol";
+
 contract LandFacet {
     function _sN() internal pure returns (LibNFTStorage.Data storage data) {
         data = LibNFTStorage.data();
+    }
+
+        function _sA() internal pure returns (AppStorage storage data) {
+        data = LibAppStorage.diamondStorage();
     }
 
     /// @notice Get the maximum supply of NFTs
