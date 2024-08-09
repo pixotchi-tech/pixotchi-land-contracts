@@ -4,11 +4,12 @@ pragma solidity >=0.8.21;
 import { LibNFTStorage } from "../libs/LibNFTStorage.sol";
 //import "ERC721A-Upgradeable/ERC721AUpgradeable.sol";
 import {ERC721AUpgradeable} from "lib_fork/ERC721A-Upgradeable/contracts/ERC721AUpgradeable.sol";
+import {ERC721AQueryableUpgradeable} from "lib_fork/ERC721A-Upgradeable/contracts/extensions/ERC721AQueryableUpgradeable.sol";
 //import 'erc721a-upgradeable/contracts/ERC721AUpgradeable.sol';
 //import '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 //import "lib/ERC721A-Upgradeable/contracts/ERC721AUpgradeable.sol";
 
-contract NFTFacet is ERC721AUpgradeable {
+contract NFTFacet is ERC721AUpgradeable, ERC721AQueryableUpgradeable {
   // Take note of the initializer modifier_sN().
   // - `initializerERC721A` for `ERC721AUpgradeable`.
   // - `initializer` for OpenZeppelin's `OwnableUpgradeable`.

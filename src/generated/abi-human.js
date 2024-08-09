@@ -26,6 +26,7 @@
   "error ApprovalCallerNotOwnerNorApproved()",
   "error ApprovalQueryForNonexistentToken()",
   "error BalanceQueryForZeroAddress()",
+  "error InvalidQueryRange()",
   "error MintERC2309QuantityExceedsLimit()",
   "error MintToZeroAddress()",
   "error MintZeroQuantity()",
