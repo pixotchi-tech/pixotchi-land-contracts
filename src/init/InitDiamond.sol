@@ -12,16 +12,16 @@ contract InitDiamond {
     LibNFTStorage.initializeNFTStorage();
     
     // Start initializing ERC721A
-    ERC721A__InitializableStorage.Layout storage initializableLayout = ERC721A__InitializableStorage.layout();
-    require(!initializableLayout._initialized, "ERC721A: already initialized");
-    initializableLayout._initializing = true;
+    //ERC721A__InitializableStorage.Layout storage initializableLayout = ERC721A__InitializableStorage.layout();
+    //require(!initializableLayout._initialized, "ERC721A: already initialized");
+    //initializableLayout._initializing = true;
 
     // Initialize ERC721A
     _initializeERC721A("Land01", "LAND01");
 
     // Finish initializing ERC721A
-    initializableLayout._initializing = false;
-    initializableLayout._initialized = true;
+    //initializableLayout._initializing = false;
+    //initializableLayout._initialized = true;
 
     emit InitializeDiamond(msg.sender);
   }
