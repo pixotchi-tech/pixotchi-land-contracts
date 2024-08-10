@@ -234,28 +234,28 @@ contract ERC721AUpgradeable is ERC721A__Initializable, IERC721AUpgradeable {
         ERC721AStorage.layout()._packedAddressData[owner] = packed;
     }
 
-    // =============================================================
-    //                            IERC165
-    // =============================================================
-
-    /**
-     * @dev Returns true if this contract implements the interface defined by
-     * `interfaceId`. See the corresponding
-     * [EIP section](https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified)
-     * to learn more about how these ids are created.
-     *
-     * This function call must use less than 30000 gas.
-     */
-    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
-        // The interface IDs are constants representing the first 4 bytes
-        // of the XOR of all function selectors in the interface.
-        // See: [ERC165](https://eips.ethereum.org/EIPS/eip-165)
-        // (e.g. `bytes4(i.functionA.selector ^ i.functionB.selector ^ ...)`)
-        return
-            interfaceId == 0x01ffc9a7 || // ERC165 interface ID for ERC165.
-            interfaceId == 0x80ac58cd || // ERC165 interface ID for ERC721.
-            interfaceId == 0x5b5e139f; // ERC165 interface ID for ERC721Metadata.
-    }
+//    // =============================================================
+//    //                            IERC165
+//    // =============================================================
+//
+//    /**
+//     * @dev Returns true if this contract implements the interface defined by
+//     * `interfaceId`. See the corresponding
+//     * [EIP section](https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified)
+//     * to learn more about how these ids are created.
+//     *
+//     * This function call must use less than 30000 gas.
+//     */
+//    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+//        // The interface IDs are constants representing the first 4 bytes
+//        // of the XOR of all function selectors in the interface.
+//        // See: [ERC165](https://eips.ethereum.org/EIPS/eip-165)
+//        // (e.g. `bytes4(i.functionA.selector ^ i.functionB.selector ^ ...)`)
+//        return
+//            interfaceId == 0x01ffc9a7 || // ERC165 interface ID for ERC165.
+//            interfaceId == 0x80ac58cd || // ERC165 interface ID for ERC721.
+//            interfaceId == 0x5b5e139f; // ERC165 interface ID for ERC721Metadata.
+//    }
 
     // =============================================================
     //                        IERC721Metadata

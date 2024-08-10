@@ -137,7 +137,7 @@ interface IERC721AUpgradeable {
      *
      * This function call must use less than 30000 gas.
      */
-    function supportsInterface(bytes4 interfaceId) external view returns (bool);
+    //function supportsInterface(bytes4 interfaceId) external view returns (bool);
 
     // =============================================================
     //                            IERC721
