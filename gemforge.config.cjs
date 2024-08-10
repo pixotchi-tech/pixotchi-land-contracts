@@ -51,7 +51,7 @@ module.exports = {
     // proxy interface options
     proxyInterface: {
       // imports to include in the generated IDiamondProxy interface
-      imports: ["src/shared/Structs.sol"],
+      imports: ["src/shared/Structs.sol", "src/interfaces/IFacets.sol"],
     },
   },
   // diamond configuration
