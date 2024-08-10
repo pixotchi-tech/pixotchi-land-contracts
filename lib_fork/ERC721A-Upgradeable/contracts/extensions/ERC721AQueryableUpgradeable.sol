@@ -74,7 +74,7 @@ abstract contract ERC721AQueryableUpgradeable is
      * See {ERC721AQueryable-explicitOwnershipOf}
      */
     function explicitOwnershipsOf(uint256[] calldata tokenIds)
-        external
+        public
         view
         virtual
         override
@@ -123,7 +123,7 @@ abstract contract ERC721AQueryableUpgradeable is
         address owner,
         uint256 start,
         uint256 stop
-    ) external view virtual override returns (uint256[] memory) {
+    ) public view virtual override returns (uint256[] memory) {
         return _tokensOfOwnerIn(owner, start, stop);
     }
 
@@ -137,7 +137,7 @@ abstract contract ERC721AQueryableUpgradeable is
      * multiple smaller scans if the collection is large enough to cause
      * an out-of-gas error (10K collections should be fine).
      */
-    function tokensOfOwner(address owner) external view virtual override returns (uint256[] memory) {
+    function tokensOfOwner(address owner) public view virtual override returns (uint256[] memory) {
         // If spot mints are enabled, full-range scan is disabled.
         if (_sequentialUpTo() != type(uint256).max) _revert(NotCompatibleWithSpotMints.selector);
         uint256 start = _startTokenId();
