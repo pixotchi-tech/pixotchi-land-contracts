@@ -99,9 +99,9 @@ contract NFTFacet is ERC721AUpgradeable, ERC721AQueryableUpgradeable {
       return super.totalSupply();
   }
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721AUpgradeable, IERC721AUpgradeable) returns (bool) {
-      return super.supportsInterface(interfaceId);
-  }
+//  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721AUpgradeable, IERC721AUpgradeable) returns (bool) {
+//      return super.supportsInterface(interfaceId);
+//  }
 
   function balanceOf(address owner) public view virtual override(ERC721AUpgradeable, IERC721AUpgradeable) returns (uint256) {
       return super.balanceOf(owner);
