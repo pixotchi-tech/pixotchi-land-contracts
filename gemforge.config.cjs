@@ -51,13 +51,13 @@ module.exports = {
     // proxy interface options
     proxyInterface: {
       // imports to include in the generated IDiamondProxy interface
-      imports: ["src/shared/Structs.sol", "src/interfaces/IFacets.sol"],
+      imports: ["src/shared/Structs.sol"],
     },
   },
   // diamond configuration
   diamond: {
     // Whether to include public methods when generating the IDiamondProxy interface. Default is to only include external methods.
-    publicMethods: false,
+    publicMethods: true,
     // The diamond initialization contract - to be called when first deploying the diamond.
     init: {
       // The diamond initialization contract name
