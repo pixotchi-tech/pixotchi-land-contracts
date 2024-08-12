@@ -16,11 +16,11 @@
     "land-cli": "ts-node scripts/land-cli.ts"
   },
   "devDependencies": {
+    "@pixotchi.tech/gemforge": "^2.7.1-0",
     "@types/node": "^18.19.43",
     "@wagmi/cli": "^2.1.15",
     "dotenv": "^16.3.1",
     "execa": "^8.0.1",
-    "gemforge": "^2.7.0",
     "hrabi": "^1.1.1",
     "prettier": "^2.8.8",
     "solc": "^0.8.21",
