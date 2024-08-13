@@ -11,7 +11,7 @@ contract NFTFacet is ERC721AUpgradeable, ERC721AQueryableUpgradeable {
 
     function initNFTFacet() external initializerERC721A {
         __ERC721A_init("Land01", "LAND01");
-        _mint(msg.sender, 1);
+        _nftMint(msg.sender, 1);
     }
 
 
