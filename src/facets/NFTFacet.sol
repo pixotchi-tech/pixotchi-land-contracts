@@ -81,7 +81,7 @@ contract NFTFacet is ERC721AUpgradeable, ERC721AQueryableUpgradeable {
   /// @param tokenId The ID of the token to get coordinates for
   /// @return x The x-coordinate of the land
   /// @return y The y-coordinate of the land
-  function nftGetLandCoordinates(uint256 tokenId) external view returns (int256 x, int256 y) {
+  function nftGetLandCoordinates(uint256 tokenId) public view returns (int256 x, int256 y) {
     //LibNFTStorage.Data storage s = _sN();
     require(_exists(tokenId), "Token does not exist");
     LibNFTStorage.Coordinates memory coords = _sN().tokenCoordinates[tokenId];
@@ -93,15 +93,9 @@ contract NFTFacet is ERC721AUpgradeable, ERC721AQueryableUpgradeable {
     data = LibNFTStorage.data();
   }
 
-  // Overwritten methods from IERC721AUpgradeable
-
   function totalSupply() public view virtual override(ERC721AUpgradeable, IERC721AUpgradeable) returns (uint256) {
       return super.totalSupply();
   }
-
-//  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721AUpgradeable, IERC721AUpgradeable) returns (bool) {
-//      return super.supportsInterface(interfaceId);
-//  }
 
   function balanceOf(address owner) public view virtual override(ERC721AUpgradeable, IERC721AUpgradeable) returns (uint256) {
       return super.balanceOf(owner);
@@ -146,12 +140,6 @@ contract NFTFacet is ERC721AUpgradeable, ERC721AQueryableUpgradeable {
   function safeTransferFrom(address from, address to, uint256 tokenId) public payable virtual override(ERC721AUpgradeable, IERC721AUpgradeable) {
       super.safeTransferFrom(from, to, tokenId);
   }
-
-  // function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory _data) public payable virtual {
-  //     super.safeTransferFrom(from, to, tokenId, _data);
-  // }
-
-  // Overwritten methods from ERC721AQueryableUpgradeable
 
   function explicitOwnershipOf(uint256 tokenId) public view virtual override returns (TokenOwnership memory) {
       return super.explicitOwnershipOf(tokenId);
