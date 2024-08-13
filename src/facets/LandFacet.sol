@@ -43,13 +43,13 @@ contract LandFacet {
         return (s.minX, s.maxX, s.minY, s.maxY);
     }
 
-    /// @notice Get the token ID for specific coordinates
-    /// @param x The x-coordinate
-    /// @param y The y-coordinate
-    /// @return The token ID at the given coordinates
-    function landGetTokenIdByCoordinates(int256 x, int256 y) external view returns (uint256) {
-        return _sN().coordinateToTokenId[x][y];
-    }
+//    /// @notice Get the token ID for specific coordinates
+//    /// @param x The x-coordinate
+//    /// @param y The y-coordinate
+//    /// @return The token ID at the given coordinates
+//    function landGetTokenIdByCoordinates(int256 x, int256 y) external view returns (uint256) {
+//        return _sN().coordinateToTokenId[x][y];
+//    }
 
     /// @notice Get the diamond initialization status
     /// @return Whether the diamond is initialized
