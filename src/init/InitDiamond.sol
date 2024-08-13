@@ -2,11 +2,11 @@
 pragma solidity >=0.8.21;
 
 import { LibLandStorage } from "../libs/LibLandStorage.sol";
-import { NFTInit } from "../libs/LibNFT.sol";
+//import { NFTInit } from "../libs/LibNFT.sol";
 import { LibAppStorage, AppStorage } from "../libs/LibAppStorage.sol";
 import { LibDiamond } from 'lib/diamond-2-hardhat/contracts/libraries/LibDiamond.sol';
 
-contract InitDiamond is NFTInit {
+contract InitDiamond /*is NFTInit*/ {
   event InitializeDiamond(address sender);
 
   /// @notice Internal function to access NFT storage
@@ -34,7 +34,7 @@ contract InitDiamond is NFTInit {
     _sD().supportedInterfaces[0x80ac58cd] = true;  // ERC165 interface ID for ERC721.
     _sD().supportedInterfaces[0x5b5e139f] = true; // ERC165 interface ID for ERC721Metadata.
 
-    NFTInit.__ERC721A_init("Land01", "LAND01");
+    //NFTInit.__ERC721A_init("Land01", "LAND01");
 
   }
 }

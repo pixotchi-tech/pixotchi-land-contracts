@@ -9,10 +9,10 @@ import {LibLand} from "../libs/LibLand.sol";
 
 contract NFTFacet is ERC721AUpgradeable, ERC721AQueryableUpgradeable {
 
-//    function initNFTFacet() external initializerERC721A {
-//        __ERC721A_init("Land01", "LAND01");
-//        _nftMint(msg.sender, 1);
-//    }
+    function initNFTFacet() external initializerERC721A {
+        __ERC721A_init("Land01", "LAND01");
+        _nftMint(msg.sender, 1);
+    }
 
 
     function mint(uint256 quantity) external payable {

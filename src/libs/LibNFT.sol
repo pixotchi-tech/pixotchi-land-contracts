@@ -139,25 +139,25 @@ library LibNFT {
 
 }
 
-abstract contract NFTInit is  ERC721A__Initializable  {
-
-    // =============================================================
-    //                          CONSTRUCTOR
-    // =============================================================
-
-    function __ERC721A_init(string memory name_, string memory symbol_) internal onlyInitializingERC721A {
-        __ERC721A_init_unchained(name_, symbol_);
-    }
-
-    function __ERC721A_init_unchained(string memory name_, string memory symbol_) internal onlyInitializingERC721A {
-        ERC721AStorage.layout()._name = name_;
-        ERC721AStorage.layout()._symbol = symbol_;
-        ERC721AStorage.layout()._currentIndex = LibNFT._startTokenId();
-
-        if (LibNFT._sequentialUpTo() < LibNFT._startTokenId()) LibNFT._revert(IERC721AUpgradeable.SequentialUpToTooSmall.selector);
-    }
-
-}
+//abstract contract NFTInit is  ERC721A__Initializable  {
+//
+//    // =============================================================
+//    //                          CONSTRUCTOR
+//    // =============================================================
+//
+//    function __ERC721A_init(string memory name_, string memory symbol_) internal onlyInitializingERC721A {
+//        __ERC721A_init_unchained(name_, symbol_);
+//    }
+//
+//    function __ERC721A_init_unchained(string memory name_, string memory symbol_) internal onlyInitializingERC721A {
+//        ERC721AStorage.layout()._name = name_;
+//        ERC721AStorage.layout()._symbol = symbol_;
+//        ERC721AStorage.layout()._currentIndex = LibNFT._startTokenId();
+//
+//        if (LibNFT._sequentialUpTo() < LibNFT._startTokenId()) LibNFT._revert(IERC721AUpgradeable.SequentialUpToTooSmall.selector);
+//    }
+//
+//}
 
 /**
  * @dev Abstract contract to implement the exists modifier using LibNFT
