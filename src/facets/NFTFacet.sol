@@ -15,7 +15,7 @@ contract NFTFacet is ERC721AUpgradeable, ERC721AQueryableUpgradeable {
     }
 
 
-    function mint(uint256 quantity) external payable {
+    function mint(uint256 quantity) external {
         _nftMint(msg.sender, quantity);
     }
 
