@@ -12,6 +12,7 @@ library LibNFT {
     uint256 private constant _BITPOS_START_TIMESTAMP = 160;
     uint256 private constant _BITPOS_NEXT_INITIALIZED = 225;
     uint256 private constant _BITMASK_NEXT_INITIALIZED = 1 << 225;
+    uint256 private constant _BITMASK_ADDRESS_DATA_ENTRY = (1 << 64) - 1;
 
     /**
      * @dev Returns whether `tokenId` exists.
@@ -135,6 +136,29 @@ library LibNFT {
     }
 
 
+    /**
+     * @dev Returns the number of tokens in `owner`'s account.
+     */
+    function _balanceOf(address owner) internal view returns (uint256) {
+        if (owner == address(0)) _revert(IERC721AUpgradeable.BalanceQueryForZeroAddress.selector);
+        return ERC721AStorage.layout()._packedAddressData[owner] & _BITMASK_ADDRESS_DATA_ENTRY;
+    }
+
+    /**
+ * @dev Returns the total number of tokens in existence.
+     * Burned tokens will reduce the count.
+     * To get the total number of tokens minted, please see {_totalMinted}.
+     */
+    function _totalSupply() public view returns (uint256 result) {
+        // Counter underflow is impossible as `_burnCounter` cannot be incremented
+        // more than `_currentIndex + _spotMinted - _startTokenId()` times.
+        unchecked {
+        // With spot minting, the intermediate `result` can be temporarily negative,
+        // and the computation must be unchecked.
+            result = ERC721AStorage.layout()._currentIndex - ERC721AStorage.layout()._burnCounter - _startTokenId();
+            if (_sequentialUpTo() != type(uint256).max) result += ERC721AStorage.layout()._spotMinted;
+        }
+    }
 
 
 }
