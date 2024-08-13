@@ -73,7 +73,7 @@ library LibNFT {
      *
      * - `tokenId` must exist.
      */
-    function ownerOf(uint256 tokenId) public view returns (address) {
+    function _ownerOf(uint256 tokenId) internal view returns (address) {
         return address(uint160(_packedOwnershipOf(tokenId)));
     }
 
