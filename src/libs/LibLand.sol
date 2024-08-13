@@ -10,6 +10,10 @@ library LibLand {
     /// @return x The calculated X coordinate
     /// @return y The calculated Y coordinate
     function _landCalculateCoordinates(uint256 tokenId) internal pure returns (int256 x, int256 y) {
+        if (tokenId == 0) {
+            return (0, 0);
+        }
+
         uint256 quadrant = (tokenId - 1) % 4;
         uint256 step = (tokenId - 1) / 4 + 1;
 
