@@ -86,6 +86,24 @@ library LibLand {
         land.mintDate = s.mintDate[tokenId];
     }
 
+    /// @notice Retrieves all lands owned by a specific address
+    /// @param owner The address of the land owner
+    /// @return lands An array of Land structs containing the land information
+    function _getLandsByOwner(address owner) internal view returns (Land[] memory lands) {
+        uint256 balance = LibNFT._balanceOf(owner);
+        lands = new Land[](balance);
+
+        uint256 landCount = 0;
+        uint256 totalSupply = LibNFT._totalSupply();
+
+        for (uint256 tokenId = 1; tokenId <= totalSupply && landCount < balance; tokenId++) {
+            if (LibNFT._ownerOf(tokenId) == owner) {
+                lands[landCount] = _getLand(tokenId);
+                landCount++;
+            }
+        }
+    }
+
     /// @notice Internal function to access NFT storage
     /// @return data The LibLandStorage.Data struct
     function _sN() internal pure returns (LibLandStorage.Data storage data) {
