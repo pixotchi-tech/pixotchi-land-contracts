@@ -67,3 +67,19 @@ library LibNFT {
 
 
 }
+
+/**
+ * @dev Abstract contract to implement the exists modifier using LibNFT
+ */
+abstract contract NFTModifiers {
+    using LibNFT for uint256;
+
+    /**
+     * @dev Modifier to check if a token exists
+     * @param tokenId The ID of the token to check
+     */
+    modifier exists(uint256 tokenId) {
+        require(LibNFT._exists(tokenId), "NFT: Token does not exist");
+        _;
+    }
+}
