@@ -2,6 +2,7 @@
 pragma solidity >=0.8.21;
 
 import {ERC721AStorage} from "lib_fork/ERC721A-Upgradeable/contracts/ERC721AStorage.sol";
+import {IERC721AUpgradeable} from "lib_fork/ERC721A-Upgradeable/contracts/IERC721AUpgradeable.sol";
 
 library LibNFT {
     // Constants from ERC721AUpgradeable
@@ -65,6 +66,72 @@ library LibNFT {
         return type(uint256).max;
     }
 
+        /**
+     * @dev Returns the owner of the `tokenId` token.
+     *
+     * Requirements:
+     *
+     * - `tokenId` must exist.
+     */
+    function ownerOf(uint256 tokenId) public view returns (address) {
+        return address(uint160(_packedOwnershipOf(tokenId)));
+    }
+
+        /**
+     * @dev Returns the packed ownership data of `tokenId`.
+     */
+    function _packedOwnershipOf(uint256 tokenId) private view returns (uint256 packed) {
+        if (_startTokenId() <= tokenId) {
+            packed = ERC721AStorage.layout()._packedOwnerships[tokenId];
+
+            if (tokenId > _sequentialUpTo()) {
+                if (_packedOwnershipExists(packed)) return packed;
+                _revert(IERC721AUpgradeable.OwnerQueryForNonexistentToken.selector);
+            }
+
+            // If the data at the starting slot does not exist, start the scan.
+            if (packed == 0) {
+                if (tokenId >= ERC721AStorage.layout()._currentIndex) _revert(IERC721AUpgradeable.OwnerQueryForNonexistentToken.selector);
+                // Invariant:
+                // There will always be an initialized ownership slot
+                // (i.e. `ownership.addr != address(0) && ownership.burned == false`)
+                // before an unintialized ownership slot
+                // (i.e. `ownership.addr == address(0) && ownership.burned == false`)
+                // Hence, `tokenId` will not underflow.
+                //
+                // We can directly compare the packed value.
+                // If the address is zero, packed will be zero.
+                for (;;) {
+                    unchecked {
+                        packed = ERC721AStorage.layout()._packedOwnerships[--tokenId];
+                    }
+                    if (packed == 0) continue;
+                    if (packed & _BITMASK_BURNED == 0) return packed;
+                    // Otherwise, the token is burned, and we must revert.
+                    // This handles the case of batch burned tokens, where only the burned bit
+                    // of the starting slot is set, and remaining slots are left uninitialized.
+                    _revert(IERC721AUpgradeable.OwnerQueryForNonexistentToken.selector);
+                }
+            }
+            // Otherwise, the data exists and we can skip the scan.
+            // This is possible because we have already achieved the target condition.
+            // This saves 2143 gas on transfers of initialized tokens.
+            // If the token is not burned, return `packed`. Otherwise, revert.
+            if (packed & _BITMASK_BURNED == 0) return packed;
+        }
+        _revert(IERC721AUpgradeable.OwnerQueryForNonexistentToken.selector);
+    }
+
+
+    /**
+     * @dev For more efficient reverts.
+     */
+    function _revert(bytes4 errorSelector) internal pure {
+        assembly {
+            mstore(0x00, errorSelector)
+            revert(0x00, 0x04)
+        }
+    }
 
 }
 
