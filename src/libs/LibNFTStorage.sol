@@ -19,11 +19,11 @@ library LibNFTStorage {
     /// @dev This function can only be called once
     function initializeNFTStorage() internal initializer(1) {
         Data storage s = data();
-        s.maxSupply = 10000;
-        s.minX = -56;
-        s.maxX = 56;
-        s.minY = -56;
-        s.maxY = 56;
+        s.maxSupply = 20000;
+        s.minX = -112;
+        s.maxX = 112;
+        s.minY = -112;
+        s.maxY = 112;
     }
 
     error AlreadyInitialized(uint256 currentVersion, uint256 newVersion);
