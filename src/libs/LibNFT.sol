@@ -3,6 +3,7 @@ pragma solidity >=0.8.21;
 
 import {ERC721AStorage} from "lib_fork/ERC721A-Upgradeable/contracts/ERC721AStorage.sol";
 import {IERC721AUpgradeable} from "lib_fork/ERC721A-Upgradeable/contracts/IERC721AUpgradeable.sol";
+import {ERC721A__Initializable} from "lib_fork/ERC721A-Upgradeable/contracts/ERC721A__Initializable.sol";
 
 library LibNFT {
     // Constants from ERC721AUpgradeable
@@ -131,6 +132,29 @@ library LibNFT {
             mstore(0x00, errorSelector)
             revert(0x00, 0x04)
         }
+    }
+
+
+
+
+}
+
+abstract contract NFTInit is  ERC721A__Initializable  {
+
+    // =============================================================
+    //                          CONSTRUCTOR
+    // =============================================================
+
+    function __ERC721A_init(string memory name_, string memory symbol_) internal onlyInitializingERC721A {
+        __ERC721A_init_unchained(name_, symbol_);
+    }
+
+    function __ERC721A_init_unchained(string memory name_, string memory symbol_) internal onlyInitializingERC721A {
+        ERC721AStorage.layout()._name = name_;
+        ERC721AStorage.layout()._symbol = symbol_;
+        ERC721AStorage.layout()._currentIndex = LibNFT._startTokenId();
+
+        if (LibNFT._sequentialUpTo() < LibNFT._startTokenId()) LibNFT._revert(IERC721AUpgradeable.SequentialUpToTooSmall.selector);
     }
 
 }
