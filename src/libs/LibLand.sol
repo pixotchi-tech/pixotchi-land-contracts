@@ -75,8 +75,7 @@ library LibLand {
 
         land.tokenId = tokenId;
         land.owner = LibNFT._ownerOf(tokenId);
-        //TODO unify data type
-        (land.coordinateX, land.coordinateY) = (uint256(int256(coords.x)), uint256(int256(coords.y)));
+        (land.coordinateX, land.coordinateY) = (coords.x, coords.y);
         land.name = s.name[tokenId];
         land.experiencePoints = s.experiencePoints[tokenId];
         land.accumulatedPlantPoints = s.accumulatedPlantPoints[tokenId];

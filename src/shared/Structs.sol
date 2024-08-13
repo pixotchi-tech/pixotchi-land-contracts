@@ -35,9 +35,9 @@ pragma solidity >=0.8.21;
         /// @notice Custom name given to the land
         string name;
         /// @notice X-coordinate of the land on the game map
-        uint256 coordinateX;
+        int256 coordinateX;
         /// @notice Y-coordinate of the land on the game map
-        uint256 coordinateY;
+        int256 coordinateY;
         /// @notice Total experience points accumulated on this land
         uint256 experiencePoints;
         /// @notice Cumulative points earned from plants on this land
