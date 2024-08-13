@@ -3,6 +3,10 @@ pragma solidity >=0.8.21;
 
 import { LibLandStorage } from "../libs/LibLandStorage.sol";
 import { LibAppStorage, AppStorage } from "../libs/LibAppStorage.sol";
+import { LibNFT } from "../libs/LibNFT.sol";
+import { Land } from "../shared/Structs.sol";
+
+
 
 library LibLand {
     /// @notice Calculates coordinates for a given token ID
@@ -53,6 +57,29 @@ library LibLand {
         // Assign coordinates
         _sN().tokenCoordinates[tokenId] = LibLandStorage.Coordinates(x, y, true);
         _sN().coordinateToTokenId[x][y] = tokenId;
+    }
+
+    /// @notice Retrieves land information for a given token ID
+    /// @param tokenId The ID of the token to retrieve land information for
+    /// @return land The Land struct containing the land information
+    function _getLand(uint256 tokenId) internal view returns (Land memory land) {
+        require(LibNFT._exists(tokenId), "LibLand: Token does not exist");
+
+        LibLandStorage.Data storage s = _sN();
+        LibLandStorage.Coordinates memory coords = s.tokenCoordinates[tokenId];
+
+        land.tokenId = tokenId;
+        land.owner = LibNFT._ownerOf(tokenId);
+        //TODO unify data type
+        (land.coordinateX, land.coordinateY) = (uint256(int256(coords.x)), uint256(int256(coords.y)));
+        land.name = s.name;
+        land.experiencePoints = s.experiencePoints;
+        land.accumulatedPlantPoints = s.accumulatedPlantPoints;
+        land.accumulatedPlantLifetime = s.accumulatedPlantLifetime;
+
+        // TODO
+        land.tokenUri = "";
+        land.mintDate = 0;
     }
 
     /// @notice Internal function to access NFT storage
