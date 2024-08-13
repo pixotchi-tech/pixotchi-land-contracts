@@ -81,8 +81,8 @@ library LibLand {
         land.accumulatedPlantPoints = s.accumulatedPlantPoints[tokenId];
         land.accumulatedPlantLifetime = s.accumulatedPlantLifetime[tokenId];
 
-        // TODO
-        land.tokenUri = "";
+
+        land.tokenUri = ""; // TODO
         land.mintDate = s.mintDate[tokenId];
     }
 
