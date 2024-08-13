@@ -28,6 +28,8 @@ pragma solidity >=0.8.21;
         uint256 tokenId;
         /// @notice URI for the land's metadata
         string tokenUri;
+        /// @notice Timestamp of when the land was minted
+        uint256 mintDate;
         /// @notice Address of the land owner
         address owner;
         /// @notice Custom name given to the land
@@ -42,6 +44,4 @@ pragma solidity >=0.8.21;
         uint256 accumulatedPlantPoints;
         /// @notice Total lifetime of all plants grown on this land
         uint256 accumulatedPlantLifetime;
-        /// @notice Timestamp of when the land was minted
-        uint256 mintDate;
     }
