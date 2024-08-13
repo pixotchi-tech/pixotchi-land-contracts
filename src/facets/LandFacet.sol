@@ -4,6 +4,8 @@ pragma solidity >=0.8.21;
 import {LibLandStorage} from "../libs/LibLandStorage.sol";
 import {LibAppStorage, AppStorage} from "../libs/LibAppStorage.sol";
 import {NFTModifiers} from "../libs/LibNFT.sol";
+import {LibLand} from "../libs/LibLand.sol";
+import {Land} from "../shared/Structs.sol";
 
 contract LandFacet is NFTModifiers {
 
@@ -22,7 +24,7 @@ contract LandFacet is NFTModifiers {
     /// @return maxX The maximum x-coordinate
     /// @return minY The minimum y-coordinate
     /// @return maxY The maximum y-coordinate
-    function landGetBoundaries() external view returns (int256 minX, int256 maxX, int256 minY, int256 maxY) {
+    function landGetBoundaries() public view returns (int256 minX, int256 maxX, int256 minY, int256 maxY) {
         LibLandStorage.Data storage s = _sN();
         return (s.minX, s.maxX, s.minY, s.maxY);
     }
@@ -39,5 +41,11 @@ contract LandFacet is NFTModifiers {
         data = LibAppStorage.diamondStorage();
     }
 
+    /// @notice Get land information by token ID
+    /// @param tokenId The ID of the land token
+    /// @return land The Land struct containing the land information
+    function landGetById(uint256 tokenId) public view exists(tokenId) returns (Land memory land) {
+        return LibLand._getLand(tokenId);
+    }
 
 }
