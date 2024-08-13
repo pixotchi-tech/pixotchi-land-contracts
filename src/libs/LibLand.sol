@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 
-import { LibNFTStorage } from "../libs/LibNFTStorage.sol";
+import { LibLandStorage } from "../libs/LibLandStorage.sol";
 import { LibAppStorage, AppStorage } from "../libs/LibAppStorage.sol";
 
 library LibLand {
@@ -51,14 +51,14 @@ library LibLand {
         }
 
         // Assign coordinates
-        _sN().tokenCoordinates[tokenId] = LibNFTStorage.Coordinates(x, y, true);
+        _sN().tokenCoordinates[tokenId] = LibLandStorage.Coordinates(x, y, true);
         _sN().coordinateToTokenId[x][y] = tokenId;
     }
 
     /// @notice Internal function to access NFT storage
-    /// @return data The LibNFTStorage.Data struct
-    function _sN() internal pure returns (LibNFTStorage.Data storage data) {
-        data = LibNFTStorage.data();
+    /// @return data The LibLandStorage.Data struct
+    function _sN() internal pure returns (LibLandStorage.Data storage data) {
+        data = LibLandStorage.data();
     }
 
     /// @notice Internal function to access AppStorage

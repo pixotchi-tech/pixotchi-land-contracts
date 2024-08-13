@@ -3,11 +3,11 @@ pragma solidity >=0.8.21;
 
 import { MetaTxContextStorage } from "../shared/Structs.sol";
 
-library LibNFTStorage {
-    bytes32 internal constant DIAMOND_STORAGE_POSITION = keccak256("eth.pixotchi.land.nft.storage");
+library LibLandStorage {
+    bytes32 internal constant DIAMOND_STORAGE_POSITION = keccak256("eth.pixotchi.land.storage");
 
-    /// @notice Returns the diamond storage for NFT-related data
-    /// @return ds The NFTStorage struct
+    /// @notice Returns the diamond storage for LAND-related data
+    /// @return ds The LANDStorage struct
     function data() internal pure returns (Data storage ds) {
         bytes32 position = DIAMOND_STORAGE_POSITION;
         assembly {
@@ -15,9 +15,9 @@ library LibNFTStorage {
         }
     }
 
-    /// @notice Initializes the NFT storage with default values
+    /// @notice Initializes the LAND storage with default values
     /// @dev This function can only be called once
-    function initializeNFTStorage() internal initializer(1) {
+    function initializeLandStorage() internal initializer(1) {
         Data storage s = data();
         s.maxSupply = 20000;
         s.minX = -112;

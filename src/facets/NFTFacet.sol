@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 
-import {LibNFTStorage} from "../libs/LibNFTStorage.sol";
+import {LibLandStorage} from "../libs/LibLandStorage.sol";
 import {ERC721AUpgradeable} from "lib_fork/ERC721A-Upgradeable/contracts/ERC721AUpgradeable.sol";
 import {IERC721AUpgradeable} from "lib_fork/ERC721A-Upgradeable/contracts/IERC721AUpgradeable.sol";
 import {ERC721AQueryableUpgradeable} from "lib_fork/ERC721A-Upgradeable/contracts/extensions/ERC721AQueryableUpgradeable.sol";
@@ -34,8 +34,8 @@ contract NFTFacet is ERC721AUpgradeable, ERC721AQueryableUpgradeable {
         }
     }
 
-    function _sN() internal pure returns (LibNFTStorage.Data storage data) {
-        data = LibNFTStorage.data();
+    function _sN() internal pure returns (LibLandStorage.Data storage data) {
+        data = LibLandStorage.data();
     }
 
     /// ERC721 non standard functions
