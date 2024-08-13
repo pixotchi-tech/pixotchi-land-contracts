@@ -63,13 +63,15 @@ library LibLandStorage {
         // Mapping to access coordinates directly
         mapping(int256 => mapping(int256 => uint256)) coordinateToTokenId;
 
+        /// @notice Timestamp of when the land was minted
+        mapping(uint256 => uint256) mintDate;
         /// @notice Custom name given to the land
-        string name;
+        mapping(uint256 => string) name;
         /// @notice Total experience points accumulated on this land
-        uint256 experiencePoints;
+        mapping(uint256 => uint256) experiencePoints;
         /// @notice Cumulative points earned from plants on this land
-        uint256 accumulatedPlantPoints;
+        mapping(uint256 => uint256) accumulatedPlantPoints;
         /// @notice Total lifetime of all plants grown on this land
-        uint256 accumulatedPlantLifetime;
+        mapping(uint256 => uint256) accumulatedPlantLifetime;
     }
 }

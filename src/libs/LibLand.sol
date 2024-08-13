@@ -6,8 +6,6 @@ import { LibAppStorage, AppStorage } from "../libs/LibAppStorage.sol";
 import { LibNFT } from "../libs/LibNFT.sol";
 import { Land } from "../shared/Structs.sol";
 
-
-
 library LibLand {
     /// @notice Calculates coordinates for a given token ID
     /// @param tokenId The ID of the token to calculate coordinates for
@@ -38,7 +36,7 @@ library LibLand {
 
     /// @notice Assigns coordinates to a newly minted token
     /// @param tokenId The ID of the token to assign coordinates to
-    function _landAssignCoordinates(uint256 tokenId) internal {
+    function _landAssignCoordinates(uint256 tokenId) private {
         (int256 x, int256 y) = _landCalculateCoordinates(tokenId);
 
         // Ensure coordinates are within bounds using custom errors
@@ -59,6 +57,13 @@ library LibLand {
         _sN().coordinateToTokenId[x][y] = tokenId;
     }
 
+    /// @notice Assigns coordinates to a newly minted token
+    /// @param tokenId The ID of the token to assign coordinates to
+    function _AssignLand(uint256 tokenId) internal {
+        _landAssignCoordinates(tokenId);
+        _sN().mintDate[tokenId] = block.timestamp;
+    }
+
     /// @notice Retrieves land information for a given token ID
     /// @param tokenId The ID of the token to retrieve land information for
     /// @return land The Land struct containing the land information
@@ -72,14 +77,14 @@ library LibLand {
         land.owner = LibNFT._ownerOf(tokenId);
         //TODO unify data type
         (land.coordinateX, land.coordinateY) = (uint256(int256(coords.x)), uint256(int256(coords.y)));
-        land.name = s.name;
-        land.experiencePoints = s.experiencePoints;
-        land.accumulatedPlantPoints = s.accumulatedPlantPoints;
-        land.accumulatedPlantLifetime = s.accumulatedPlantLifetime;
+        land.name = s.name[tokenId];
+        land.experiencePoints = s.experiencePoints[tokenId];
+        land.accumulatedPlantPoints = s.accumulatedPlantPoints[tokenId];
+        land.accumulatedPlantLifetime = s.accumulatedPlantLifetime[tokenId];
 
         // TODO
         land.tokenUri = "";
-        land.mintDate = 0;
+        land.mintDate = s.mintDate[tokenId];
     }
 
     /// @notice Internal function to access NFT storage

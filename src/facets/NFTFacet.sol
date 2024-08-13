@@ -30,7 +30,7 @@ contract NFTFacet is ERC721AUpgradeable, ERC721AQueryableUpgradeable {
 
         for (uint256 i = 0; i < quantity; i++) {
             uint256 tokenId = supply + i + 1;
-            LibLand._landAssignCoordinates(tokenId);
+            LibLand._AssignLand(tokenId);
         }
     }
 
