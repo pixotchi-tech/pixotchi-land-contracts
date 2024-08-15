@@ -6,13 +6,15 @@ pragma solidity >=0.8.21;
 //import {IERC721Upgradeable} from "lib_fork/ERC721-Upgradeable/contracts/IERC721Upgradeable.sol";
 //import {ERC721QueryableUpgradeable} from "lib_fork/ERC721-Upgradeable/contracts/extensions/ERC721QueryableUpgradeable.sol";
 //import {LibLand} from "../libs/LibLand.sol";
+import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import {ERC721EnumerableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 //import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 
-contract NFTFacet is ERC721Upgradeable /*is ERC721Upgradeable, ERC721QueryableUpgradeable*/ {
+contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721QueryableUpgradeable*/ {
 
-    function initialize() initializer public {
+    function initNFTFacet() initializer external {
         __ERC721_init("Land02", "LAND02");
     }
 
@@ -59,47 +61,47 @@ contract NFTFacet is ERC721Upgradeable /*is ERC721Upgradeable, ERC721QueryableUp
 //        return super.totalSupply();
 //    }
 
-    function balanceOf(address owner) public view virtual override returns (uint256) {
+    function balanceOf(address owner) public view virtual override(IERC721, ERC721Upgradeable) returns (uint256) {
         return super.balanceOf(owner);
     }
 
-    function ownerOf(uint256 tokenId) public view virtual override returns (address) {
+    function ownerOf(uint256 tokenId) public view virtual override(IERC721, ERC721Upgradeable) returns (address) {
         return super.ownerOf(tokenId);
     }
 
-    function name() public view virtual override returns (string memory) {
+    function name() public view virtual override(ERC721Upgradeable) returns (string memory) {
         return super.name();
     }
 
-    function symbol() public view virtual override returns (string memory) {
+    function symbol() public view virtual override(ERC721Upgradeable) returns (string memory) {
         return super.symbol();
     }
 
-    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+    function tokenURI(uint256 tokenId) public view virtual override(ERC721Upgradeable) returns (string memory) {
         return super.tokenURI(tokenId);
     }
 
-    function approve(address to, uint256 tokenId) public  virtual override {
+    function approve(address to, uint256 tokenId) public  virtual override(IERC721, ERC721Upgradeable) {
         super.approve(to, tokenId);
     }
 
-    function getApproved(uint256 tokenId) public view virtual override returns (address) {
+    function getApproved(uint256 tokenId) public view virtual override(IERC721, ERC721Upgradeable) returns (address) {
         return super.getApproved(tokenId);
     }
 
-    function setApprovalForAll(address operator, bool approved) public virtual override {
+    function setApprovalForAll(address operator, bool approved) public virtual override(IERC721, ERC721Upgradeable) {
         super.setApprovalForAll(operator, approved);
     }
 
-    function isApprovedForAll(address owner, address operator) public view virtual override returns (bool) {
+    function isApprovedForAll(address owner, address operator) public view virtual override(IERC721, ERC721Upgradeable) returns (bool) {
         return super.isApprovedForAll(owner, operator);
     }
 
-    function transferFrom(address from, address to, uint256 tokenId) public virtual override {
+    function transferFrom(address from, address to, uint256 tokenId) public virtual override(IERC721, ERC721Upgradeable) {
         super.transferFrom(from, to, tokenId);
     }
 
-    function safeTransferFrom(address from, address to, uint256 tokenId) public virtual override {
+    function safeTransferFrom(address from, address to, uint256 tokenId) public virtual override(IERC721, ERC721Upgradeable) {
         super.safeTransferFrom(from, to, tokenId);
     }
 
