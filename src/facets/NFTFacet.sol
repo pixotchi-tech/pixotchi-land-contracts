@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 
-import {LibLandStorage} from "../libs/LibLandStorage.sol";
-import {LibLand} from "../libs/LibLand.sol";
+//import {LibLandStorage} from "../libs/LibLandStorage.sol";
+//import {LibLand} from "../libs/LibLand.sol";
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {ERC721EnumerableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
@@ -12,6 +12,7 @@ contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721
 
     function initNFTFacet() external initializer  {
         __ERC721_init("Land02", "LAND02");
+        _mint(msg.sender, 1);
     }
 
 //    function initNFTFacet() external initializerERC721 {
@@ -39,9 +40,9 @@ contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721
 //        }
 //    }
 //
-    function _sN() internal pure returns (LibLandStorage.Data storage data) {
-        data = LibLandStorage.data();
-    }
+//    function _sN() internal pure returns (LibLandStorage.Data storage data) {
+//        data = LibLandStorage.data();
+//    }
 
     /// ERC721EnumerableUpgradeable Overrides
 
