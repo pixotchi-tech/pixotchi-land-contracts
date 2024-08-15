@@ -10,6 +10,7 @@
     "test": "forge test -vv",
     "test-cov": "forge coverage -vv",
     "build": "gemforge build",
+    "build:watch": "find src/ -name \"*.sol\" | grep -v \"src/generate\" | entr -s 'npx @pixotchi.tech/gemforge build'",
     "deploy:local": "gemforge build && gemforge deploy local --new",
     "deploy:testnet": "gemforge build && gemforge deploy testnet",
     "init:storage:testnet": "ts-node scripts/init.ts",
