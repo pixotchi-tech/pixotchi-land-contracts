@@ -14,7 +14,7 @@ import {ERC721EnumerableUpgradeable} from "@openzeppelin/contracts-upgradeable/t
 
 contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721QueryableUpgradeable*/ {
 
-    function initNFTFacet() initializer external {
+    function initNFTFacet() external initializer  {
         __ERC721_init("Land02", "LAND02");
     }
 
@@ -55,11 +55,18 @@ contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721
 //        return _sN().maxSupply;
 //    }
 //
-//    /// ERC721 Overrides
+    /// ERC721EnumerableUpgradeable Overrides
 
-//    function totalSupply() public view virtual override returns (uint256) {
-//        return super.totalSupply();
-//    }
+    function tokenOfOwnerByIndex(address owner, uint256 index) public view virtual override returns (uint256) {
+        return super.tokenOfOwnerByIndex(owner, index);
+    }
+
+    function totalSupply() public view virtual override returns (uint256) {
+        return super.totalSupply();
+    }
+    
+    /// ERC721 Overrides
+
 
     function balanceOf(address owner) public view virtual override(IERC721, ERC721Upgradeable) returns (uint256) {
         return super.balanceOf(owner);
