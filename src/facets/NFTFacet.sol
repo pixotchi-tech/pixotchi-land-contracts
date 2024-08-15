@@ -1,15 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 
-//import {LibLandStorage} from "../libs/LibLandStorage.sol";
-//import {ERC721Upgradeable} from "lib_fork/ERC721-Upgradeable/contracts/ERC721Upgradeable.sol";
-//import {IERC721Upgradeable} from "lib_fork/ERC721-Upgradeable/contracts/IERC721Upgradeable.sol";
-//import {ERC721QueryableUpgradeable} from "lib_fork/ERC721-Upgradeable/contracts/extensions/ERC721QueryableUpgradeable.sol";
-//import {LibLand} from "../libs/LibLand.sol";
+import {LibLandStorage} from "../libs/LibLandStorage.sol";
+import {LibLand} from "../libs/LibLand.sol";
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {ERC721EnumerableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
-//import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 
 contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721QueryableUpgradeable*/ {
@@ -43,18 +39,10 @@ contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721
 //        }
 //    }
 //
-//    function _sN() internal pure returns (LibLandStorage.Data storage data) {
-//        data = LibLandStorage.data();
-//    }
-//
-//    /// ERC721 non standard functions
-//
-//    /// @notice Get the maximum supply of NFTs
-//    /// @return The maximum supply
-//    function maxSupply() external view returns (uint256) {
-//        return _sN().maxSupply;
-//    }
-//
+    function _sN() internal pure returns (LibLandStorage.Data storage data) {
+        data = LibLandStorage.data();
+    }
+
     /// ERC721EnumerableUpgradeable Overrides
 
     function tokenOfOwnerByIndex(address owner, uint256 index) public view virtual override returns (uint256) {
