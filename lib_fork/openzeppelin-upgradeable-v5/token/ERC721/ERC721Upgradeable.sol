@@ -179,7 +179,7 @@ abstract contract ERC721Upgradeable is Initializable, ContextUpgradeable, ERC165
     /**
      * @dev See {IERC721-safeTransferFrom}.
      */
-    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public virtual {
+    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) internal virtual {
         transferFrom(from, to, tokenId);
         _checkOnERC721Received(from, to, tokenId, data);
     }
