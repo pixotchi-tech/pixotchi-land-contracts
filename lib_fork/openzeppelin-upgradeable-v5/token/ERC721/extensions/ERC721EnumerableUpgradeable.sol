@@ -194,4 +194,74 @@ abstract contract ERC721EnumerableUpgradeable is Initializable, ERC721Upgradeabl
         }
         super._increaseBalance(account, amount);
     }
+
+    /**
+     * @dev Returns an array of token IDs owned by `owner`.
+     * @param owner Address to query the tokens of.
+     * @return result Array of token IDs owned by the requested address.
+     */
+    function _tokensOfOwner1(address owner) internal view returns (uint256[] memory) {
+        uint256 tokenCount = balanceOf(owner);
+        uint256[] memory result = new uint256[](tokenCount);
+        
+        for (uint256 i = 0; i < tokenCount; i++) {
+            result[i] = tokenOfOwnerByIndex(owner, i);
+        }
+        
+        return result;
+    }
+
+    /**
+     * @dev Returns an array of token IDs owned by `owner`.
+     * @param owner Address to query the tokens of.
+     * @return result Array of token IDs owned by the requested address.
+     */
+    function _tokensOfOwner2(address owner) internal view returns (uint256[] memory result) {
+        ERC721EnumerableStorage storage $ = _getERC721EnumerableStorage();
+        uint256 ownerTokenCount = balanceOf(owner);
+        result = new uint256[](ownerTokenCount);
+        
+        for (uint256 i = 0; i < ownerTokenCount; i++) {
+            result[i] = $._ownedTokens[owner][i];
+        }
+        
+        return result;
+    }
+
+    /**
+     * @dev Returns an array of token IDs owned by `owner`.
+     * @param owner Address to query the tokens of.
+     * @return result Array of token IDs owned by the requested address.
+     */
+    function _tokensOfOwner3(address owner) internal view returns (uint256[] memory result) {
+        uint256 ownerTokenCount = balanceOf(owner);
+
+        assembly {
+            // Allocate memory for the result array
+            result := mload(0x40)
+            // Store the length of the array
+            mstore(result, ownerTokenCount)
+            // Update the free memory pointer
+            mstore(0x40, add(result, add(0x20, mul(ownerTokenCount, 0x20))))
+
+            // Get the storage slot of ERC721EnumerableStorage
+            let storageSlot := ERC721EnumerableStorageLocation
+
+            // Calculate the slot for _ownedTokens
+            mstore(0x00, owner)
+            mstore(0x20, 0) // _ownedTokens is the first mapping in the struct
+            let ownedTokensSlot := keccak256(0x00, 0x40)
+            ownedTokensSlot := add(ownedTokensSlot, storageSlot)
+
+            // Copy token IDs to the result array
+            let resultPtr := add(result, 0x20)
+            for { let i := 0 } lt(i, ownerTokenCount) { i := add(i, 1) } {
+                let tokenIdSlot := keccak256(ownedTokensSlot, i)
+                let tokenId := sload(tokenIdSlot)
+                mstore(resultPtr, tokenId)
+                resultPtr := add(resultPtr, 0x20)
+            }
+        }
+    }
+
 }
