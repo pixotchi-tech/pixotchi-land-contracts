@@ -101,6 +101,16 @@ contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721
         super.safeTransferFrom(from, to, tokenId);
     }
 
+    
+    /// @notice Returns an array of token IDs owned by a given address
+    /// @param owner The address to query the tokens of
+    /// @return An array of token IDs owned by the requested address
+    function tokensOfOwner(address owner) public view returns (uint256[] memory) {
+        return _tokensOfOwner(owner);
+    }
+
+    
+
 //    function explicitOwnershipOf(uint256 tokenId) public view virtual override returns (TokenOwnership memory) {
 //        return super.explicitOwnershipOf(tokenId);
 //    }
