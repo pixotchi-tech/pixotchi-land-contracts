@@ -1,18 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 
-//import {LibLandStorage} from "../libs/LibLandStorage.sol";
+import {LibLandStorage} from "../libs/LibLandStorage.sol";
 //import {LibLand} from "../libs/LibLand.sol";
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {ERC721EnumerableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 
 
-contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721QueryableUpgradeable*/ {
+contract NFTFacet is ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721QueryableUpgradeable*/ {
 
-    function initNFTFacet() external initializer  {
+    function initNFTFacet() external initializer {
         __ERC721_init("Land02", "LAND02");
-        _mint(msg.sender, 1);
+        _mint(msg.sender, _sN().nextTokenId++);
+    }
+
+    function mint() external {
+        _safeMint(msg.sender, _sN().nextTokenId++);
     }
 
 //    function initNFTFacet() external initializerERC721 {
@@ -40,9 +44,13 @@ contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721
 //        }
 //    }
 //
-//    function _sN() internal pure returns (LibLandStorage.Data storage data) {
-//        data = LibLandStorage.data();
-//    }
+
+
+
+
+    function _sN() internal pure returns (LibLandStorage.Data storage data) {
+        data = LibLandStorage.data();
+    }
 
     /// ERC721EnumerableUpgradeable Overrides
 
@@ -53,7 +61,7 @@ contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721
     function totalSupply() public view virtual override returns (uint256) {
         return super.totalSupply();
     }
-    
+
     /// ERC721 Overrides
 
 
@@ -77,7 +85,7 @@ contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721
         return super.tokenURI(tokenId);
     }
 
-    function approve(address to, uint256 tokenId) public  virtual override(IERC721, ERC721Upgradeable) {
+    function approve(address to, uint256 tokenId) public virtual override(IERC721, ERC721Upgradeable) {
         super.approve(to, tokenId);
     }
 
@@ -101,15 +109,12 @@ contract NFTFacet is  ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721
         super.safeTransferFrom(from, to, tokenId);
     }
 
-    
     /// @notice Returns an array of token IDs owned by a given address
     /// @param owner The address to query the tokens of
     /// @return An array of token IDs owned by the requested address
     function tokensOfOwner(address owner) public view returns (uint256[] memory) {
         return _tokensOfOwner(owner);
     }
-
-    
 
 //    function explicitOwnershipOf(uint256 tokenId) public view virtual override returns (TokenOwnership memory) {
 //        return super.explicitOwnershipOf(tokenId);
