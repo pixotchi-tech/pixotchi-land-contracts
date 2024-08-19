@@ -1020,6 +1020,38 @@ export const landAbi = [
   },
   {
     "type": "error",
+    "name": "NFTCoordinateOccupied",
+    "inputs": [
+      {
+        "name": "x",
+        "type": "int256",
+        "internalType": "int256"
+      },
+      {
+        "name": "y",
+        "type": "int256",
+        "internalType": "int256"
+      }
+    ]
+  },
+  {
+    "type": "error",
+    "name": "NFTCoordinateOutOfBounds",
+    "inputs": [
+      {
+        "name": "coordinate",
+        "type": "int256",
+        "internalType": "int256"
+      },
+      {
+        "name": "axis",
+        "type": "string",
+        "internalType": "string"
+      }
+    ]
+  },
+  {
+    "type": "error",
     "name": "NotInitializing",
     "inputs": []
   },
