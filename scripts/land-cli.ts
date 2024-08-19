@@ -4,8 +4,8 @@ import {landContract} from './viemUtils';
 
 
 // Specific function for minting land
-async function mint(quantity: bigint): Promise<void> {
-    await executeContractWrite(landContract, 'mint', [quantity]);
+async function mint(/*quantity: bigint*/): Promise<void> {
+    await executeContractWrite(landContract, 'mint', /*[quantity]*/ {} );
 }
 
 async function getLandCoordinates(fromTokenId: bigint, toTokenId: bigint): Promise<void> {
@@ -15,15 +15,15 @@ async function getLandCoordinates(fromTokenId: bigint, toTokenId: bigint): Promi
     //     client: publicClient
     // });
 
-    for (let tokenId = fromTokenId; tokenId <= toTokenId; tokenId++) {
-        try {
-            const [x, y] = await landContract.read.nftGetLandCoordinates([tokenId]);
-            //const [x, y] = await contract.read.nftGetLandCoordinates([tokenId]);
-            console.log(`Token ID ${tokenId}: (x: ${x}, y: ${y})`);
-        } catch (error) {
-            console.error(`Error getting coordinates for Token ID ${tokenId}:`, error);
-        }
-    }
+    // for (let tokenId = fromTokenId; tokenId <= toTokenId; tokenId++) {
+    //     try {
+    //         const [x, y] = await landContract.read.nftGetLandCoordinates([tokenId]);
+    //         //const [x, y] = await contract.read.nftGetLandCoordinates([tokenId]);
+    //         console.log(`Token ID ${tokenId}: (x: ${x}, y: ${y})`);
+    //     } catch (error) {
+    //         console.error(`Error getting coordinates for Token ID ${tokenId}:`, error);
+    //     }
+    // }
 }
 
 // Renamed function
@@ -33,33 +33,33 @@ async function initNFTFacet(): Promise<void> {
 
 // New function for initFacet
 async function initFacet(): Promise<void> {
-    await executeContractWrite(landContract, 'initFacet', {} as const);
+    //await executeContractWrite(landContract, 'initFacet', {} as const);
     //throw new Error("Not implemented");
 }
 
 async function landGetBoundaries(): Promise<void> {
-    const [minX, maxX, minY, maxY] = await landContract.read.landGetBoundaries();
-    console.log(`Boundaries: minX: ${minX}, maxX: ${maxX}, minY: ${minY}, maxY: ${maxY}`);
+    //const [minX, maxX, minY, maxY] = await landContract.read.landGetBoundaries();
+    //console.log(`Boundaries: minX: ${minX}, maxX: ${maxX}, minY: ${minY}, maxY: ${maxY}`);
 }
 
 async function landGetCoordinates(tokenId: bigint): Promise<void> {
-    const [x, y, occupied] = await landContract.read.landGetCoordinates([tokenId]);
-    console.log(`Token ID ${tokenId}: x: ${x}, y: ${y}, occupied: ${occupied}`);
+    //const [x, y, occupied] = await landContract.read.landGetCoordinates([tokenId]);
+    //console.log(`Token ID ${tokenId}: x: ${x}, y: ${y}, occupied: ${occupied}`);
 }
 
 async function landGetDiamondInitialized(): Promise<void> {
-    const initialized = await landContract.read.landGetDiamondInitialized();
-    console.log(`Diamond initialized: ${initialized}`);
+    //const initialized = await landContract.read.landGetDiamondInitialized();
+    //console.log(`Diamond initialized: ${initialized}`);
 }
 
 async function landGetMaxSupply(): Promise<void> {
-    const maxSupply = await landContract.read.landGetMaxSupply();
-    console.log(`Max supply: ${maxSupply}`);
+    //const maxSupply = await landContract.read.landGetMaxSupply();
+    //console.log(`Max supply: ${maxSupply}`);
 }
 
 async function landGetTokenIdByCoordinates(x: bigint, y: bigint): Promise<void> {
-    const tokenId = await landContract.read.landGetTokenIdByCoordinates([x, y]);
-    console.log(`Token ID for coordinates (${x}, ${y}): ${tokenId}`);
+    //const tokenId = await landContract.read.landGetTokenIdByCoordinates([x, y]);
+    //console.log(`Token ID for coordinates (${x}, ${y}): ${tokenId}`);
 }
 
 async function getOwner(): Promise<void> {
@@ -73,8 +73,8 @@ async function supportsInterface(interfaceId: `0x${string}`): Promise<void> {
 }
 
 async function landGetInitializationNumber(): Promise<void> {
-    const initNumber = await landContract.read.landGetInitializationNumber();
-    console.log(`Initialization number: ${initNumber}`);
+    //const initNumber = await landContract.read.landGetInitializationNumber();
+    //console.log(`Initialization number: ${initNumber}`);
 }
 
 async function main(): Promise<void> {
@@ -103,9 +103,9 @@ async function main(): Promise<void> {
 
         switch (action) {
             case '1':
-                const quantityInput = await rl.question("Enter quantity to mint (default is 1): ");
-                const quantity = quantityInput ? BigInt(quantityInput) : BigInt(1);
-                await mint(quantity);
+                //const quantityInput = await rl.question("Enter quantity to mint (default is 1): ");
+                //const quantity = quantityInput ? BigInt(quantityInput) : BigInt(1);
+                await mint();
                 break;
             case '2':
                 const rangeInput = await rl.question("Enter token ID range (e.g., 0-999): ");
