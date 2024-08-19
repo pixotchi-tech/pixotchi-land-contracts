@@ -3,8 +3,10 @@ pragma solidity >=0.8.21;
 
 import { LibLandStorage } from "../libs/LibLandStorage.sol";
 import { LibAppStorage, AppStorage } from "../libs/LibAppStorage.sol";
-import { LibNFT } from "../libs/LibNFT.sol";
+//import { LibNFT } from "../libs/LibNFT.sol";
 import { Land } from "../shared/Structs.sol";
+import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import {IERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 
 library LibLand {
     /// @notice Calculates coordinates for a given token ID
@@ -68,13 +70,13 @@ library LibLand {
     /// @param tokenId The ID of the token to retrieve land information for
     /// @return land The Land struct containing the land information
     function _getLand(uint256 tokenId) internal view returns (Land memory land) {
-        require(LibNFT._exists(tokenId), "LibLand: Token does not exist");
+        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
 
         LibLandStorage.Data storage s = _sN();
         LibLandStorage.Coordinates memory coords = s.tokenCoordinates[tokenId];
 
         land.tokenId = tokenId;
-        land.owner = LibNFT._ownerOf(tokenId);
+        land.owner = IERC721(address(this)).ownerOf(tokenId);
         (land.coordinateX, land.coordinateY) = (coords.x, coords.y);
         land.name = s.name[tokenId];
         land.experiencePoints = s.experiencePoints[tokenId];
@@ -90,14 +92,14 @@ library LibLand {
     /// @param owner The address of the land owner
     /// @return lands An array of Land structs containing the land information
     function _getLandsByOwner(address owner) internal view returns (Land[] memory lands) {
-        uint256 balance = LibNFT._balanceOf(owner);
+        uint256 balance = IERC721(address(this)).balanceOf(owner);
         lands = new Land[](balance);
 
         uint256 landCount = 0;
-        uint256 totalSupply = LibNFT._totalSupply();
+        uint256 totalSupply = IERC721Enumerable(address(this)).totalSupply();
 
         for (uint256 tokenId = 1; tokenId <= totalSupply && landCount < balance; tokenId++) {
-            if (LibNFT._ownerOf(tokenId) == owner) {
+            if (IERC721(address(this)).ownerOf(tokenId) == owner) {
                 lands[landCount] = _getLand(tokenId);
                 landCount++;
             }
