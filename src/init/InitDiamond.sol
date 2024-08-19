@@ -34,7 +34,7 @@ contract InitDiamond /*is NFTInit*/ {
     _sD().supportedInterfaces[0x01ffc9a7] = true; // ERC165 interface ID for ERC165.
     _sD().supportedInterfaces[0x80ac58cd] = true;  // ERC165 interface ID for ERC721.
     _sD().supportedInterfaces[0x5b5e139f] = true; // ERC165 interface ID for ERC721Metadata.
-    _sD().supportedInterfaces[type(IERC721Enumerable).interfaceId] = true; // ERC165 interface ID for ERC721Metadata.
+    _sD().supportedInterfaces[type(IERC721Enumerable).interfaceId] = true; // ERC165 interface ID for IERC721Enumerable.
 
     //NFTInit.__ERC721A_init("Land01", "LAND01");
 
