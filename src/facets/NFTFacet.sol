@@ -6,9 +6,10 @@ import {LibLand} from "../libs/LibLand.sol";
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {ERC721EnumerableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
+import {INFTFacet} from "../interfaces/INFTFacet.sol";
 
 
-contract NFTFacet is ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721QueryableUpgradeable*/ {
+contract NFTFacet is ERC721EnumerableUpgradeable, INFTFacet /*is ERC721Upgradeable, ERC721QueryableUpgradeable*/ {
 
     function initNFTFacet() external initializer {
         __ERC721_init("Land02", "LAND02");
