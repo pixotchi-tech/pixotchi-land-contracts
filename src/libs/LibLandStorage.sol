@@ -51,6 +51,7 @@ library LibLandStorage {
         MetaTxContextStorage metaTxContext;
 
         uint256 maxSupply;
+        uint256 nextTokenId;
         // Mapping to store coordinates for each token ID
         mapping(uint256 => Coordinates) tokenCoordinates;
 
