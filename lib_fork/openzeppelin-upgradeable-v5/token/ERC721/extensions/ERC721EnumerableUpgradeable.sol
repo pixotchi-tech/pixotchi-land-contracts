@@ -213,6 +213,18 @@ abstract contract ERC721EnumerableUpgradeable is Initializable, ERC721Upgradeabl
         return result;
     }
 
+    /**
+     * @dev See {IERC721Upgradeable-exists}. Returns whether `tokenId` exists.
+     *
+     * Tokens can be managed by their owner or approved accounts via {approve} or {setApprovalForAll}.
+     *
+     * Tokens start existing when they are minted (`_mint`),
+     * and stop existing when they are burned (`_burn`).
+     */
+    function exists(uint256 tokenId) public view virtual returns (bool) {
+        return _ownerOf(tokenId) != address(0);
+    }
+
 
 
 }
