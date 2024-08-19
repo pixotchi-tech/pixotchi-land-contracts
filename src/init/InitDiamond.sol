@@ -6,6 +6,9 @@ import { LibLandStorage } from "../libs/LibLandStorage.sol";
 import { LibAppStorage, AppStorage } from "../libs/LibAppStorage.sol";
 import { LibDiamond } from 'lib/diamond-2-hardhat/contracts/libraries/LibDiamond.sol';
 import {IERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
+import {INFTFacet} from "../interfaces/INFTFacet.sol";
+
+
 
 contract InitDiamond /*is NFTInit*/ {
   event InitializeDiamond(address sender);
@@ -37,6 +40,8 @@ contract InitDiamond /*is NFTInit*/ {
     _sD().supportedInterfaces[type(IERC721Enumerable).interfaceId] = true; // ERC165 interface ID for IERC721Enumerable.
 
     //NFTInit.__ERC721A_init("Land01", "LAND01");
+    INFTFacet(address(this)).initNFTFacet();
+    emit InitializeDiamond(msg.sender);
 
   }
 }
