@@ -2,7 +2,7 @@
 pragma solidity >=0.8.21;
 
 import {LibLandStorage} from "../libs/LibLandStorage.sol";
-//import {LibLand} from "../libs/LibLand.sol";
+import {LibLand} from "../libs/LibLand.sol";
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {ERC721EnumerableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
@@ -16,34 +16,27 @@ contract NFTFacet is ERC721EnumerableUpgradeable /*is ERC721Upgradeable, ERC721Q
     }
 
     function mint() external {
-        _safeMint(msg.sender, _sN().nextTokenId++);
+        _nftMint(msg.sender, 1);
     }
 
-//    function initNFTFacet() external initializerERC721 {
-//        __ERC721_init("Land01", "LAND01");
-//        _nftMint(msg.sender, 1);
-//    }
-//
-//
-//    function mint(uint256 quantity) external {
-//        _nftMint(msg.sender, quantity);
-//    }
-//
-//    /// @notice Internal function to mint NFTs with specific coordinate assignment
-//    /// @param to The address to mint the NFT to
-//    /// @param quantity The number of NFTs to mint
-//    function _nftMint(address to, uint256 quantity) internal {
-//        uint256 supply = totalSupply();
-//        require(supply + quantity <= _sN().maxSupply, "Exceeds max supply");
-//
-//        _mint(to, quantity);
-//
-//        for (uint256 i = 0; i < quantity; i++) {
-//            uint256 tokenId = supply + i + 1;
-//            LibLand._AssignLand(tokenId);
-//        }
-//    }
-//
+
+
+    /// @notice Internal function to mint NFTs with specific coordinate assignment
+    /// @param to The address to mint the NFT to
+    /// @param quantity The number of NFTs to mint
+    function _nftMint(address to, uint256 quantity) internal {
+        uint256 supply = totalSupply();
+        require(supply + quantity <= _sN().maxSupply, "Exceeds max supply");
+
+        _safeMint(msg.sender, _sN().nextTokenId++);
+
+
+        for (uint256 i = 0; i < quantity; i++) {
+            uint256 tokenId = supply + i + 1;
+            LibLand._AssignLand(tokenId);
+        }
+    }
+
 
 
 
