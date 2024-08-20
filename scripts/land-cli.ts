@@ -1,6 +1,8 @@
 import { createInterface } from 'readline/promises';
 import { executeContractWrite } from "./viem-generics";
-import {landContract} from './viemUtils';
+import {landContract, publicClient} from './viemUtils';
+import {getContract} from "viem";
+import {abi} from "../src/generated/abi";
 
 
 // Specific function for minting land
@@ -9,21 +11,21 @@ async function mint(/*quantity: bigint*/): Promise<void> {
 }
 
 async function getLandCoordinates(fromTokenId: bigint, toTokenId: bigint): Promise<void> {
-    // const contract = getContract({
-    //     address: landContract.address,
-    //     abi: landAbi,
-    //     client: publicClient
-    // });
+    const contract = getContract({
+        address: landContract.address,
+        abi: abi,
+        client: publicClient
+    });
 
-    // for (let tokenId = fromTokenId; tokenId <= toTokenId; tokenId++) {
-    //     try {
-    //         const [x, y] = await landContract.read.nftGetLandCoordinates([tokenId]);
-    //         //const [x, y] = await contract.read.nftGetLandCoordinates([tokenId]);
-    //         console.log(`Token ID ${tokenId}: (x: ${x}, y: ${y})`);
-    //     } catch (error) {
-    //         console.error(`Error getting coordinates for Token ID ${tokenId}:`, error);
-    //     }
-    // }
+    for (let tokenId = fromTokenId; tokenId <= toTokenId; tokenId++) {
+        try {
+            const [x, y] = await landContract.read.landGetCoordinates([tokenId]);
+            //const [x, y] = await contract.read.nftGetLandCoordinates([tokenId]);
+            console.log(`Token ID ${tokenId}: (x: ${x}, y: ${y})`);
+        } catch (error) {
+            console.error(`Error getting coordinates for Token ID ${tokenId}:`, error);
+        }
+    }
 }
 
 // Renamed function
@@ -38,13 +40,13 @@ async function initFacet(): Promise<void> {
 }
 
 async function landGetBoundaries(): Promise<void> {
-    //const [minX, maxX, minY, maxY] = await landContract.read.landGetBoundaries();
-    //console.log(`Boundaries: minX: ${minX}, maxX: ${maxX}, minY: ${minY}, maxY: ${maxY}`);
+    const [minX, maxX, minY, maxY] = await landContract.read.landGetBoundaries();
+    console.log(`Boundaries: minX: ${minX}, maxX: ${maxX}, minY: ${minY}, maxY: ${maxY}`);
 }
 
 async function landGetCoordinates(tokenId: bigint): Promise<void> {
-    //const [x, y, occupied] = await landContract.read.landGetCoordinates([tokenId]);
-    //console.log(`Token ID ${tokenId}: x: ${x}, y: ${y}, occupied: ${occupied}`);
+    const [x, y, occupied] = await landContract.read.landGetCoordinates([tokenId]);
+    console.log(`Token ID ${tokenId}: x: ${x}, y: ${y}, occupied: ${occupied}`);
 }
 
 async function landGetDiamondInitialized(): Promise<void> {
@@ -53,13 +55,13 @@ async function landGetDiamondInitialized(): Promise<void> {
 }
 
 async function landGetMaxSupply(): Promise<void> {
-    //const maxSupply = await landContract.read.landGetMaxSupply();
-    //console.log(`Max supply: ${maxSupply}`);
+    const maxSupply = await landContract.read.maxSupply();
+    console.log(`Max supply: ${maxSupply}`);
 }
 
 async function landGetTokenIdByCoordinates(x: bigint, y: bigint): Promise<void> {
-    //const tokenId = await landContract.read.landGetTokenIdByCoordinates([x, y]);
-    //console.log(`Token ID for coordinates (${x}, ${y}): ${tokenId}`);
+    const tokenId = await landContract.read.landGetTokenIdByCoordinates([x, y]);
+    console.log(`Token ID for coordinates (${x}, ${y}): ${tokenId}`);
 }
 
 async function getOwner(): Promise<void> {
@@ -87,7 +89,7 @@ async function main(): Promise<void> {
         console.log("\nWhat would you like to do?");
         console.log("1. Mint land");
         console.log("2. Get Land Coordinates");
-        console.log("3. Initialize NFT Facet (ERC721A)");
+        console.log("3. Initialize NFT Facet (ERC721)");
         console.log("4. Initialize Facet");
         console.log("5. Get Land Boundaries");
         console.log("6. Get Coordinates for Token ID");
