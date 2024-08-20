@@ -56,6 +56,10 @@ contract NFTFacet is ERC721EnumerableUpgradeable, INFTFacet /*is ERC721Upgradeab
         return super.totalSupply();
     }
 
+    function maxSupply() public view virtual  returns (uint256) {
+        return _sN().maxSupply;
+    }
+
     /// ERC721 Overrides
 
 
