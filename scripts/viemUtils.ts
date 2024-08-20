@@ -12,7 +12,7 @@ import { base, baseSepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 import dotenv from 'dotenv';
 import { getProxyAddressByChainId } from './getProxyAddress';
-import {landAbi} from "./landabi";
+import {abi} from "./../src/generated/abi";
 //import {landAbiHuman} from "./landabi-human";
 //import landAbiHumanReadable from '../src/generated/abi-human';
 
@@ -60,7 +60,7 @@ export const LAND_CONTRACT_ADDRESS = getAddress(getProxyAddressByChainId(chain.i
 
 export const landContract = getContract({
     address: LAND_CONTRACT_ADDRESS,
-    abi: landAbi,
+    abi: abi,
     client: walletClient,
 });
 
