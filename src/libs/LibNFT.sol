@@ -1,6 +1,24 @@
-/*
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
+
+import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+
+abstract contract NFTModifiers {
+    //using LibNFT for uint256;
+
+    /**
+     * @dev Modifier to check if a token exists
+     * @param tokenId The ID of the token to check
+     */
+    modifier exists(uint256 tokenId) {
+        //IERC721(address(this)).exists(tokenId)
+        require(IERC721(address(this)).exists(tokenId), "NFT: Token does not exist");
+        _;
+    }
+}
+
+/*
+
 
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
