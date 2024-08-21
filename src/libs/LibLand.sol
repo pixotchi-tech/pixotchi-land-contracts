@@ -9,37 +9,52 @@ import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {IERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 
 library LibLand {
-    /// @notice Calculates coordinates for a given token ID
+
+    /// @notice Generates coordinates for a given token ID using a quadrant spiral algorithm
     /// @param tokenId The ID of the token to calculate coordinates for
     /// @return x The calculated X coordinate
     /// @return y The calculated Y coordinate
-    function _landCalculateCoordinates(uint256 tokenId) internal pure returns (int256 x, int256 y) {
+    function landCalculateCoordinatesQuadrantSpiral(uint256 tokenId) public pure returns (int256 x, int256 y) {
         if (tokenId == 0) {
             return (0, 0);
         }
 
-        uint256 quadrant = (tokenId - 1) % 4;
-        uint256 step = (tokenId - 1) / 4 + 1;
+        int256[2][4] memory directions = [
+            [int256(0), int256(1)],
+            [int256(1), int256(0)],
+            [int256(0), int256(-1)],
+            [int256(-1), int256(0)]
+        ]; // right, down, left, up
+        uint256 directionIndex = 0;
+        uint256 stepsInThisDirection = 1;
+        uint256 stepsCount = 0;
 
-        if (quadrant == 0) { // Right top
-            x = int256(step);
-            y = int256(step);
-        } else if (quadrant == 1) { // Right bottom
-            x = int256(step);
-            y = -int256(step);
-        } else if (quadrant == 2) { // Left bottom
-            x = -int256(step);
-            y = -int256(step);
-        } else { // Left top
-            x = -int256(step);
-            y = int256(step);
+        for (uint256 i = 0; i < tokenId; i++) {
+            int256 dx = directions[directionIndex][0];
+            int256 dy = directions[directionIndex][1];
+            x += dx;
+            y += dy;
+
+            stepsCount++;
+
+            if (stepsCount == stepsInThisDirection) {
+                directionIndex = (directionIndex + 1) % 4;
+                stepsCount = 0;
+
+                // Increase steps every two direction changes
+                if (directionIndex % 2 == 0) {
+                    stepsInThisDirection++;
+                }
+            }
         }
+
+        return (x, y);
     }
 
     /// @notice Assigns coordinates to a newly minted token
     /// @param tokenId The ID of the token to assign coordinates to
     function _landAssignCoordinates(uint256 tokenId) private {
-        (int256 x, int256 y) = _landCalculateCoordinates(tokenId);
+        (int256 x, int256 y) = landCalculateCoordinatesQuadrantSpiral(tokenId);
 
         // Ensure coordinates are within bounds using custom errors
         if (x < _sN().minX || x > _sN().maxX) {
