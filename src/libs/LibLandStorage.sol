@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 
-import { MetaTxContextStorage } from "../shared/Structs.sol";
-
+/// @title LibLandStorage
+/// @notice Library for managing LAND storage in the Pixotchi game
+/// @dev This library provides functions and structures for LAND-related data storage
 library LibLandStorage {
     bytes32 internal constant DIAMOND_STORAGE_POSITION = keccak256("eth.pixotchi.land.storage");
 
@@ -26,6 +27,9 @@ library LibLandStorage {
         s.maxY = 112;
     }
 
+    /// @dev Error thrown when trying to initialize with a version lower than or equal to the current version
+    /// @param currentVersion The current initialization version
+    /// @param newVersion The new version attempted to initialize
     error AlreadyInitialized(uint256 currentVersion, uint256 newVersion);
 
     /// @notice Modifier to ensure initialization is done only once per version
@@ -39,40 +43,58 @@ library LibLandStorage {
         s.initializationNumber = version;
     }
 
+    /// @notice Struct to represent coordinates of a LAND
+    /// @param x The x-coordinate
+    /// @param y The y-coordinate
+    /// @param occupied Whether the coordinate is occupied
     struct Coordinates {
         int256 x;
         int256 y;
         bool occupied;
     }
 
+    /// @notice Main data structure for LAND storage
     struct Data {
+        /// @notice The initialization version number
         uint256 initializationNumber;
-        uint256 reentrancyStatus;
-        MetaTxContextStorage metaTxContext;
-
+        
+        /// @notice The maximum supply of LAND tokens
         uint256 maxSupply;
+        
+        /// @notice The next available token ID for minting
         uint256 nextTokenId;
-        // Mapping to store coordinates for each token ID
-        mapping(uint256 => Coordinates) tokenCoordinates;
-
-        // Boundaries for x and y coordinates
+        
+        /// @notice Minimum x-coordinate of the LAND grid
         int256 minX;
+        
+        /// @notice Maximum x-coordinate of the LAND grid
         int256 maxX;
+        
+        /// @notice Minimum y-coordinate of the LAND grid
         int256 minY;
+        
+        /// @notice Maximum y-coordinate of the LAND grid
         int256 maxY;
 
-        // Mapping to access coordinates directly
+        /// @notice Mapping from token ID to its coordinates
+        mapping(uint256 => Coordinates) tokenCoordinates;
+        
+        /// @notice Mapping from coordinates to token ID
         mapping(int256 => mapping(int256 => uint256)) coordinateToTokenId;
-
-        /// @notice Timestamp of when the land was minted
+        
+        /// @notice Mapping from token ID to its mint date
         mapping(uint256 => uint256) mintDate;
-        /// @notice Custom name given to the land
+        
+        /// @notice Mapping from token ID to its name
         mapping(uint256 => string) name;
-        /// @notice Total experience points accumulated on this land
+        
+        /// @notice Mapping from token ID to its experience points
         mapping(uint256 => uint256) experiencePoints;
-        /// @notice Cumulative points earned from plants on this land
+        
+        /// @notice Mapping from token ID to its accumulated plant points
         mapping(uint256 => uint256) accumulatedPlantPoints;
-        /// @notice Total lifetime of all plants grown on this land
+        
+        /// @notice Mapping from token ID to its accumulated plant lifetime
         mapping(uint256 => uint256) accumulatedPlantLifetime;
     }
 }
