@@ -59,12 +59,12 @@ contract LandFacet is NFTModifiers {
         return tokenId;
     }
 
-//
-//    /// @notice Get all lands owned by a specific address
-//    /// @param owner The address of the land owner
-//    /// @return lands An array of Land structs containing the land information
-//    function landGetByOwner(address owner) public view returns (Land[] memory lands) {
-//        return LibLand._getLandsByOwner(owner);
-//    }
+
+    /// @notice Get all lands owned by a specific address
+    /// @param owner The address of the land owner
+    /// @return lands An array of Land structs containing the land information
+    function landGetByOwner(address owner) public view returns (Land[] memory lands) {
+        return LibLand._getLandsByOwner(owner);
+    }
 
 }
