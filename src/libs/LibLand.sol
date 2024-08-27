@@ -109,24 +109,43 @@ library LibLand {
     /// @notice Retrieves the buildings in a village for a given token ID
     /// @param tokenId The ID of the token to retrieve village buildings for
     /// @return An array of Building structs representing the village buildings
-    function _getVillageBuildings(uint256 tokenId) internal view returns (Building[] storage) {
+    function _getVillageBuildings(uint256 tokenId) internal view returns (Building[] memory) {
         require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
 
         LibLandBuildingStorage.Data storage s = _sNB();
 
-        return s.villageBuildings[tokenId];
+        LibLandBuildingStorage.Building[] storage storageBuildings = s.villageBuildings[tokenId];
+        uint256 buildingCount = storageBuildings.length;
+
+        Building[] memory buildings = new Building[](buildingCount);
+
+        for (uint256 i = 0; i < buildingCount; i++) {
+            uint256 accumulatedPoints = 0; //TODO, on chain calculation based on BuildingType points production rate
+            uint256 accumulatedLifetime = 0; //TODO, on chain calculation based on BuildingType lifetime production rate
+            
+            buildings[i] = Building({
+                id: storageBuildings[i].id,
+                level: storageBuildings[i].level,
+                blockHeightUpgradeInitiated: storageBuildings[i].blockHeightUpgradeInitiated,
+                blockHeightUntilUpgradeDone: storageBuildings[i].blockHeightUntilUpgradeDone,
+                accumulatedPoints: accumulatedPoints,
+                accumulatedLifetime: accumulatedLifetime
+            });
+        }
+
+        return buildings;
     }
 
-    /// @notice Retrieves the buildings in a town for a given token ID
-    /// @param tokenId The ID of the token to retrieve town buildings for
-    /// @return An array of Building structs representing the town buildings
-    function _getTownBuildings(uint256 tokenId) internal view returns (Building[] storage) {
-        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+    // /// @notice Retrieves the buildings in a town for a given token ID
+    // /// @param tokenId The ID of the token to retrieve town buildings for
+    // /// @return An array of Building structs representing the town buildings
+    // function _getTownBuildings(uint256 tokenId) internal view returns (Building[] memory) {
+    //     require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
 
-        LibLandBuildingStorage.Data storage s = _sNB();
+    //     LibLandBuildingStorage.Data storage s = _sNB();
 
-        return s.townBuildings[tokenId];
-    }
+    //     return s.townBuildings[tokenId];
+    // }
 
     /// @notice Retrieves land information for a given token ID
     /// @param tokenId The ID of the token to retrieve land information for

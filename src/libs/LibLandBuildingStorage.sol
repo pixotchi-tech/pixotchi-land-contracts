@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 
-import { Building, BuildingType } from "../shared/Structs.sol";
 
 /// @title LibLandBuildingStorage
 /// @notice Library for managing LAND building storage
@@ -47,5 +46,20 @@ library LibLandBuildingStorage {
     /// @notice Mapping of town ID to its buildings
     /// @dev Key is the town ID, value is an array of Building structs
     mapping(uint256 => Building[]) townBuildings;
+  }
+
+
+  /// @notice Represents a building in the game
+/// @dev Contains information about a building's state and progress
+  struct Building {
+    /// @notice Unique identifier for the building type
+    uint8 id;
+    /// @notice Current level of the building
+    uint8 level;
+    /// @notice Block number when the upgrade was initiated
+    uint256 blockHeightUpgradeInitiated;
+    /// @notice Block number when the upgrade will be completed
+    uint256 blockHeightUntilUpgradeDone;
+    /// @notice Total points accumulated by this building
   }
 }
