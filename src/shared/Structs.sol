@@ -67,9 +67,17 @@ struct BuildingType {
     /// @notice Whether this building type comes pre-built
     bool preBuilt;
     /// @notice Leaf cost for upgrading to each level
-    mapping(uint8 => uint256) levelUpgradeCostLeaf;
+    uint256[] levelUpgradeCostLeaf;
     /// @notice Seed cost for instant upgrade to each level
-    mapping(uint8 => uint256) levelUpgradeCostSeedInstant;
+    uint256[] levelUpgradeCostSeedInstant;
     /// @notice Block interval required for upgrading to each level
-    mapping(uint8 => uint256) levelUpgradeBlockInterval;
+    uint256[] levelUpgradeBlockInterval;
+    /// @notice Whether this building type produces plant points
+    bool isProducingPlantPoints;
+    /// @notice Whether this building type produces plant lifetime
+    bool isProducingPlantLifetime;
+    /// @notice Production rate of plant lifetime per block for each level
+    uint256[] productionRatePlantLifetimePerBlock;
+    /// @notice Production rate of plant points per block for each level
+    uint256[] productionRatePlantPointsPerBlock;
 }
