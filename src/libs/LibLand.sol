@@ -190,21 +190,32 @@ library LibLand {
         return land;
     }
 
-    /// @notice Retrieves all lands owned by a specific address
+    /// @notice Retrieves all token IDs owned by a specific address
     /// @param owner The address of the land owner
-    /// @return lands An array of Land structs containing the land information
-    function _getLandsByOwner(address owner) internal view returns (Land[] memory lands) {
+    /// @return tokenIds An array of token IDs owned by the given address
+    function _getTokenIdsByOwner(address owner) internal view returns (uint256[] memory tokenIds) {
         uint256 balance = IERC721(address(this)).balanceOf(owner);
-        lands = new Land[](balance);
+        tokenIds = new uint256[](balance);
 
-        uint256 landCount = 0;
+        uint256 tokenCount = 0;
         uint256 totalSupply = IERC721Enumerable(address(this)).totalSupply();
 
-        for (uint256 tokenId = 1; tokenId <= totalSupply && landCount < balance; tokenId++) {
+        for (uint256 tokenId = 1; tokenId <= totalSupply && tokenCount < balance; tokenId++) {
             if (IERC721(address(this)).ownerOf(tokenId) == owner) {
-                lands[landCount] = _getLand(tokenId);
-                landCount++;
+                tokenIds[tokenCount] = tokenId;
+                tokenCount++;
             }
+        }
+    }
+
+    /// @notice Retrieves land information for multiple token IDs
+    /// @param tokenIds An array of token IDs to retrieve land information for
+    /// @return lands An array of Land structs containing the land information
+    function _getLandsByIds(uint256[] memory tokenIds) internal view returns (Land[] memory lands) {
+        lands = new Land[](tokenIds.length);
+
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            lands[i] = _getLand(tokenIds[i]);
         }
     }
 
