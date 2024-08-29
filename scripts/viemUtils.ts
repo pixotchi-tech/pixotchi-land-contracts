@@ -12,7 +12,7 @@ import { base, baseSepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 import dotenv from 'dotenv';
 import { getProxyAddressByChainId } from './getProxyAddress';
-import {abi} from "./../src/generated/abi";
+import {abi} from "./abi";
 //import {landAbiHuman} from "./landabi-human";
 //import landAbiHumanReadable from '../src/generated/abi-human';
 

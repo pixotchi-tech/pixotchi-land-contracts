@@ -2,7 +2,7 @@ import { createInterface } from 'readline/promises';
 import { executeContractWrite } from "./viem-generics";
 import {landContract, publicClient} from './viemUtils';
 import {getContract} from "viem";
-import {abi} from "../src/generated/abi";
+import {abi} from "./abi";
 
 
 // Specific function for minting land
