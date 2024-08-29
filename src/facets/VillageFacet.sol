@@ -31,7 +31,7 @@ contract VillageFacet is NFTModifiers {
     /// @param landId The ID of the land
     /// @return villageBuildings An array of VillageBuilding structs containing the building information
     function villageGetVillageBuildingsByLandId(uint256 landId) public view exists(landId) returns (VillageBuilding[] memory villageBuildings) {
-        LibVillage._villageGetBuildingsByLandId(landId);
+        return LibVillage._villageGetBuildingsByLandId(landId);
     }
 
     /// @notice Upgrade a village building using leaves
