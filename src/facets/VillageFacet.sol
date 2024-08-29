@@ -6,6 +6,7 @@ import {LibAppStorage, AppStorage} from "../libs/LibAppStorage.sol";
 import {NFTModifiers} from "../libs/LibNFT.sol";
 import {LibLand} from "../libs/LibLand.sol";
 import "../shared/Structs.sol";
+import {LibVillage} from "../libs/LibVillage.sol";
 
 contract VillageFacet is NFTModifiers {
 
@@ -29,71 +30,29 @@ contract VillageFacet is NFTModifiers {
     /// @notice Get all village buildings for a given land ID
     /// @param landId The ID of the land
     /// @return villageBuildings An array of VillageBuilding structs containing the building information
-    function landGetVillageBuildingsByLandId(uint256 landId) public view exists(landId) returns (VillageBuilding[] memory villageBuildings) {
-        //TODO: implement actual logic to fetch from storage
-        villageBuildings = new VillageBuilding[](3);
-        
-        villageBuildings[0] = VillageBuilding({
-            id: 0, // Solar
-            level: 1,
-            blockHeightUpgradeInitiated: block.number - 1000,
-            blockHeightUntilUpgradeDone: block.number + 1000,
-            accumulatedPoints: 1000,
-            accumulatedLifetime: 500,
-            isUpgrading: false,
-            levelUpgradeCostLeaf: 100,
-            levelUpgradeCostSeedInstant: 50,
-            levelUpgradeBlockInterval: 1000,
-            productionRatePlantLifetimePerBlock: 5,
-            productionRatePlantPointsPerBlock: 10,
-            maxLevel: 5,
-            claimedBlockHeight: block.number - 1000
-        });
-
-        villageBuildings[1] = VillageBuilding({
-            id: 3, // Soil Factory
-            level: 1,
-            blockHeightUpgradeInitiated: block.number - 900,
-            blockHeightUntilUpgradeDone: block.number + 900,
-            accumulatedPoints: 800,
-            accumulatedLifetime: 400,
-            isUpgrading: true,
-            levelUpgradeCostLeaf: 120,
-            levelUpgradeCostSeedInstant: 60,
-            levelUpgradeBlockInterval: 1100,
-            productionRatePlantLifetimePerBlock: 6,
-            productionRatePlantPointsPerBlock: 12,
-            maxLevel: 4,
-            claimedBlockHeight: block.number - 900
-        });
-
-        villageBuildings[2] = VillageBuilding({
-            id: 5, // Bee Farm
-            level: 2,
-            blockHeightUpgradeInitiated: block.number - 800,
-            blockHeightUntilUpgradeDone: block.number + 800,
-            accumulatedPoints: 1200,
-            accumulatedLifetime: 600,
-            isUpgrading: false,
-            levelUpgradeCostLeaf: 150,
-            levelUpgradeCostSeedInstant: 75,
-            levelUpgradeBlockInterval: 1200,
-            productionRatePlantLifetimePerBlock: 7,
-            productionRatePlantPointsPerBlock: 14,
-            maxLevel: 6,
-            claimedBlockHeight: block.number - 800
-        });
-
-        return villageBuildings;
+    function villageGetVillageBuildingsByLandId(uint256 landId) public view exists(landId) returns (VillageBuilding[] memory villageBuildings) {
+        LibVillage._villageGetBuildingsByLandId(landId);
     }
 
-
+    /// @notice Upgrade a village building using leaves
+    /// @param landId The ID of the land
+    /// @param buildingId The ID of the building to upgrade
     function villageUpgradeWithLeaf(uint256 landId, uint8 buildingId) public exists(landId) {
-        //TODO: implement actual logic to upgrade village building
+        LibVillage._villageUpgradeWithLeaf(landId, buildingId);
     }
 
+    /// @notice Speed up a village building upgrade using seeds
+    /// @param landId The ID of the land
+    /// @param buildingId The ID of the building to speed up
     function villageSpeedUpWithSeed(uint256 landId, uint8 buildingId) public exists(landId) {
-        //TODO: implement actual logic to upgrade village building
+        LibVillage._villageSpeedUpWithSeed(landId, buildingId);
+    }
+
+    /// @notice Claim production from a village building
+    /// @param landId The ID of the land
+    /// @param buildingId The ID of the building to claim production from
+    function villageClaimProduction(uint256 landId, uint8 buildingId) public exists(landId) {
+        LibVillage._villageClaimProduction(landId, buildingId);
     }
 
     function townUpgradeWithLeaf(uint256 landId, uint8 buildingId) public exists(landId) {
