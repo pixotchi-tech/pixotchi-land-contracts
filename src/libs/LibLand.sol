@@ -2,11 +2,11 @@
 pragma solidity >=0.8.21;
 
 import { LibLandStorage } from "../libs/LibLandStorage.sol";
-import { LibAppStorage, AppStorage } from "../libs/LibAppStorage.sol";
-import { Land, Building, BuildingType } from "../shared/Structs.sol";
+import  "../libs/LibAppStorage.sol";
+import   "../shared/Structs.sol";
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {IERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
-import {LibLandBuildingStorage} from "./LibLandBuildingStorage.sol";
+import {LibLandStorage} from "./LibLandStorage.sol";
 
 /// @title LibLand
 /// @notice A library for managing land-related operations in the Pixotchi game
@@ -106,65 +106,68 @@ library LibLand {
         _sN().mintDate[tokenId] = block.timestamp;
     }
 
-    /// @notice Retrieves the buildings in a village for a given token ID
-    /// @param tokenId The ID of the token to retrieve village buildings for
-    /// @return An array of Building structs representing the village buildings
-    function _getVillageBuildings(uint256 tokenId) internal view returns (Building[] memory) {
-        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
-
-        LibLandBuildingStorage.Data storage s = _sNB();
-
-        LibLandBuildingStorage.Building[] storage storageBuildings = s.villageBuildings[tokenId];
-        uint256 buildingCount = storageBuildings.length;
-
-        Building[] memory buildings = new Building[](buildingCount);
-
-        for (uint256 i = 0; i < buildingCount; i++) {
-            uint256 accumulatedPoints = 0; //TODO, on chain calculation based on BuildingType points production rate
-            uint256 accumulatedLifetime = 0; //TODO, on chain calculation based on BuildingType lifetime production rate
-            
-            buildings[i] = Building({
-                id: storageBuildings[i].id,
-                level: storageBuildings[i].level,
-                blockHeightUpgradeInitiated: storageBuildings[i].blockHeightUpgradeInitiated,
-                blockHeightUntilUpgradeDone: storageBuildings[i].blockHeightUntilUpgradeDone,
-                accumulatedPoints: accumulatedPoints,
-                accumulatedLifetime: accumulatedLifetime
-            });
-        }
-
-        return buildings;
-    }
-
-    /// @notice Retrieves the buildings in a town for a given token ID
-    /// @param tokenId The ID of the token to retrieve town buildings for
-    /// @return An array of Building structs representing the town buildings
-    function _getTownBuildings(uint256 tokenId) internal view returns (Building[] memory) {
-        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
-
-        LibLandBuildingStorage.Data storage s = _sNB();
-
-        LibLandBuildingStorage.Building[] storage storageBuildings = s.townBuildings[tokenId];
-        uint256 buildingCount = storageBuildings.length;
-
-        Building[] memory buildings = new Building[](buildingCount);
-
-        for (uint256 i = 0; i < buildingCount; i++) {
-            uint256 accumulatedPoints = 0; //TODO, on chain calculation based on BuildingType points production rate
-            uint256 accumulatedLifetime = 0; //TODO, on chain calculation based on BuildingType lifetime production rate
-            
-            buildings[i] = Building({
-                id: storageBuildings[i].id,
-                level: storageBuildings[i].level,
-                blockHeightUpgradeInitiated: storageBuildings[i].blockHeightUpgradeInitiated,
-                blockHeightUntilUpgradeDone: storageBuildings[i].blockHeightUntilUpgradeDone,
-                accumulatedPoints: accumulatedPoints,
-                accumulatedLifetime: accumulatedLifetime
-            });
-        }
-
-        return buildings;
-    }
+//    /// @notice Retrieves the buildings in a village for a given token ID
+//    /// @param tokenId The ID of the token to retrieve village buildings for
+//    /// @return An array of Building structs representing the village buildings
+//    function _getVillageBuildings(uint256 tokenId) internal view returns (Building[] memory) {
+//        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+//
+//        LibLandBuildingStorage.Data storage s = _sNB();
+//
+//        LibLandBuildingStorage.Building[] storage storageBuildings = s.villageBuildings[tokenId];
+//        uint256 buildingCount = storageBuildings.length;
+//
+//        Building[] memory buildings = new Building[](buildingCount);
+//
+//        for (uint256 i = 0; i < buildingCount; i++) {
+//            uint256 accumulatedPoints = 0; //TODO, on chain calculation based on BuildingType points production rate
+//            uint256 accumulatedLifetime = 0; //TODO, on chain calculation based on BuildingType lifetime production rate
+//            bool isUpgrading = false //TODO
+//
+//            buildings[i] = Building({
+//                id: storageBuildings[i].id,
+//                level: storageBuildings[i].level,
+//                blockHeightUpgradeInitiated: storageBuildings[i].blockHeightUpgradeInitiated,
+//                blockHeightUntilUpgradeDone: storageBuildings[i].blockHeightUntilUpgradeDone,
+//                accumulatedPoints: accumulatedPoints,
+//                accumulatedLifetime: accumulatedLifetime,
+//                isUpgrading: isUpgrading
+//            });
+//
+//        }
+//
+//        return buildings;
+//    }
+//
+//    /// @notice Retrieves the buildings in a town for a given token ID
+//    /// @param tokenId The ID of the token to retrieve town buildings for
+//    /// @return An array of Building structs representing the town buildings
+//    function _getTownBuildings(uint256 tokenId) internal view returns (Building[] memory) {
+//        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+//
+//        LibLandBuildingStorage.Data storage s = _sNB();
+//
+//        LibLandBuildingStorage.Building[] storage storageBuildings = s.townBuildings[tokenId];
+//        uint256 buildingCount = storageBuildings.length;
+//
+//        Building[] memory buildings = new Building[](buildingCount);
+//
+//        for (uint256 i = 0; i < buildingCount; i++) {
+//            uint256 accumulatedPoints = 0; //TODO, on chain calculation based on BuildingType points production rate
+//            uint256 accumulatedLifetime = 0; //TODO, on chain calculation based on BuildingType lifetime production rate
+//
+//            buildings[i] = Building({
+//                id: storageBuildings[i].id,
+//                level: storageBuildings[i].level,
+//                blockHeightUpgradeInitiated: storageBuildings[i].blockHeightUpgradeInitiated,
+//                blockHeightUntilUpgradeDone: storageBuildings[i].blockHeightUntilUpgradeDone,
+//                accumulatedPoints: accumulatedPoints,
+//                accumulatedLifetime: accumulatedLifetime
+//            });
+//        }
+//
+//        return buildings;
+//    }
 
     /// @notice Retrieves land information for a given token ID
     /// @param tokenId The ID of the token to retrieve land information for
@@ -225,11 +228,6 @@ library LibLand {
         data = LibLandStorage.data();
     }
 
-    /// @notice Internal function to access NFT Building storage
-    /// @return data The LibLandBuildingStorage.Data struct
-    function _sNB() internal pure returns (LibLandBuildingStorage.Data storage data) {
-        data = LibLandBuildingStorage.data();
-    }
 
     /// @notice Internal function to access AppStorage
     /// @return data The AppStorage struct
