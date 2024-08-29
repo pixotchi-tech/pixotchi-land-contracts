@@ -445,97 +445,6 @@ export const abi = [
   },
   {
     "type": "function",
-    "name": "landGetVillageBuildingsByLandId",
-    "inputs": [
-      {
-        "name": "landId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "villageBuildings",
-        "type": "tuple[]",
-        "internalType": "struct VillageBuilding[]",
-        "components": [
-          {
-            "name": "id",
-            "type": "uint8",
-            "internalType": "uint8"
-          },
-          {
-            "name": "level",
-            "type": "uint8",
-            "internalType": "uint8"
-          },
-          {
-            "name": "maxLevel",
-            "type": "uint8",
-            "internalType": "uint8"
-          },
-          {
-            "name": "blockHeightUpgradeInitiated",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "blockHeightUntilUpgradeDone",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "accumulatedPoints",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "accumulatedLifetime",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "isUpgrading",
-            "type": "bool",
-            "internalType": "bool"
-          },
-          {
-            "name": "levelUpgradeCostLeaf",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "levelUpgradeCostSeedInstant",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "levelUpgradeBlockInterval",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "productionRatePlantLifetimePerBlock",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "productionRatePlantPointsPerBlock",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "claimedBlockHeight",
-            "type": "uint256",
-            "internalType": "uint256"
-          }
-        ]
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "landOverviewByOwner",
     "inputs": [
       {
@@ -877,6 +786,115 @@ export const abi = [
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "villageClaimProduction",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "buildingId",
+        "type": "uint8",
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "villageGetVillageBuildingsByLandId",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "villageBuildings",
+        "type": "tuple[]",
+        "internalType": "struct VillageBuilding[]",
+        "components": [
+          {
+            "name": "id",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "level",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "maxLevel",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "blockHeightUpgradeInitiated",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "blockHeightUntilUpgradeDone",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "accumulatedPoints",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "accumulatedLifetime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isUpgrading",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "levelUpgradeCostLeaf",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "levelUpgradeCostSeedInstant",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "levelUpgradeBlockInterval",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "productionRatePlantLifetimePerBlock",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "productionRatePlantPointsPerBlock",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "claimedBlockHeight",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
   },
   {
     "type": "function",
