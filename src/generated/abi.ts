@@ -38,6 +38,24 @@ export const abi = [
   },
   {
     "type": "function",
+    "name": "claimVillageProduction",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "buildingId",
+        "type": "uint8",
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "diamondCut",
     "inputs": [
       {
@@ -303,6 +321,77 @@ export const abi = [
   },
   {
     "type": "function",
+    "name": "landGetByOwner",
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "lands",
+        "type": "tuple[]",
+        "internalType": "struct Land[]",
+        "components": [
+          {
+            "name": "tokenId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "tokenUri",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "mintDate",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "owner",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "coordinateX",
+            "type": "int256",
+            "internalType": "int256"
+          },
+          {
+            "name": "coordinateY",
+            "type": "int256",
+            "internalType": "int256"
+          },
+          {
+            "name": "experiencePoints",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "accumulatedPlantPoints",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "accumulatedPlantLifetime",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "landGetCoordinates",
     "inputs": [
       {
@@ -353,6 +442,156 @@ export const abi = [
       }
     ],
     "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "landGetVillageBuildingsByLandId",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "villageBuildings",
+        "type": "tuple[]",
+        "internalType": "struct VillageBuilding[]",
+        "components": [
+          {
+            "name": "id",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "level",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "maxLevel",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "blockHeightUpgradeInitiated",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "blockHeightUntilUpgradeDone",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "accumulatedPoints",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "accumulatedLifetime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isUpgrading",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "levelUpgradeCostLeaf",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "levelUpgradeCostSeedInstant",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "levelUpgradeBlockInterval",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "productionRatePlantLifetimePerBlock",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "productionRatePlantPointsPerBlock",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "claimedBlockHeight",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "landOverviewByOwner",
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct LandOverview[]",
+        "components": [
+          {
+            "name": "tokenId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "coordinateX",
+            "type": "int256",
+            "internalType": "int256"
+          },
+          {
+            "name": "coordinateY",
+            "type": "int256",
+            "internalType": "int256"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "internalType": "string"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "landSetName",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -569,6 +808,42 @@ export const abi = [
   },
   {
     "type": "function",
+    "name": "townSpeedUpWithSeed",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "buildingId",
+        "type": "uint8",
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "townUpgradeWithLeaf",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "buildingId",
+        "type": "uint8",
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "transferFrom",
     "inputs": [
       {
@@ -598,6 +873,42 @@ export const abi = [
         "name": "_newOwner",
         "type": "address",
         "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "villageSpeedUpWithSeed",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "buildingId",
+        "type": "uint8",
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "villageUpgradeWithLeaf",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "buildingId",
+        "type": "uint8",
+        "internalType": "uint8"
       }
     ],
     "outputs": [],
@@ -760,37 +1071,6 @@ export const abi = [
         "name": "sender",
         "type": "address",
         "indexed": false,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ConsecutiveTransfer",
-    "inputs": [
-      {
-        "name": "fromTokenId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "toTokenId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "from",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "to",
-        "type": "address",
-        "indexed": true,
         "internalType": "address"
       }
     ],
@@ -1235,96 +1515,6 @@ export const abi = [
         "internalType": "uint256"
       }
     ]
-  },
-  {
-    "type": "error",
-    "name": "ApprovalCallerNotOwnerNorApproved",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ApprovalQueryForNonexistentToken",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "BalanceQueryForZeroAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "MintERC2309QuantityExceedsLimit",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "MintToZeroAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "MintZeroQuantity",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "NotCompatibleWithSpotMints",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "OwnerQueryForNonexistentToken",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "OwnershipNotInitializedForExtraData",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "SequentialMintExceedsLimit",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "SequentialUpToTooSmall",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "SpotMintTokenIdTooSmall",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "TokenAlreadyExists",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "TransferCallerNotOwnerNorApproved",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "TransferFromIncorrectOwner",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "TransferToNonERC721ReceiverImplementer",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "TransferToZeroAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "URIQueryForNonexistentToken",
-    "inputs": []
   },
   {
     "type": "error",
