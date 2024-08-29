@@ -29,6 +29,8 @@ library LibVillageStorage {
         _initBuildingTypes(s);
     }
 
+
+
     /// @notice Initializes the village building types with their respective data
     /// @dev This function sets up the initial configuration for all building types
     /// @param s The Data storage struct to initialize
@@ -169,6 +171,8 @@ library LibVillageStorage {
         s.initializationNumber = version;
     }
 
+
+
     /// @notice Struct containing all the storage variables for LAND buildings
     struct Data {
         /// @notice The current initialization version number
@@ -203,6 +207,23 @@ library LibVillageStorage {
         UNDEFINED_6,
         UNDEFINED_7
     }
+
+        /// @notice Returns an array of enabled village building type IDs
+    /// @return An array of uint8 representing the enabled building type IDs
+    function villageEnabledBuildingTypes() internal pure returns (uint8[] memory) {
+        uint8[] memory types = new uint8[](villageEnabledBuildingTypesCount());
+        types[0] = uint8(VillageBuildingNaming.SOLAR);
+        types[1] = uint8(VillageBuildingNaming.SOIL_FACTORY);
+        types[2] = uint8(VillageBuildingNaming.BEE_FARM);
+        return types;
+    }
+
+    /// @notice Returns the count of enabled village building types
+    /// @return The number of enabled village building types
+    function villageEnabledBuildingTypesCount() internal pure returns (uint8) {
+        return 3;
+    }
+    
 
     /// @notice Configuration for a village building type
     struct VillageBuildingType {
