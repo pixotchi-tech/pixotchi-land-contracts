@@ -5,10 +5,13 @@ pragma solidity >=0.8.21;
 //import  "../libs/LibAppStorage.sol";
 //import   "../shared/Structs.sol";
 import "./LibVillageStorage.sol";
+import "../shared/Structs.sol";
 
 /// @title LibLand
 /// @notice A library for managing land-related operations in the Pixotchi game
 library LibVillage {
+
+
 
     /// @notice Upgrades or builds a village building using leaves
     /// @param landId The ID of the land
@@ -39,7 +42,7 @@ library LibVillage {
 
         // If upgrading from level 1 or higher, claim resources first
         if (currentLevel > 0) {
-            _villageClaimResources(landId, buildingId);
+            _villageClaimProduction(landId, buildingId);
         }
 
         // Set upgrade details
@@ -52,21 +55,7 @@ library LibVillage {
         // emit VillageUpgradeInitiated(landId, buildingId, nextLevel, block.number, upgradeCompletionBlock);
     }
 
-    /// @notice Claims resources from a village building
-    /// @param landId The ID of the land
-    /// @param buildingId The ID of the building to claim resources from
-    function _villageClaimResources(uint256 landId, uint8 buildingId) internal {
-        // TODO: Implement resource claiming logic
-        // This function should calculate and distribute the resources produced since the last claim
 
-        // Example structure:
-        // 1. Get the current building data
-        // 2. Calculate the time passed since the last claim
-        // 3. Calculate the resources produced based on the building's production rate
-        // 4. Update the player's resource balance
-        // 5. Update the building's last claim time
-        // 6. Emit an event for the resource claim
-    }
 
     /// @notice Speeds up a village building upgrade using a seed
     /// @param landId The ID of the land
@@ -143,10 +132,99 @@ library LibVillage {
         return isUpgrading;
     }
 
+    /// @notice Retrieves all village buildings for a given land ID
+    /// @param landId The ID of the land
+    /// @return buildings An array of VillageBuilding structs for the given land ID
+    function _villageGetBuildingsByLandId(uint256 landId) internal view returns (VillageBuilding[] memory buildings) {
+        LibVillageStorage.Data storage s = _sNB();
+        
+        buildings = new VillageBuilding[](LibVillageStorage.villageEnabledBuildingTypesCount());
+
+        uint8[] memory enabledBuildingTypes = LibVillageStorage.villageEnabledBuildingTypes();
+        
+        for (uint8 i = 0; i < LibVillageStorage.villageEnabledBuildingTypesCount(); i++) {
+            uint8 buildingId = enabledBuildingTypes[i];
+            LibVillageStorage.VillageBulding storage storedBuilding = s.villageBuildings[landId][buildingId];
+            LibVillageStorage.VillageBuildingType storage buildingType = s.villageBuildingTypes[buildingId];
+            LibVillageStorage.LevelData storage levelData = buildingType.levelData[storedBuilding.level + 1];
+
+            buildings[i] = VillageBuilding({
+                id: buildingId,
+                level: storedBuilding.level,
+                maxLevel: buildingType.maxLevel,
+                blockHeightUpgradeInitiated: storedBuilding.blockHeightUpgradeInitiated,
+                blockHeightUntilUpgradeDone: storedBuilding.blockHeightUntilUpgradeDone,
+                accumulatedPoints: _villageCalculateAccumulatedPoints(landId, buildingId),
+                accumulatedLifetime: _villageCalculateAccumulatedLifetime(landId, buildingId),
+                isUpgrading: _villageIsUpgrading(landId, buildingId),
+                levelUpgradeCostLeaf: levelData.levelUpgradeCostLeaf,
+                levelUpgradeCostSeedInstant: levelData.levelUpgradeCostSeedInstant,
+                levelUpgradeBlockInterval: levelData.levelUpgradeBlockInterval,
+                productionRatePlantLifetimePerBlock: levelData.productionRatePlantLifetimePerBlock,
+                productionRatePlantPointsPerBlock: levelData.productionRatePlantPointsPerBlock,
+                claimedBlockHeight: storedBuilding.claimedBlockHeight
+            });
+        }
+        
+        return buildings;
+    }
+
     /// @notice Internal function to access NFT Building storage
     /// @return data The LibLandBuildingStorage.Data struct
     function _sNB() internal pure returns (LibVillageStorage.Data storage data) {
         data = LibVillageStorage.data();
+    }
+
+    /// @notice Calculates the accumulated plant points for a village building
+    /// @param landId The ID of the land
+    /// @param buildingId The ID of the building
+    /// @return accumulatedPoints The accumulated plant points
+    function _villageCalculateAccumulatedPoints(uint256 landId, uint8 buildingId) internal view returns (uint256 accumulatedPoints) {
+        LibVillageStorage.Data storage s = _sNB();
+        LibVillageStorage.VillageBulding storage building = s.villageBuildings[landId][buildingId];
+        LibVillageStorage.VillageBuildingType storage buildingType = s.villageBuildingTypes[buildingId];
+
+        if (!buildingType.isProducingPlantPoints || building.level == 0) {
+            return 0;
+        }
+
+        uint256 lastClaimBlock = building.claimedBlockHeight;
+        uint256 currentBlock = block.number;
+
+        if (_villageIsUpgrading(landId, buildingId)) {
+            currentBlock = building.blockHeightUpgradeInitiated;
+        }
+
+        uint256 blocksPassed = currentBlock - lastClaimBlock;
+        uint256 productionRate = buildingType.levelData[building.level].productionRatePlantPointsPerBlock;
+
+        accumulatedPoints = (blocksPassed * productionRate) / 1e12; // Adjust for precision
+    }
+
+    /// @notice Calculates the accumulated plant lifetime for a village building
+    /// @param landId The ID of the land
+    /// @param buildingId The ID of the building
+    /// @return accumulatedLifetime The accumulated plant lifetime in seconds
+    function _villageCalculateAccumulatedLifetime(uint256 landId, uint8 buildingId) internal view returns (uint256 accumulatedLifetime) {
+        LibVillageStorage.Data storage s = _sNB();
+        LibVillageStorage.VillageBulding storage building = s.villageBuildings[landId][buildingId];
+        LibVillageStorage.VillageBuildingType storage buildingType = s.villageBuildingTypes[buildingId];
+
+        if (!buildingType.isProducingPlantLifetime || building.level == 0) {
+            return 0;
+        }
+
+        uint256 lastClaimBlock = building.claimedBlockHeight;
+        uint256 currentBlock = block.number;
+
+        if (_villageIsUpgrading(landId, buildingId)) {
+            currentBlock = building.blockHeightUpgradeInitiated;
+        }
+
+        uint256 blocksPassed = currentBlock - lastClaimBlock;
+        uint256 productionRate = buildingType.levelData[building.level].productionRatePlantLifetimePerBlock;
+
+        accumulatedLifetime = (blocksPassed * productionRate * LibVillageStorage.BLOCK_TIME) / 1e18; // Convert to seconds and adjust for precision
     }
 
 //    /// @notice Internal function to access AppStorage
