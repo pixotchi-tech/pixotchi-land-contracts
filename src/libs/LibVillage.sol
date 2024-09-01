@@ -50,6 +50,7 @@ library LibVillage {
         s.villageBuildings[landId][buildingId].blockHeightUpgradeInitiated = block.number;
         s.villageBuildings[landId][buildingId].blockHeightUntilUpgradeDone = upgradeCompletionBlock;
         s.villageBuildings[landId][buildingId].claimedBlockHeight = upgradeCompletionBlock;
+        s.villageBuildings[landId][buildingId].level = nextLevel;
 
         // TODO: Emit an event for the upgrade initiation
         // emit VillageUpgradeInitiated(landId, buildingId, nextLevel, block.number, upgradeCompletionBlock);
@@ -71,9 +72,10 @@ library LibVillage {
         
         // Deduct seeds and complete the upgrade instantly
         //_sA().resources[msg.sender].seeds -= s.speedUpCost;
-        s.villageBuildings[landId][buildingId].blockHeightUpgradeInitiated = 0;
+        //s.villageBuildings[landId][buildingId].blockHeightUpgradeInitiated = 0;
         s.villageBuildings[landId][buildingId].blockHeightUntilUpgradeDone = block.number;
-        s.villageBuildings[landId][buildingId].level++;
+        //s.villageBuildings[landId][buildingId].level++;
+        s.villageBuildings[landId][buildingId].claimedBlockHeight = block.number;
         
         // TODO: Update production rates or other relevant data
     }
@@ -82,6 +84,7 @@ library LibVillage {
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to claim production from
     function _villageClaimProduction(uint256 landId, uint8 buildingId) internal {
+        
         //TODO: split intro 3 functions. we have to check if the building is upgrading. we have to also check if the isProducingPlantPoints and isProducingPlantLifetime.
         LibVillageStorage.Data storage s = _sNB();
         
@@ -184,21 +187,21 @@ library LibVillage {
         LibVillageStorage.VillageBulding storage building = s.villageBuildings[landId][buildingId];
         LibVillageStorage.VillageBuildingType storage buildingType = s.villageBuildingTypes[buildingId];
 
-        if (!buildingType.isProducingPlantPoints || building.level == 0) {
+        if (!buildingType.isProducingPlantPoints || building.level == 0 || _villageIsUpgrading(landId, buildingId)) {
             return 0;
         }
 
         uint256 lastClaimBlock = building.claimedBlockHeight;
         uint256 currentBlock = block.number;
 
-        if (_villageIsUpgrading(landId, buildingId)) {
-            currentBlock = building.blockHeightUpgradeInitiated;
-        }
+//        if (_villageIsUpgrading(landId, buildingId)) {
+//            currentBlock = building.blockHeightUpgradeInitiated;
+//        }
 
         uint256 blocksPassed = currentBlock - lastClaimBlock;
         uint256 productionRate = buildingType.levelData[building.level].productionRatePlantPointsPerBlock;
 
-        accumulatedPoints = (blocksPassed * productionRate) / 1e12; // Adjust for precision
+        accumulatedPoints = (blocksPassed * productionRate) /*/ 1e12*/; // Adjust for precision
     }
 
     /// @notice Calculates the accumulated plant lifetime for a village building
