@@ -12,6 +12,9 @@ library LibPayment {
 
     // Custom errors
     error UnsupportedNetwork();
+    error AmountMustBeGreaterThanZero();
+    error InsufficientBalance();
+    error InsufficientAllowance();
 
     // Constants for token addresses
     address internal constant testnetSeedToken = address(0xc64F740D216B6ec49e435a8a08132529788e8DD0);
@@ -81,9 +84,9 @@ library LibPayment {
         address receiveAddress = paymentGetSeedReceiveAddress();
 
         // Checks
-        require(amount > 0, "Amount must be greater than zero");
-        require(IERC20(tokenAddress).balanceOf(from) >= amount, "Insufficient balance");
-        require(IERC20(tokenAddress).allowance(from, address(this)) >= amount, "Insufficient allowance");
+        if (amount <= 0) revert AmountMustBeGreaterThanZero();
+        if (IERC20(tokenAddress).balanceOf(from) < amount) revert InsufficientBalance();
+        if (IERC20(tokenAddress).allowance(from, address(this)) < amount) revert InsufficientAllowance();
 
         // Effects
         // No state variables to update in this case
@@ -100,9 +103,9 @@ library LibPayment {
         address receiveAddress = paymentGetLeafReceiveAddress();
 
         // Checks
-        require(amount > 0, "Amount must be greater than zero");
-        require(IERC20(tokenAddress).balanceOf(from) >= amount, "Insufficient balance");
-        require(IERC20(tokenAddress).allowance(from, address(this)) >= amount, "Insufficient allowance");
+        if (amount <= 0) revert AmountMustBeGreaterThanZero();
+        if (IERC20(tokenAddress).balanceOf(from) < amount) revert InsufficientBalance();
+        if (IERC20(tokenAddress).allowance(from, address(this)) < amount) revert InsufficientAllowance();
 
         // Effects
         // No state variables to update in this case
