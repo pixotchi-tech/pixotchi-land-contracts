@@ -8,6 +8,9 @@ import "../shared/Structs.sol";
 /// @notice A library for managing land-related operations in the Pixotchi game
 library LibPayment {
 
+    // Custom errors
+    error UnsupportedNetwork();
+
     // Constants for token addresses
     address internal constant testnetSeedToken = address(0xc64F740D216B6ec49e435a8a08132529788e8DD0);
     address internal constant testnetLeafToken = address(0x33feeD5a3eD803dc03BBF4B6041bB2b86FACD6C4);
@@ -31,7 +34,7 @@ library LibPayment {
         } else if (block.chainid == mainnetChainId) { // Mainnet chain ID
             return mainnetSeedToken;
         } else {
-            revert("Unsupported network");
+            revert UnsupportedNetwork();
         }
     }
 
@@ -42,7 +45,7 @@ library LibPayment {
         } else if (block.chainid == mainnetChainId) { // Mainnet chain ID
             return mainnetLeafToken;
         } else {
-            revert("Unsupported network");
+            revert UnsupportedNetwork();
         }
     }
 
@@ -53,7 +56,7 @@ library LibPayment {
         } else if (block.chainid == mainnetChainId) { // Mainnet chain ID
             return mainnetSeedReceiveAddress;
         } else {
-            revert("Unsupported network");
+            revert UnsupportedNetwork();
         }
     }
 
@@ -64,7 +67,7 @@ library LibPayment {
         } else if (block.chainid == mainnetChainId) { // Mainnet chain ID
             return mainnetLeafReceiveAddress;
         } else {
-            revert("Unsupported network");
+            revert UnsupportedNetwork();
         }
     }
 
