@@ -220,9 +220,9 @@ library LibVillage {
         uint256 lastClaimBlock = building.claimedBlockHeight;
         uint256 currentBlock = block.number;
 
-        if (_villageIsUpgrading(landId, buildingId)) {
-            currentBlock = building.blockHeightUpgradeInitiated;
-        }
+//        if (_villageIsUpgrading(landId, buildingId)) {
+//            currentBlock = building.blockHeightUpgradeInitiated;
+//        }
 
         uint256 blocksPassed = currentBlock - lastClaimBlock;
         uint256 productionRate = buildingType.levelData[building.level].productionRatePlantLifetimePerBlock;
