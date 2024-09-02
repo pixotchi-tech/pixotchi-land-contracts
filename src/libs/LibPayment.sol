@@ -79,6 +79,15 @@ library LibPayment {
     function paymentPayWithSeed(address from, uint256 amount) internal {
         address tokenAddress = paymentGetSeedToken();
         address receiveAddress = paymentGetSeedReceiveAddress();
+
+        // Checks
+        require(amount > 0, "Amount must be greater than zero");
+        require(IERC20(tokenAddress).balanceOf(from) >= amount, "Insufficient balance");
+
+        // Effects
+        // No state variables to update in this case
+
+        // Interactions
         SafeERC20.safeTransferFrom(IERC20(tokenAddress), from, receiveAddress, amount);
     }
 
@@ -88,6 +97,15 @@ library LibPayment {
     function paymentPayWithLeaf(address from, uint256 amount) internal {
         address tokenAddress = paymentGetLeafToken();
         address receiveAddress = paymentGetLeafReceiveAddress();
+
+        // Checks
+        require(amount > 0, "Amount must be greater than zero");
+        require(IERC20(tokenAddress).balanceOf(from) >= amount, "Insufficient balance");
+
+        // Effects
+        // No state variables to update in this case
+
+        // Interactions
         SafeERC20.safeTransferFrom(IERC20(tokenAddress), from, receiveAddress, amount);
     }
 
