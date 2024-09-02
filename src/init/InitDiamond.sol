@@ -7,6 +7,7 @@ import { LibDiamond } from 'lib/diamond-2-hardhat/contracts/libraries/LibDiamond
 import {IERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 import {INFTFacet} from "../interfaces/INFTFacet.sol";
 import { LibVillageStorage } from "../libs/LibVillageStorage.sol"; // Add this import
+import { LibPaymentStorage } from "../libs/LibPaymentStorage.sol"; // Add this import
 
 contract InitDiamond /*is NFTInit*/ {
   event InitializeDiamond(address sender);
@@ -31,7 +32,9 @@ contract InitDiamond /*is NFTInit*/ {
 
   function init() external  {
     LibLandStorage.initializeLandStorage();
-    LibVillageStorage.initializeVillageStorage(); // Add this line
+    LibVillageStorage.initializeVillageStorage();
+    LibPaymentStorage.initializePaymentStorage();
+
 
     _sD().supportedInterfaces[0x01ffc9a7] = true; // ERC165 interface ID for ERC165.
     _sD().supportedInterfaces[0x80ac58cd] = true;  // ERC165 interface ID for ERC721.
