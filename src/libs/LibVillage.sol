@@ -149,7 +149,7 @@ library LibVillage {
             uint8 buildingId = enabledBuildingTypes[i];
             LibVillageStorage.VillageBulding storage storedBuilding = s.villageBuildings[landId][buildingId];
             LibVillageStorage.VillageBuildingType storage buildingType = s.villageBuildingTypes[buildingId];
-            LibVillageStorage.LevelData storage levelData = buildingType.levelData[storedBuilding.level + 1];
+            LibVillageStorage.LevelData storage levelData = buildingType.levelData[storedBuilding.level];
 
             buildings[i] = VillageBuilding({
                 id: buildingId,
@@ -213,7 +213,7 @@ library LibVillage {
         LibVillageStorage.VillageBulding storage building = s.villageBuildings[landId][buildingId];
         LibVillageStorage.VillageBuildingType storage buildingType = s.villageBuildingTypes[buildingId];
 
-        if (!buildingType.isProducingPlantLifetime || building.level == 0) {
+        if (!buildingType.isProducingPlantLifetime || building.level == 0  || _villageIsUpgrading(landId, buildingId)) {
             return 0;
         }
 
@@ -227,7 +227,7 @@ library LibVillage {
         uint256 blocksPassed = currentBlock - lastClaimBlock;
         uint256 productionRate = buildingType.levelData[building.level].productionRatePlantLifetimePerBlock;
 
-        accumulatedLifetime = (blocksPassed * productionRate * LibVillageStorage.BLOCK_TIME) / 1e18; // Convert to seconds and adjust for precision
+        accumulatedLifetime = (blocksPassed * productionRate * LibVillageStorage.BLOCK_TIME) /*/ 1e18*/; // Convert to seconds and adjust for precision
     }
 
 //    /// @notice Internal function to access AppStorage
