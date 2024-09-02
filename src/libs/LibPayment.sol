@@ -3,6 +3,8 @@ pragma solidity >=0.8.21;
 
 //import "./LibPaymentStorage.sol";
 import "../shared/Structs.sol";
+import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /// @title LibLand
 /// @notice A library for managing land-related operations in the Pixotchi game
@@ -69,6 +71,24 @@ library LibPayment {
         } else {
             revert UnsupportedNetwork();
         }
+    }
+
+    /// @notice Pays with Seed token
+    /// @param from The address to transfer the tokens from
+    /// @param amount The amount of tokens to transfer
+    function paymentPayWithSeed(address from, uint256 amount) internal {
+        address tokenAddress = paymentGetSeedToken();
+        address receiveAddress = paymentGetSeedReceiveAddress();
+        SafeERC20.safeTransferFrom(IERC20(tokenAddress), from, receiveAddress, amount);
+    }
+
+    /// @notice Pays with Leaf token
+    /// @param from The address to transfer the tokens from
+    /// @param amount The amount of tokens to transfer
+    function paymentPayWithLeaf(address from, uint256 amount) internal {
+        address tokenAddress = paymentGetLeafToken();
+        address receiveAddress = paymentGetLeafReceiveAddress();
+        SafeERC20.safeTransferFrom(IERC20(tokenAddress), from, receiveAddress, amount);
     }
 
     // function _sNB() internal pure returns (LibPaymentStorage.Data storage data) {
