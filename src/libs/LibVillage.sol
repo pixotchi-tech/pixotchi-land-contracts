@@ -16,7 +16,7 @@ library LibVillage {
     /// @notice Upgrades or builds a village building using leaves
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to upgrade or build
-    function _villageUpgradeWithLeaf(uint256 landId, uint8 buildingId) internal {
+    function _villageUpgradeWithLeaf(uint256 landId, uint8 buildingId) internal returns (uint256 upgradeCost) {
         LibVillageStorage.Data storage s = _sNB();
         
         // Check if the building type is enabled
@@ -31,7 +31,7 @@ library LibVillage {
         // Check if the building can be upgraded
         require(nextLevel <= s.villageBuildingTypes[buildingId].maxLevel, "Building already at max level");
 
-        uint256 upgradeCost = s.villageBuildingTypes[buildingId].levelData[nextLevel].levelUpgradeCostLeaf;
+        upgradeCost = s.villageBuildingTypes[buildingId].levelData[nextLevel].levelUpgradeCostLeaf;
         uint256 upgradeBlockInterval = s.villageBuildingTypes[buildingId].levelData[nextLevel].levelUpgradeBlockInterval;
 
         // Check if the user has enough leaves
@@ -54,6 +54,8 @@ library LibVillage {
 
         // TODO: Emit an event for the upgrade initiation
         // emit VillageUpgradeInitiated(landId, buildingId, nextLevel, block.number, upgradeCompletionBlock);
+
+        return upgradeCost;
     }
 
 
