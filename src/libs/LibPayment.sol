@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 
-import "./LibPaymentStorage.sol";
+//import "./LibPaymentStorage.sol";
 import "../shared/Structs.sol";
 
 /// @title LibLand
@@ -36,8 +36,8 @@ library LibPayment {
         }
     }
 
-    function _sNB() internal pure returns (LibPaymentStorage.Data storage data) {
-        data = LibPaymentStorage.data();
-    }
+    // function _sNB() internal pure returns (LibPaymentStorage.Data storage data) {
+    //     data = LibPaymentStorage.data();
+    // }
 
 }
