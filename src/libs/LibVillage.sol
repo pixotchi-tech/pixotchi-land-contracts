@@ -63,23 +63,28 @@ library LibVillage {
     /// @notice Speeds up a village building upgrade using a seed
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to speed up
-    function _villageSpeedUpWithSeed(uint256 landId, uint8 buildingId) internal {
+    function _villageSpeedUpWithSeed(uint256 landId, uint8 buildingId) internal returns (uint256 speedUpCost) {
         LibVillageStorage.Data storage s = _sNB();
         
         // Check if the building is currently upgrading
         require(_villageIsUpgrading(landId, buildingId), "Building is not upgrading");
         
+        uint8 currentLevel = s.villageBuildings[landId][buildingId].level;
+        speedUpCost = s.villageBuildingTypes[buildingId].levelData[currentLevel].levelUpgradeCostSeedInstant;
+        
         // Check if the user has enough seeds
-        //require(_sA().resources[msg.sender].seeds >= s.speedUpCost, "Not enough seeds");
+        //require(_sA().resources[msg.sender].seeds >= speedUpCost, "Not enough seeds");
         
         // Deduct seeds and complete the upgrade instantly
-        //_sA().resources[msg.sender].seeds -= s.speedUpCost;
+        //_sA().resources[msg.sender].seeds -= speedUpCost;
         //s.villageBuildings[landId][buildingId].blockHeightUpgradeInitiated = 0;
         s.villageBuildings[landId][buildingId].blockHeightUntilUpgradeDone = block.number;
         //s.villageBuildings[landId][buildingId].level++;
         s.villageBuildings[landId][buildingId].claimedBlockHeight = block.number;
         
         // TODO: Update production rates or other relevant data
+
+        return speedUpCost;
     }
 
     /// @notice Claims production from a village building
