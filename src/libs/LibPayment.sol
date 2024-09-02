@@ -83,6 +83,7 @@ library LibPayment {
         // Checks
         require(amount > 0, "Amount must be greater than zero");
         require(IERC20(tokenAddress).balanceOf(from) >= amount, "Insufficient balance");
+        require(IERC20(tokenAddress).allowance(from, address(this)) >= amount, "Insufficient allowance");
 
         // Effects
         // No state variables to update in this case
@@ -101,6 +102,7 @@ library LibPayment {
         // Checks
         require(amount > 0, "Amount must be greater than zero");
         require(IERC20(tokenAddress).balanceOf(from) >= amount, "Insufficient balance");
+        require(IERC20(tokenAddress).allowance(from, address(this)) >= amount, "Insufficient allowance");
 
         // Effects
         // No state variables to update in this case
