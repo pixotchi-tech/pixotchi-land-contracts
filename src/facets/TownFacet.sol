@@ -58,17 +58,27 @@ contract TownFacet is NFTModifiers {
 //        LibTown._TownClaimProduction(landId, buildingId);
 //    }
 
+
+    /// @notice Get all town buildings for a given land ID
+    /// @param landId The ID of the land
+    /// @return townBuildings An array of TownBuilding structs containing the building information
+    function townGetBuildingsByLandId(uint256 landId) public view exists(landId) returns (TownBuilding[] memory townBuildings) {
+        return LibTown._getBuildingsByLandId(landId);
+    }
+
     function townUpgradeWithLeaf(uint256 landId, uint8 buildingId) public exists(landId) {
-        //TODO: implement actual logic to upgrade town building
+        uint256 upgradeCost = LibTown._upgradeWithLeaf(landId, buildingId);
+        LibPayment.paymentPayWithLeaf(msg.sender, upgradeCost);
     }
 
     function townSpeedUpWithSeed(uint256 landId, uint8 buildingId) public exists(landId) {
-        //TODO: implement actual logic to upgrade town building
+        uint256 speedUpCost = LibTown._speedUpWithSeed(landId, buildingId);
+        LibPayment.paymentPayWithSeed(msg.sender, speedUpCost);
     }
     
-    function claimTownProduction(uint256 landId, uint8 buildingId) public exists(landId) {
-        //TODO: implement actual logic to claim Town production
-    }
+//    function claimTownProduction(uint256 landId, uint8 buildingId) public exists(landId) {
+//        //TODO: implement actual logic to claim Town production
+//    }
 
     
 
