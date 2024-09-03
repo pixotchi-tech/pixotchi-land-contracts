@@ -236,6 +236,81 @@ library LibLand {
     }
 
 
+    /// @notice Adds accumulatedPlantPoints to a land
+    /// @param tokenId The ID of the token to add points to
+    /// @param points The amount of points to add
+    function _addAccumulatedPlantPoints(uint256 tokenId, uint256 points) internal {
+        // Checks
+        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+        require(points > 0, "LibLand: Points must be greater than zero");
+
+        // Effects
+        LibLandStorage.Data storage s = _sN();
+        s.accumulatedPlantPoints[tokenId] += points;
+
+        // No interactions with external contracts in this function
+    }
+
+    /// @notice Adds accumulatedPlantLifetime to a land
+    /// @param tokenId The ID of the token to add lifetime to
+    /// @param lifetime The amount of lifetime to add
+    function _addAccumulatedPlantLifetime(uint256 tokenId, uint256 lifetime) internal {
+        // Checks
+        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+        require(lifetime > 0, "LibLand: Lifetime must be greater than zero");
+
+        // Effects
+        LibLandStorage.Data storage s = _sN();
+        s.accumulatedPlantLifetime[tokenId] += lifetime;
+
+        // No interactions with external contracts in this function
+    }
+
+    /// @notice Adds experience points to a land
+    /// @param tokenId The ID of the token to add experience points to
+    /// @param points The amount of experience points to add
+    function _addExperiencePoints(uint256 tokenId, uint256 points) internal {
+        // Checks
+        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+        require(points > 0, "LibLand: Experience points must be greater than zero");
+
+        // Effects
+        LibLandStorage.Data storage s = _sN();
+        s.experiencePoints[tokenId] += points;
+
+        // No interactions with external contracts in this function
+    }
+
+    /// @notice Retrieves and resets the accumulated plant points for a land
+    /// @param tokenId The ID of the token to pop accumulated plant points from
+    /// @return points The original accumulated plant points before resetting
+    function _popAccumulatedPlantPoints(uint256 tokenId) internal returns (uint256 points) {
+        // Checks
+        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+
+        // Effects
+        LibLandStorage.Data storage s = _sN();
+        points = s.accumulatedPlantPoints[tokenId];
+        s.accumulatedPlantPoints[tokenId] = 0;
+
+        // No interactions with external contracts in this function
+    }
+
+    /// @notice Retrieves and resets the accumulated plant lifetime for a land
+    /// @param tokenId The ID of the token to pop accumulated plant lifetime from
+    /// @return lifetime The original accumulated plant lifetime before resetting
+    function _popAccumulatedPlantLifetime(uint256 tokenId) internal returns (uint256 lifetime) {
+        // Checks
+        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+
+        // Effects
+        LibLandStorage.Data storage s = _sN();
+        lifetime = s.accumulatedPlantLifetime[tokenId];
+        s.accumulatedPlantLifetime[tokenId] = 0;
+
+        // No interactions with external contracts in this function
+    }
+
 }
 
 /// @notice Error thrown when a coordinate is out of the allowed bounds

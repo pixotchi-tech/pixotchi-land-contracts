@@ -146,6 +146,7 @@ contract LandFacet is NFTModifiers {
 
     /*
     farm town
+    5 = market place
     7 = farmer house / quest house.
     */
 
