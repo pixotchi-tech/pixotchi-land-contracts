@@ -50,9 +50,9 @@ library LibWareHouseStorage {
         uint256 initializationNumber;
 
         /// @notice Mapping from token ID to its accumulated plant points
-        mapping(uint256 => uint256) accumulatedPlantPoints;  //TODO: remove for new deployment
+        //mapping(uint256 => uint256) accumulatedPlantPoints;  //TODO: remove for new deployment
         
         /// @notice Mapping from token ID to its accumulated plant lifetime
-        mapping(uint256 => uint256) accumulatedPlantLifetime; //TODO: remove for new deployment
+        //mapping(uint256 => uint256) accumulatedPlantLifetime; //TODO: remove for new deployment
     }
 }
