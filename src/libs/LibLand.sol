@@ -263,7 +263,6 @@ library LibLand {
         LibLandStorage.Data storage s = _sN();
         s.accumulatedPlantLifetime[tokenId] += lifetime;
 
-        // No interactions with external contracts in this function
     }
 
     /// @notice Adds experience points to a land
@@ -278,7 +277,6 @@ library LibLand {
         LibLandStorage.Data storage s = _sN();
         s.experiencePoints[tokenId] += points;
 
-        // No interactions with external contracts in this function
     }
 
     /// @notice Retrieves and resets the accumulated plant points for a land
@@ -293,7 +291,7 @@ library LibLand {
         points = s.accumulatedPlantPoints[tokenId];
         s.accumulatedPlantPoints[tokenId] = 0;
 
-        // No interactions with external contracts in this function
+        return points;
     }
 
     /// @notice Retrieves and resets the accumulated plant lifetime for a land
@@ -308,7 +306,7 @@ library LibLand {
         lifetime = s.accumulatedPlantLifetime[tokenId];
         s.accumulatedPlantLifetime[tokenId] = 0;
 
-        // No interactions with external contracts in this function
+        return lifetime;
     }
 
 }
