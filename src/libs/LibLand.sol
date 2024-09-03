@@ -254,7 +254,7 @@ library LibLand {
     /// @notice Adds accumulatedPlantLifetime to a land
     /// @param tokenId The ID of the token to add lifetime to
     /// @param lifetime The amount of lifetime to add
-    function _addAccumulatedPlantLifetime(uint256 tokenId, uint256 lifetime) internal {
+    function _pushAccumulatedPlantLifetime(uint256 tokenId, uint256 lifetime) internal {
         // Checks
         require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
         require(lifetime > 0, "LibLand: Lifetime must be greater than zero");
@@ -268,7 +268,7 @@ library LibLand {
     /// @notice Adds experience points to a land
     /// @param tokenId The ID of the token to add experience points to
     /// @param points The amount of experience points to add
-    function _addExperiencePoints(uint256 tokenId, uint256 points) internal {
+    function _pushExperiencePoints(uint256 tokenId, uint256 points) internal {
         // Checks
         require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
         require(points > 0, "LibLand: Experience points must be greater than zero");
