@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 
+import "./LibConstants.sol";
+
 /// @title LibVillageStorage
 /// @notice Library for managing LAND building storage
 library LibVillageStorage {
@@ -61,14 +63,14 @@ library LibVillageStorage {
     /// @param hoursPerDay The number of hours of lifetime produced per day
     /// @return The production rate per block (in 1e18 precision)
     function _calculateLifetimeProductionRate(uint256 hoursPerDay) internal pure returns (uint256) {
-        return (hoursPerDay * 1 hours * 1e18) / (24 hours / BLOCK_TIME);
+        return (hoursPerDay * 1 hours /** 1e18*/) / (24 hours / BLOCK_TIME);
     }
 
     /// @notice Calculates the production rate for plant points per block
     /// @param pointsPerDay The number of points produced per day
-    /// @return The production rate per block (in 1e12 precision)
+    /// @return The production rate per block (in PLANT_POINT_DECIMALS precision)
     function _calculatePointsProductionRate(uint256 pointsPerDay) internal pure returns (uint256) {
-        return (pointsPerDay * 1e12) / (24 hours / BLOCK_TIME);
+        return (pointsPerDay * (10 ** LibConstants.PLANT_POINT_DECIMALS)) / (24 hours / BLOCK_TIME);
     }
 
     /// @notice Initializes the levels for the Soil Factory building type
