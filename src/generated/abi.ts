@@ -38,24 +38,6 @@ export const abi = [
   },
   {
     "type": "function",
-    "name": "claimTownProduction",
-    "inputs": [
-      {
-        "name": "landId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "buildingId",
-        "type": "uint8",
-        "internalType": "uint8"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "diamondCut",
     "inputs": [
       {
@@ -711,6 +693,72 @@ export const abi = [
         "name": "",
         "type": "uint256",
         "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "townGetBuildingsByLandId",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "townBuildings",
+        "type": "tuple[]",
+        "internalType": "struct TownBuilding[]",
+        "components": [
+          {
+            "name": "id",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "level",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "maxLevel",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "blockHeightUpgradeInitiated",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "blockHeightUntilUpgradeDone",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isUpgrading",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "levelUpgradeCostLeaf",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "levelUpgradeCostSeedInstant",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "levelUpgradeBlockInterval",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
       }
     ],
     "stateMutability": "view"
