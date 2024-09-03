@@ -58,17 +58,17 @@ contract VillageFacet is NFTModifiers {
         LibVillage._villageClaimProduction(landId, buildingId);
     }
 
-    function townUpgradeWithLeaf(uint256 landId, uint8 buildingId) public exists(landId) {
-        //TODO: implement actual logic to upgrade town building
-    }
-
-    function townSpeedUpWithSeed(uint256 landId, uint8 buildingId) public exists(landId) {
-        //TODO: implement actual logic to upgrade town building
-    }
-    
-    function claimVillageProduction(uint256 landId, uint8 buildingId) public exists(landId) {
-        //TODO: implement actual logic to claim village production
-    }
+//    function townUpgradeWithLeaf(uint256 landId, uint8 buildingId) public exists(landId) {
+//        //TODO: implement actual logic to upgrade town building
+//    }
+//
+//    function townSpeedUpWithSeed(uint256 landId, uint8 buildingId) public exists(landId) {
+//        //TODO: implement actual logic to upgrade town building
+//    }
+//
+//    function claimVillageProduction(uint256 landId, uint8 buildingId) public exists(landId) {
+//        //TODO: implement actual logic to claim village production
+//    }
 
     
 
