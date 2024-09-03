@@ -21,6 +21,9 @@ library LibConstants {
     uint256 internal constant TESTNET_CHAIN_ID = 84532;
     uint256 internal constant MAINNET_CHAIN_ID = 8453;
 
+    // New constant for plant point decimals
+    uint256 internal constant PLANT_POINT_DECIMALS = 12;
+
     error UnsupportedNetwork();
 
     /// @notice Get the seed token address based on the network
