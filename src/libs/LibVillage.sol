@@ -6,6 +6,7 @@ pragma solidity >=0.8.21;
 //import   "../shared/Structs.sol";
 import "./LibVillageStorage.sol";
 import "../shared/Structs.sol";
+import "./LibLand.sol";
 
 /// @title LibLand
 /// @notice A library for managing land-related operations in the Pixotchi game
@@ -91,27 +92,34 @@ library LibVillage {
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to claim production from
     function _villageClaimProduction(uint256 landId, uint8 buildingId) internal {
-        
-        //TODO: split intro 3 functions. we have to check if the building is upgrading. we have to also check if the isProducingPlantPoints and isProducingPlantLifetime.
         LibVillageStorage.Data storage s = _sNB();
         
-        // Check if the building exists
+        // Check if the building exists and is not upgrading
         require(s.villageBuildingTypes[buildingId].enabled, "Building type is not enabled");
+        require(!_villageIsUpgrading(landId, buildingId), "Building is currently upgrading");
         
-        // Calculate production since last claim
-        uint256 timeSinceLastClaim = block.number - s.villageBuildings[landId][buildingId].claimedBlockHeight;
-        uint256 production = timeSinceLastClaim * s.villageBuildingTypes[buildingId].levelData[s.villageBuildings[landId][buildingId].level].productionRatePlantLifetimePerBlock;
+        // Check if the building produces plant lifetime
+        if (s.villageBuildingTypes[buildingId].isProducingPlantLifetime) {
+            uint256 accumulatedLifetime = _villageCalculateAccumulatedLifetime(landId, buildingId);
+            if (accumulatedLifetime > 0) {
+                LibLand._pushAccumulatedPlantLifetime(landId, accumulatedLifetime);
+            }
+        }
         
+        // Check if the building produces plant points
+        if (s.villageBuildingTypes[buildingId].isProducingPlantPoints) {
+            uint256 accumulatedPoints = _villageCalculateAccumulatedPoints(landId, buildingId);
+            if (accumulatedPoints > 0) {
+                // TODO: Implement a function to add plant points to the player's balance
+                // LibLand._pushAccumulatedPlantPoints(landId, accumulatedPoints);
+            }
+        }
 
         // Update last claim time
         s.villageBuildings[landId][buildingId].claimedBlockHeight = block.number;
         
-        // TODO: Add produced resources to the player's balance
-        // This part requires access to the player's resource storage, which might be in a different contract
-        // _sA().resources[msg.sender].someResource += production;
-        
         // TODO: Emit an event for the production claim
-        // emit ProductionClaimed(landId, buildingId, production);
+        // emit ProductionClaimed(landId, buildingId, accumulatedLifetime, accumulatedPoints);
     }
 
     /// @notice Checks if a village building is currently in the process of upgrading
