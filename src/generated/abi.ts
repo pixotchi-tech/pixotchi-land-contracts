@@ -38,7 +38,7 @@ export const abi = [
   },
   {
     "type": "function",
-    "name": "claimVillageProduction",
+    "name": "claimTownProduction",
     "inputs": [
       {
         "name": "landId",
