@@ -51,10 +51,82 @@ library LibTownStorage {
 
 
 
-    /// @notice Struct containing all the storage variables for LAND buildings
+
+        /// @notice Struct containing all the storage variables for LAND buildings
     struct Data {
         /// @notice The current initialization version number
         uint256 initializationNumber;
+        /// @notice Mapping of town ID to its buildings
+        /// @dev Key is the town ID, value is a mapping of building ID to Building struct
+        mapping(uint256 => mapping(uint8 => TownBuilding)) townBuildings;
+        /// @notice Mapping of building type ID to its configuration
+        mapping(uint8 => TownBuildingType) townBuildingTypes;
+    }
+
+    /// @notice Represents a building in a town
+    struct TownBuilding {
+        /// @notice Current level of the building
+        uint8 level;
+        /// @notice Block number when the upgrade was initiated
+        uint256 blockHeightUpgradeInitiated;
+        /// @notice Block number when the upgrade will be completed
+        uint256 blockHeightUntilUpgradeDone;
+        /// @notice Block height when the resources were claimed last
+        uint256 claimedBlockHeight;
+    }
+
+    /// @notice Enum representing different types of town buildings
+    enum TownBuildingNaming {
+        UNDEFINED_0,
+        UNDEFINED_1, //STAKE_HOUSE
+        UNDEFINED_2,
+        UNDEFINED_3, //WARE_HOUSE
+        UNDEFINED_4,
+        MARKET_PLACE, //MARKET PLACE
+        UNDEFINED_6,
+        QUEST_HOUSE //7 FARMER HOUSE / QUEST HOUSE
+    }
+
+        /// @notice Returns an array of enabled town building type IDs
+    /// @return An array of uint8 representing the enabled building type IDs
+    function townEnabledBuildingTypes() internal pure returns (uint8[] memory) {
+        uint8[] memory types = new uint8[](townEnabledBuildingTypesCount());
+        types[0] = uint8(TownBuildingNaming.MARKET_PLACE);
+        types[1] = uint8(TownBuildingNaming.QUEST_HOUSE);
+        return types;
+    }
+
+    /// @notice Returns the count of enabled town building types
+    /// @return The number of enabled town building types
+    function townEnabledBuildingTypesCount() internal pure returns (uint8) {
+        return 2;
+    }
+    
+
+    /// @notice Configuration for a town building type
+    struct TownBuildingType {
+        /// @notice Maximum level this building type can reach
+        uint8 maxLevel;
+        /// @notice Whether this building type produces plant points
+        bool isProducingPlantPoints;
+        /// @notice Whether this building type produces plant lifetime
+        bool isProducingPlantLifetime;
+        /// @notice Whether this building type is enabled
+        bool enabled;
+        /// @notice Mapping of level to level-specific data
+        mapping(uint8 => LevelData) levelData;
+    }
+
+    /// @notice Data specific to each level of a building type
+    struct LevelData {
+        /// @notice Leaf cost for upgrading to this level
+        uint256 levelUpgradeCostLeaf;
+        /// @notice Seed cost for instant upgrade to this level
+        uint256 levelUpgradeCostSeedInstant;
+        /// @notice Block interval required for upgrading to this level
+        uint256 levelUpgradeBlockInterval;
+        /// @notice Number of quests available per day for this level
+        //uint256 questsPerDay;
     }
 
 }
