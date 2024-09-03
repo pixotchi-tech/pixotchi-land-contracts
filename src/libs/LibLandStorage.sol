@@ -92,9 +92,9 @@ library LibLandStorage {
         mapping(uint256 => uint256) experiencePoints;
         
         /// @notice Mapping from token ID to its accumulated plant points
-        mapping(uint256 => uint256) accumulatedPlantPoints;
+        mapping(uint256 => uint256) accumulatedPlantPoints;  //TODO: remove for new deployment
         
         /// @notice Mapping from token ID to its accumulated plant lifetime
-        mapping(uint256 => uint256) accumulatedPlantLifetime;
+        mapping(uint256 => uint256) accumulatedPlantLifetime; //TODO: remove for new deployment
     }
 }
