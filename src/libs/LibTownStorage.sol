@@ -28,10 +28,8 @@ library LibTownStorage {
     /// @dev This function should only be called once during contract initialization
     function initializeTownStorage() internal initializer(1) {
         Data storage s = data();
-        //_initBuildingTypes(s);
+        _initBuildingTypes(s);
     }
-
-
 
     /// @notice Error thrown when trying to initialize with a version lower than or equal to the current one
     /// @param currentVersion The current initialization version
@@ -49,10 +47,7 @@ library LibTownStorage {
         s.initializationNumber = version;
     }
 
-
-
-
-        /// @notice Struct containing all the storage variables for LAND buildings
+    /// @notice Struct containing all the storage variables for LAND buildings
     struct Data {
         /// @notice The current initialization version number
         uint256 initializationNumber;
@@ -87,7 +82,7 @@ library LibTownStorage {
         QUEST_HOUSE //7 FARMER HOUSE / QUEST HOUSE
     }
 
-        /// @notice Returns an array of enabled town building type IDs
+    /// @notice Returns an array of enabled town building type IDs
     /// @return An array of uint8 representing the enabled building type IDs
     function townEnabledBuildingTypes() internal pure returns (uint8[] memory) {
         uint8[] memory types = new uint8[](townEnabledBuildingTypesCount());
@@ -101,16 +96,11 @@ library LibTownStorage {
     function townEnabledBuildingTypesCount() internal pure returns (uint8) {
         return 2;
     }
-    
 
     /// @notice Configuration for a town building type
     struct TownBuildingType {
         /// @notice Maximum level this building type can reach
         uint8 maxLevel;
-        /// @notice Whether this building type produces plant points
-        bool isProducingPlantPoints;
-        /// @notice Whether this building type produces plant lifetime
-        bool isProducingPlantLifetime;
         /// @notice Whether this building type is enabled
         bool enabled;
         /// @notice Mapping of level to level-specific data
@@ -129,4 +119,43 @@ library LibTownStorage {
         //uint256 questsPerDay;
     }
 
+    function _initBuildingTypes(Data storage s) internal {
+        // Initialize Market Place
+        s.townBuildingTypes[uint8(TownBuildingNaming.MARKET_PLACE)].maxLevel = 1;
+        s.townBuildingTypes[uint8(TownBuildingNaming.MARKET_PLACE)].enabled = true;
+        _initMarketPlaceLevels(s.townBuildingTypes[uint8(TownBuildingNaming.MARKET_PLACE)]);
+
+        // Initialize Quest House
+        s.townBuildingTypes[uint8(TownBuildingNaming.QUEST_HOUSE)].maxLevel = 3;
+        s.townBuildingTypes[uint8(TownBuildingNaming.QUEST_HOUSE)].enabled = true;
+        _initQuestHouseLevels(s.townBuildingTypes[uint8(TownBuildingNaming.QUEST_HOUSE)]);
+    }
+
+    function _initMarketPlaceLevels(TownBuildingType storage buildingType) internal {
+        buildingType.levelData[1] = LevelData({
+            levelUpgradeCostLeaf: 400000 ether,
+            levelUpgradeCostSeedInstant: 230 ether,
+            levelUpgradeBlockInterval: 10 hours / BLOCK_TIME
+        });
+    }
+
+    function _initQuestHouseLevels(TownBuildingType storage buildingType) internal {
+        buildingType.levelData[1] = LevelData({
+            levelUpgradeCostLeaf: 500000 ether,
+            levelUpgradeCostSeedInstant: 250 ether,
+            levelUpgradeBlockInterval: 12 hours / BLOCK_TIME
+        });
+
+        buildingType.levelData[2] = LevelData({
+            levelUpgradeCostLeaf: 750000 ether,
+            levelUpgradeCostSeedInstant: 625 ether,
+            levelUpgradeBlockInterval: 30 hours / BLOCK_TIME
+        });
+
+        buildingType.levelData[3] = LevelData({
+            levelUpgradeCostLeaf: 2000000 ether,
+            levelUpgradeCostSeedInstant: 1500 ether,
+            levelUpgradeBlockInterval: 72 hours / BLOCK_TIME
+        });
+    }
 }
