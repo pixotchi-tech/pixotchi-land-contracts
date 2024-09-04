@@ -11,18 +11,39 @@ library LibTown {
     /// @param landId The ID of the land
     /// @return townBuildings An array of TownBuilding structs containing the building information
     function _getBuildingsByLandId(uint256 landId) internal view returns (TownBuilding[] memory townBuildings) {
-        // Dummy implementation
-        townBuildings = new TownBuilding[](1);
-        townBuildings[0] = TownBuilding({
-            id: 1,
-            level: 1,
-            maxLevel: 5,
-            blockHeightUpgradeInitiated: 0,
-            blockHeightUntilUpgradeDone: 0,
-            isUpgrading: false,
-            levelUpgradeCostLeaf: 100,
-            levelUpgradeCostSeedInstant: 10,
-            levelUpgradeBlockInterval: 1000
+        LibTownStorage.Data storage s = LibTownStorage.data();
+        
+        townBuildings = new TownBuilding[](LibTownStorage.townEnabledBuildingTypesCount());
+        uint8[] memory enabledBuildingTypes = LibTownStorage.townEnabledBuildingTypes();
+        
+        for (uint8 i = 0; i < LibTownStorage.townEnabledBuildingTypesCount(); i++) {
+            uint8 buildingId = enabledBuildingTypes[i];
+            townBuildings[i] = _getTownBuildingInfo(s, landId, buildingId);
+        }
+        
+        return townBuildings;
+    }
+
+    function _getTownBuildingInfo(LibTownStorage.Data storage s, uint256 landId, uint8 buildingId) internal view returns (TownBuilding memory) {
+        LibTownStorage.TownBuilding storage storedBuilding = s.townBuildings[landId][buildingId];
+        LibTownStorage.TownBuildingType storage buildingType = s.townBuildingTypes[buildingId];
+        
+        uint8 currentLevel = storedBuilding.level;
+        LibTownStorage.LevelData storage levelData = buildingType.levelData[currentLevel];
+        LibTownStorage.LevelData storage levelDataNext = buildingType.levelData[currentLevel + 1];
+
+        bool isUpgrading = storedBuilding.blockHeightUntilUpgradeDone > block.number;
+
+        return TownBuilding({
+            id: buildingId,
+            level: currentLevel,
+            maxLevel: buildingType.maxLevel,
+            blockHeightUpgradeInitiated: storedBuilding.blockHeightUpgradeInitiated,
+            blockHeightUntilUpgradeDone: storedBuilding.blockHeightUntilUpgradeDone,
+            isUpgrading: isUpgrading,
+            levelUpgradeCostLeaf: isUpgrading ? levelData.levelUpgradeCostLeaf : levelDataNext.levelUpgradeCostLeaf,
+            levelUpgradeCostSeedInstant: isUpgrading ? levelData.levelUpgradeCostSeedInstant : levelDataNext.levelUpgradeCostSeedInstant,
+            levelUpgradeBlockInterval: isUpgrading ? levelData.levelUpgradeBlockInterval : levelDataNext.levelUpgradeBlockInterval
         });
     }
 
