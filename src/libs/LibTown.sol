@@ -32,7 +32,7 @@ library LibTown {
         LibTownStorage.LevelData storage levelData = buildingType.levelData[currentLevel];
         LibTownStorage.LevelData storage levelDataNext = buildingType.levelData[currentLevel + 1];
 
-        bool isUpgrading = storedBuilding.blockHeightUntilUpgradeDone > block.number;
+        bool isUpgrading = _townIsUpgrading(landId, buildingId);
 
         return TownBuilding({
             id: buildingId,
@@ -65,5 +65,33 @@ library LibTown {
         // Dummy implementation
         speedUpCost = 10;
         // TODO: Implement actual speed up logic
+    }
+
+    /// @notice Checks if a town building is currently in the process of upgrading
+    /// @dev This function performs two checks:
+    ///      1. If the upgrade end block is in the future (upgrade not finished)
+    ///      2. If the upgrade start block is in the past (upgrade has started)
+    /// @param landId The ID of the land where the building is located
+    /// @param buildingId The ID of the building to check
+    /// @return isUpgrading True if the building is currently upgrading, false otherwise
+    function _townIsUpgrading(uint256 landId, uint8 buildingId) internal view returns (bool isUpgrading) {
+        LibTownStorage.Data storage s = LibTownStorage.data();
+        
+        // Check if the building exists
+        if (s.townBuildings[landId][buildingId].level == 0) {
+            return false;
+        }
+        
+        // Check if the building is currently upgrading
+        // Step 1: Check if the upgrade end block is in the future
+        bool upgradeNotFinished = s.townBuildings[landId][buildingId].blockHeightUntilUpgradeDone > block.number;
+        
+        // Step 2: Check if the upgrade start block is in the past
+        bool upgradeStarted = s.townBuildings[landId][buildingId].blockHeightUpgradeInitiated < block.number;
+        
+        // Step 3: Combine both conditions to determine if the building is currently upgrading
+        isUpgrading = upgradeNotFinished && upgradeStarted;
+
+        return isUpgrading;
     }
 }
