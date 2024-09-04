@@ -92,9 +92,27 @@ library LibTown {
     /// @param buildingId The ID of the building to speed up
     /// @return speedUpCost The cost of speeding up the upgrade in seeds
     function _speedUpWithSeed(uint256 landId, uint8 buildingId) internal returns (uint256 speedUpCost) {
-        // Dummy implementation
-        speedUpCost = 10;
-        // TODO: Implement actual speed up logic
+        LibTownStorage.Data storage s = LibTownStorage.data();
+        
+        // Check if the building is currently upgrading
+        require(_townIsUpgrading(landId, buildingId), "Building is not upgrading");
+        
+        uint8 currentLevel = s.townBuildings[landId][buildingId].level;
+        speedUpCost = s.townBuildingTypes[buildingId].levelData[currentLevel].levelUpgradeCostSeedInstant;
+        
+        // Check if the user has enough seeds
+        // require(_sA().resources[msg.sender].seeds >= speedUpCost, "Not enough seeds");
+        
+        // Deduct seeds and complete the upgrade instantly
+        // _sA().resources[msg.sender].seeds -= speedUpCost;
+        // s.townBuildings[landId][buildingId].blockHeightUpgradeInitiated = 0;
+        s.townBuildings[landId][buildingId].blockHeightUntilUpgradeDone = block.number;
+        // s.townBuildings[landId][buildingId].level++;
+        
+        // TODO: Update production rates or other relevant data
+        // TODO: Emit an event for the speed-up
+
+        return speedUpCost;
     }
 
     /// @notice Checks if a town building is currently in the process of upgrading
