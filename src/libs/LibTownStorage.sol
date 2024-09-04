@@ -82,7 +82,7 @@ library LibTownStorage {
         UNDEFINED_2,
         UNDEFINED_3, //WARE_HOUSE
         UNDEFINED_4,
-        MARKET_PLACE, //MARKET PLACE
+        MARKET_PLACE, //5 MARKET PLACE
         UNDEFINED_6,
         QUEST_HOUSE //7 FARMER HOUSE / QUEST HOUSE
     }

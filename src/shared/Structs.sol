@@ -96,8 +96,11 @@ struct TownBuilding {
     uint256 levelUpgradeCostSeedInstant;
     /// @notice Block interval required for upgrading to the next level
     uint256 levelUpgradeBlockInterval;
- 
 }
+
+//two seperate getter. for farmer house and for market place.
+//quest system. farmer house.
+//market place
 
 
 /// @notice Struct to hold basic land information for overview
