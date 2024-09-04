@@ -164,7 +164,7 @@ library LibVillage {
             uint8 buildingId = enabledBuildingTypes[i];
             LibVillageStorage.VillageBulding storage storedBuilding = s.villageBuildings[landId][buildingId];
             LibVillageStorage.VillageBuildingType storage buildingType = s.villageBuildingTypes[buildingId];
-            LibVillageStorage.LevelData storage levelData = buildingType.levelData[storedBuilding.level];
+            LibVillageStorage.LevelData storage levelData = buildingType.levelData[storedBuilding.level + 1];
 
             buildings[i] = VillageBuilding({
                 id: buildingId,
