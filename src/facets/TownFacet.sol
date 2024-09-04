@@ -66,6 +66,13 @@ contract TownFacet is NFTModifiers {
         return LibTown._getBuildingsByLandId(landId);
     }
 
+    //todo: create own facet for , getter and setter QuestHouse
+
+    //todo: create own facet for , getter and setter MarketPlace
+    //get swap ratio. return 2 swap ratios. SEED to LEAF and LEAF to SEED.
+    //write fn: swapSeedToLeaf(uint256 amount)
+    //write fn: swapLeafToSeed(uint256 amount)
+
     function townUpgradeWithLeaf(uint256 landId, uint8 buildingId) public exists(landId) {
         uint256 upgradeCost = LibTown._upgradeWithLeaf(landId, buildingId);
         LibPayment.paymentPayWithLeaf(msg.sender, upgradeCost);
