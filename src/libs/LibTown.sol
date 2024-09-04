@@ -52,9 +52,39 @@ library LibTown {
     /// @param buildingId The ID of the building to upgrade
     /// @return upgradeCost The cost of the upgrade in leaves
     function _upgradeWithLeaf(uint256 landId, uint8 buildingId) internal returns (uint256 upgradeCost) {
-        // Dummy implementation
-        upgradeCost = 100;
-        // TODO: Implement actual upgrade logic
+        LibTownStorage.Data storage s = LibTownStorage.data();
+        
+        // Check if the building type is enabled
+        require(s.townBuildingTypes[buildingId].enabled, "Building type is not enabled");
+
+        // Check if the building is not currently upgrading
+        require(!_townIsUpgrading(landId, buildingId), "Building is already upgrading");
+
+        uint8 currentLevel = s.townBuildings[landId][buildingId].level;
+        uint8 nextLevel = currentLevel + 1;
+
+        // Check if the building can be upgraded
+        require(nextLevel <= s.townBuildingTypes[buildingId].maxLevel, "Building already at max level");
+
+        upgradeCost = s.townBuildingTypes[buildingId].levelData[nextLevel].levelUpgradeCostLeaf;
+        uint256 upgradeBlockInterval = s.townBuildingTypes[buildingId].levelData[nextLevel].levelUpgradeBlockInterval;
+
+        // Check if the user has enough leaves
+        // require(_sA().resources[msg.sender].leaves >= upgradeCost, "Not enough leaves");
+
+        // TODO: Implement safe transfer of leaves
+        // _safeTransferLeaves(msg.sender, address(this), upgradeCost);
+
+        // Set upgrade details
+        uint256 upgradeCompletionBlock = block.number + upgradeBlockInterval;
+        s.townBuildings[landId][buildingId].blockHeightUpgradeInitiated = block.number;
+        s.townBuildings[landId][buildingId].blockHeightUntilUpgradeDone = upgradeCompletionBlock;
+        s.townBuildings[landId][buildingId].level = nextLevel;
+
+        // TODO: Emit an event for the upgrade initiation
+        // emit TownUpgradeInitiated(landId, buildingId, nextLevel, block.number, upgradeCompletionBlock);
+
+        return upgradeCost;
     }
 
     /// @notice Speed up a town building upgrade using seeds
