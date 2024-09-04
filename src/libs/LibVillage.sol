@@ -111,6 +111,7 @@ library LibVillage {
             uint256 accumulatedPoints = _villageCalculateAccumulatedPoints(landId, buildingId);
             if (accumulatedPoints > 0) {
                 // TODO: Implement a function to add plant points to the player's balance
+                LibLand._pushExperiencePoints(landId, accumulatedPoints);
                 // LibLand._pushAccumulatedPlantPoints(landId, accumulatedPoints);
             }
         }
