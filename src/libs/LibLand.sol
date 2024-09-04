@@ -236,20 +236,19 @@ library LibLand {
     }
 
 
-//    /// @notice Adds accumulatedPlantPoints to a land
-//    /// @param tokenId The ID of the token to add points to
-//    /// @param points The amount of points to add
-//    function _addAccumulatedPlantPoints(uint256 tokenId, uint256 points) internal {
-//        // Checks
-//        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
-//        require(points > 0, "LibLand: Points must be greater than zero");
-//
-//        // Effects
-//        LibLandStorage.Data storage s = _sN();
-//        s.accumulatedPlantPoints[tokenId] += points;
-//
-//        // No interactions with external contracts in this function
-//    }
+    /// @notice Adds accumulatedPlantPoints to a land
+    /// @param tokenId The ID of the token to add points to
+    /// @param points The amount of points to add
+    function _pushAccumulatedPlantPoints(uint256 tokenId, uint256 points) internal {
+        // Checks
+        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+        require(points > 0, "LibLand: Points must be greater than zero");
+
+        // Effects
+        LibLandStorage.Data storage s = _sN();
+        s.accumulatedPlantPoints[tokenId] += points;
+
+    }
 
     /// @notice Adds accumulatedPlantLifetime to a land
     /// @param tokenId The ID of the token to add lifetime to
