@@ -110,7 +110,7 @@ library LibVillage {
         if (s.villageBuildingTypes[buildingId].isProducingPlantPoints) {
             uint256 accumulatedPoints = _villageCalculateAccumulatedPoints(landId, buildingId);
             if (accumulatedPoints > 0) {
-                LibLand._pushExperiencePoints(landId, accumulatedPoints);
+                LibLand._pushAccumulatedPlantPoints(landId, accumulatedPoints);
             }
         }
 
