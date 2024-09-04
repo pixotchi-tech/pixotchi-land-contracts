@@ -107,6 +107,20 @@ contract NFTFacet is ERC721EnumerableUpgradeable, INFTFacet /*is ERC721Upgradeab
         super.safeTransferFrom(from, to, tokenId);
     }
 
+    //TODO: audit this & unit & fuzz test
+    /// @notice Transfers a token from the caller to another address
+    /// @param to The address to transfer the token to
+    /// @param tokenId The ID of the token to transfer
+    /// @return success True if the transfer was successful
+    function transfer(address to, uint256 tokenId) public virtual returns (bool success) {
+        address owner = ownerOf(tokenId);
+        require(owner == _msgSender(), "NFTFacet: transfer caller is not owner");
+        require(to != address(0), "NFTFacet: transfer to the zero address");
+
+        _transfer(owner, to, tokenId);
+        return true;
+    }
+
     /// @notice Returns an array of token IDs owned by a given address
     /// @param owner The address to query the tokens of
     /// @return An array of token IDs owned by the requested address
