@@ -156,34 +156,48 @@ library LibVillage {
         LibVillageStorage.Data storage s = _sNB();
         
         buildings = new VillageBuilding[](LibVillageStorage.villageEnabledBuildingTypesCount());
-
         uint8[] memory enabledBuildingTypes = LibVillageStorage.villageEnabledBuildingTypes();
         
         for (uint8 i = 0; i < LibVillageStorage.villageEnabledBuildingTypesCount(); i++) {
             uint8 buildingId = enabledBuildingTypes[i];
-            LibVillageStorage.VillageBulding storage storedBuilding = s.villageBuildings[landId][buildingId];
-            LibVillageStorage.VillageBuildingType storage buildingType = s.villageBuildingTypes[buildingId];
-            LibVillageStorage.LevelData storage levelData = buildingType.levelData[storedBuilding.level + 1];
-
-            buildings[i] = VillageBuilding({
-                id: buildingId,
-                level: storedBuilding.level,
-                maxLevel: buildingType.maxLevel,
-                blockHeightUpgradeInitiated: storedBuilding.blockHeightUpgradeInitiated,
-                blockHeightUntilUpgradeDone: storedBuilding.blockHeightUntilUpgradeDone,
-                accumulatedPoints: _villageCalculateAccumulatedPoints(landId, buildingId),
-                accumulatedLifetime: _villageCalculateAccumulatedLifetime(landId, buildingId),
-                isUpgrading: _villageIsUpgrading(landId, buildingId),
-                levelUpgradeCostLeaf: levelData.levelUpgradeCostLeaf,
-                levelUpgradeCostSeedInstant: levelData.levelUpgradeCostSeedInstant,
-                levelUpgradeBlockInterval: levelData.levelUpgradeBlockInterval,
-                productionRatePlantLifetimePerBlock: levelData.productionRatePlantLifetimePerBlock,
-                productionRatePlantPointsPerBlock: levelData.productionRatePlantPointsPerBlock,
-                claimedBlockHeight: storedBuilding.claimedBlockHeight
-            });
+            buildings[i] = _getVillageBuildingInfo(landId, buildingId);
         }
         
         return buildings;
+    }
+
+    function _getVillageBuildingInfo(uint256 landId, uint8 buildingId) internal view returns (VillageBuilding memory) {
+        LibVillageStorage.Data storage s = _sNB();
+        LibVillageStorage.VillageBulding storage storedBuilding = s.villageBuildings[landId][buildingId];
+        LibVillageStorage.VillageBuildingType storage buildingType = s.villageBuildingTypes[buildingId];
+        
+        uint8 currentLevel = storedBuilding.level;
+        LibVillageStorage.LevelData storage levelData = buildingType.levelData[currentLevel];
+        LibVillageStorage.LevelData storage levelDataNext = buildingType.levelData[currentLevel + 1];
+
+        bool isUpgrading = _villageIsUpgrading(landId, buildingId);
+
+        (uint256 levelUpgradeCostLeaf, uint256 levelUpgradeCostSeedInstant, uint256 levelUpgradeBlockInterval) = 
+            isUpgrading ? 
+            (levelData.levelUpgradeCostLeaf, levelData.levelUpgradeCostSeedInstant, levelData.levelUpgradeBlockInterval) :
+            (levelDataNext.levelUpgradeCostLeaf, levelDataNext.levelUpgradeCostSeedInstant, levelDataNext.levelUpgradeBlockInterval);
+
+        return VillageBuilding({
+            id: buildingId,
+            level: currentLevel,
+            maxLevel: buildingType.maxLevel,
+            blockHeightUpgradeInitiated: storedBuilding.blockHeightUpgradeInitiated,
+            blockHeightUntilUpgradeDone: storedBuilding.blockHeightUntilUpgradeDone,
+            accumulatedPoints: _villageCalculateAccumulatedPoints(landId, buildingId),
+            accumulatedLifetime: _villageCalculateAccumulatedLifetime(landId, buildingId),
+            isUpgrading: isUpgrading,
+            levelUpgradeCostLeaf: levelUpgradeCostLeaf,
+            levelUpgradeCostSeedInstant: levelUpgradeCostSeedInstant,
+            levelUpgradeBlockInterval: levelUpgradeBlockInterval,
+            productionRatePlantLifetimePerBlock: levelData.productionRatePlantLifetimePerBlock,
+            productionRatePlantPointsPerBlock: levelData.productionRatePlantPointsPerBlock,
+            claimedBlockHeight: storedBuilding.claimedBlockHeight
+        });
     }
 
     /// @notice Internal function to access NFT Building storage
