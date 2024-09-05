@@ -949,12 +949,12 @@ export const abi = [
             "internalType": "uint256"
           },
           {
-            "name": "productionRatePlantLifetimePerBlock",
+            "name": "productionRatePlantLifetimePerDay",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "productionRatePlantPointsPerBlock",
+            "name": "productionRatePlantPointsPerDay",
             "type": "uint256",
             "internalType": "uint256"
           },
