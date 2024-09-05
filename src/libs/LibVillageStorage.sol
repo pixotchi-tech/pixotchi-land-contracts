@@ -58,20 +58,22 @@ library LibVillageStorage {
         s.villageBuildingTypes[uint8(VillageBuildingNaming.BEE_FARM)].enabled = true;
         _initBeeFarmLevels(s.villageBuildingTypes[uint8(VillageBuildingNaming.BEE_FARM)]);
     }
-
-    /// @notice Calculates the production rate for plant lifetime per block
-    /// @param hoursPerDay The number of hours of lifetime produced per day
-    /// @return The production rate per block (in 1e18 precision)
-    function _calculateLifetimeProductionRate(uint256 hoursPerDay) internal pure returns (uint256) {
-        return (hoursPerDay * 1 hours /** 1e18*/) / (24 hours / BLOCK_TIME);
-    }
-
-    /// @notice Calculates the production rate for plant points per block
-    /// @param pointsPerDay The number of points produced per day
-    /// @return The production rate per block (in PLANT_POINT_DECIMALS precision)
-    function _calculatePointsProductionRate(uint256 pointsPerDay) internal pure returns (uint256) {
-        return (pointsPerDay * (10 ** LibConstants.PLANT_POINT_DECIMALS)) / (24 hours / BLOCK_TIME);
-    }
+//
+//    /// @notice Calculates the production rate for plant lifetime per block
+//    /// @param hoursPerDay The number of hours of lifetime produced per day
+//    /// @return The production rate per block (in 1e18 precision)
+//    function _calculateLifetimeProductionRate(uint256 hoursPerDay) internal pure returns (uint256) {
+//        return (hoursPerDay /* * 1 hours*/ /** 1e18*/) / (24 hours / BLOCK_TIME);
+//        //6 * 3600 /((24 * 3600) / 2)
+//    }
+//
+//    /// @notice Calculates the production rate for plant points per block
+//    /// @param pointsPerDay The number of points produced per day
+//    /// @return The production rate per block (in PLANT_POINT_DECIMALS precision)
+//    function _calculatePointsProductionRate(uint256 pointsPerDay) internal pure returns (uint256) {
+//        return (pointsPerDay * (10 ** LibConstants.PLANT_POINT_DECIMALS)) / (24 hours / BLOCK_TIME);
+//    }
+//
 
     /// @notice Initializes the levels for the Soil Factory building type
     /// @param buildingType The VillageBuildingType struct to initialize
@@ -80,24 +82,24 @@ library LibVillageStorage {
             levelUpgradeCostLeaf: 750000 ether,
             levelUpgradeCostSeedInstant: 500 ether,
             levelUpgradeBlockInterval: 24 hours / BLOCK_TIME,
-            productionRatePlantLifetimePerBlock: 0,
-            productionRatePlantPointsPerBlock: _calculatePointsProductionRate(250)
+            productionRatePlantLifetimePerDay: 0,
+            productionRatePlantPointsPerDay: 250 * (10 ** LibConstants.PLANT_POINT_DECIMALS)
         });
 
         buildingType.levelData[2] = LevelData({
             levelUpgradeCostLeaf: 1000000 ether,
             levelUpgradeCostSeedInstant: 1250 ether,
             levelUpgradeBlockInterval: 60 hours / BLOCK_TIME,
-            productionRatePlantLifetimePerBlock: 0,
-            productionRatePlantPointsPerBlock: _calculatePointsProductionRate(500)
+            productionRatePlantLifetimePerDay: 0,
+            productionRatePlantPointsPerDay: 500 * (10 ** LibConstants.PLANT_POINT_DECIMALS)
         });
 
         buildingType.levelData[3] = LevelData({
             levelUpgradeCostLeaf: 3000000 ether,
             levelUpgradeCostSeedInstant: 2000 ether,
             levelUpgradeBlockInterval: 96 hours / BLOCK_TIME,
-            productionRatePlantLifetimePerBlock: 0,
-            productionRatePlantPointsPerBlock: _calculatePointsProductionRate(1000)
+            productionRatePlantLifetimePerDay: 0,
+            productionRatePlantPointsPerDay: 1000 * (10 ** LibConstants.PLANT_POINT_DECIMALS)
         });
     }
 
@@ -108,24 +110,24 @@ library LibVillageStorage {
             levelUpgradeCostLeaf: 800000 ether,
             levelUpgradeCostSeedInstant: 750 ether,
             levelUpgradeBlockInterval: 36 hours / BLOCK_TIME,
-            productionRatePlantLifetimePerBlock: 0,
-            productionRatePlantPointsPerBlock: _calculatePointsProductionRate(200)
+            productionRatePlantLifetimePerDay: 0,
+            productionRatePlantPointsPerDay: 200 * (10 ** LibConstants.PLANT_POINT_DECIMALS)
         });
 
         buildingType.levelData[2] = LevelData({
             levelUpgradeCostLeaf: 1100000 ether,
             levelUpgradeCostSeedInstant: 1000 ether,
             levelUpgradeBlockInterval: 48 hours / BLOCK_TIME,
-            productionRatePlantLifetimePerBlock: 0,
-            productionRatePlantPointsPerBlock: _calculatePointsProductionRate(350)
+            productionRatePlantLifetimePerDay: 0,
+            productionRatePlantPointsPerDay: 350 * (10 ** LibConstants.PLANT_POINT_DECIMALS)
         });
 
         buildingType.levelData[3] = LevelData({
             levelUpgradeCostLeaf: 1500000 ether,
             levelUpgradeCostSeedInstant: 1625 ether,
             levelUpgradeBlockInterval: 78 hours / BLOCK_TIME,
-            productionRatePlantLifetimePerBlock: 0,
-            productionRatePlantPointsPerBlock: _calculatePointsProductionRate(500)
+            productionRatePlantLifetimePerDay: 0,
+            productionRatePlantPointsPerDay: 500 * (10 ** LibConstants.PLANT_POINT_DECIMALS)
         });
     }
 
@@ -136,24 +138,24 @@ library LibVillageStorage {
             levelUpgradeCostLeaf: 500000 ether,
             levelUpgradeCostSeedInstant: 125 ether,
             levelUpgradeBlockInterval: 6 hours / BLOCK_TIME,
-            productionRatePlantLifetimePerBlock: _calculateLifetimeProductionRate(3),
-            productionRatePlantPointsPerBlock: 0
+            productionRatePlantLifetimePerDay: 6 hours,
+            productionRatePlantPointsPerDay: 0
         });
 
         buildingType.levelData[2] = LevelData({
             levelUpgradeCostLeaf: 750000 ether,
             levelUpgradeCostSeedInstant: 375 ether,
             levelUpgradeBlockInterval: 18 hours / BLOCK_TIME,
-            productionRatePlantLifetimePerBlock: _calculateLifetimeProductionRate(6),
-            productionRatePlantPointsPerBlock: 0
+            productionRatePlantLifetimePerDay: 12 hours,
+            productionRatePlantPointsPerDay: 0
         });
 
         buildingType.levelData[3] = LevelData({
             levelUpgradeCostLeaf: 1000000 ether,
             levelUpgradeCostSeedInstant: 625 ether,
             levelUpgradeBlockInterval: 30 hours / BLOCK_TIME,
-            productionRatePlantLifetimePerBlock: _calculateLifetimeProductionRate(18),
-            productionRatePlantPointsPerBlock: 0
+            productionRatePlantLifetimePerDay: 24 hours,
+            productionRatePlantPointsPerDay: 0
         });
     }
 
@@ -250,8 +252,8 @@ library LibVillageStorage {
         /// @notice Block interval required for upgrading to this level
         uint256 levelUpgradeBlockInterval;
         /// @notice Production rate of plant lifetime per block for this level
-        uint256 productionRatePlantLifetimePerBlock;
+        uint256 productionRatePlantLifetimePerDay;
         /// @notice Production rate of plant points per block for this level
-        uint256 productionRatePlantPointsPerBlock;
+        uint256 productionRatePlantPointsPerDay;
     }
 }
