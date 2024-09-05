@@ -29,7 +29,7 @@ contract NFTFacet is ERC721EnumerableUpgradeable, INFTFacet /*is ERC721Upgradeab
         uint256 supply = totalSupply();
         require(supply + quantity <= _sN().maxSupply, "Exceeds max supply");
 
-        _safeMint(msg.sender, _sN().nextTokenId++);
+        _safeMint(to, _sN().nextTokenId++);
 
 
         for (uint256 i = 0; i < quantity; i++) {
