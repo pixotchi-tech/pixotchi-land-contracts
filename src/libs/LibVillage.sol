@@ -153,7 +153,7 @@ library LibVillage {
     /// @param landId The ID of the land
     /// @return buildings An array of VillageBuilding structs for the given land ID
     function _villageGetBuildingsByLandId(uint256 landId) internal view returns (VillageBuilding[] memory buildings) {
-        LibVillageStorage.Data storage s = _sNB();
+        //LibVillageStorage.Data storage s = _sNB();
         
         buildings = new VillageBuilding[](LibVillageStorage.villageEnabledBuildingTypesCount());
         uint8[] memory enabledBuildingTypes = LibVillageStorage.villageEnabledBuildingTypes();
