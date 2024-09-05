@@ -19,7 +19,7 @@ library LibWareHouseStorage {
     /// @notice Initializes the LAND storage with default values
     /// @dev This function can only be called once
     function initializeLandStorage() internal initializer(1) {
-        Data storage s = data();
+        //Data storage s = data();
 /*        s.maxSupply = 20000;
         s.minX = -112;
         s.maxX = 112;
