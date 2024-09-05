@@ -194,8 +194,8 @@ library LibVillage {
             levelUpgradeCostLeaf: levelUpgradeCostLeaf,
             levelUpgradeCostSeedInstant: levelUpgradeCostSeedInstant,
             levelUpgradeBlockInterval: levelUpgradeBlockInterval,
-            productionRatePlantLifetimePerBlock: levelData.productionRatePlantLifetimePerBlock,
-            productionRatePlantPointsPerBlock: levelData.productionRatePlantPointsPerBlock,
+            productionRatePlantLifetimePerDay: levelData.productionRatePlantLifetimePerDay,
+            productionRatePlantPointsPerDay: levelData.productionRatePlantPointsPerDay,
             claimedBlockHeight: storedBuilding.claimedBlockHeight
         });
     }
@@ -218,18 +218,28 @@ library LibVillage {
         if (!buildingType.isProducingPlantPoints || building.level == 0 || _villageIsUpgrading(landId, buildingId)) {
             return 0;
         }
-
         uint256 lastClaimBlock = building.claimedBlockHeight;
         uint256 currentBlock = block.number;
 
-//        if (_villageIsUpgrading(landId, buildingId)) {
-//            currentBlock = building.blockHeightUpgradeInitiated;
-//        }
-
         uint256 blocksPassed = currentBlock - lastClaimBlock;
-        uint256 productionRate = buildingType.levelData[building.level].productionRatePlantPointsPerBlock;
+        uint256 productionRate = buildingType.levelData[building.level].productionRatePlantPointsPerDay;
 
-        accumulatedPoints = (blocksPassed * productionRate) /*/ 1e12*/; // Adjust for precision
+        accumulatedPoints = _calculateAccumulatedPoints(blocksPassed, productionRate);
+    }
+
+    /// @notice Calculate the accumulated plant points for a village building
+    /// @dev This function calculates the plant points accumulated over a period of time.
+    ///      The calculation is done in the following steps:
+    ///      1. Convert blocks to seconds: blocksPassed * BLOCK_TIME
+    ///      2. Calculate the fraction of a day that has passed: (blocksPassed * BLOCK_TIME) / 1 days
+    ///      3. Multiply by the daily production rate: ... * productionRatePlantPointsPerDay
+    ///      4. Scale the result for precision: ... * PLANT_POINT_DECIMALS
+    ///      All multiplications are performed before division to maintain precision.
+    /// @param blocksPassed The number of blocks that have passed since the last update
+    /// @param productionRatePlantPointsPerDay The daily production rate of plant points for the building
+    /// @return The accumulated plant points, scaled by PLANT_POINT_DECIMALS (1e12)
+    function _calculateAccumulatedPoints(uint256 blocksPassed, uint256 productionRatePlantPointsPerDay) private pure returns (uint256) {
+        return (blocksPassed * LibConstants.BLOCK_TIME * productionRatePlantPointsPerDay * LibConstants.PLANT_POINT_DECIMALS) / 1 days;
     }
 
     /// @notice Calculates the accumulated plant lifetime for a village building
@@ -253,7 +263,7 @@ library LibVillage {
 //        }
 
         uint256 blocksPassed = currentBlock - lastClaimBlock;
-        uint256 productionRate = buildingType.levelData[building.level].productionRatePlantLifetimePerBlock;
+        uint256 productionRate = buildingType.levelData[building.level].productionRatePlantLifetimePerDay;
 
         accumulatedLifetime = (blocksPassed * productionRate * LibVillageStorage.BLOCK_TIME) /*/ 1e18*/; // Convert to seconds and adjust for precision
     }
