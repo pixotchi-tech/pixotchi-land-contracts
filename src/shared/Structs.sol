@@ -61,10 +61,10 @@ struct VillageBuilding {
   uint256 levelUpgradeCostSeedInstant;
   /// @notice Block interval required for upgrading to current level
   uint256 levelUpgradeBlockInterval;
-  /// @notice Production rate of plant lifetime per block for current level
-  uint256 productionRatePlantLifetimePerBlock;
-  /// @notice Production rate of plant points per block for current level
-  uint256 productionRatePlantPointsPerBlock;
+  /// @notice Production rate of plant lifetime per day for current level
+  uint256 productionRatePlantLifetimePerDay;
+  /// @notice Production rate of plant points per day for current level
+  uint256 productionRatePlantPointsPerDay;
   /// @notice Block height when the resources were claimed last.
   uint256 claimedBlockHeight;
 
