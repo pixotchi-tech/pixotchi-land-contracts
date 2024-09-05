@@ -258,14 +258,29 @@ library LibVillage {
         uint256 lastClaimBlock = building.claimedBlockHeight;
         uint256 currentBlock = block.number;
 
-//        if (_villageIsUpgrading(landId, buildingId)) {
-//            currentBlock = building.blockHeightUpgradeInitiated;
-//        }
-
         uint256 blocksPassed = currentBlock - lastClaimBlock;
         uint256 productionRate = buildingType.levelData[building.level].productionRatePlantLifetimePerDay;
 
-        accumulatedLifetime = (blocksPassed * productionRate * LibVillageStorage.BLOCK_TIME) /*/ 1e18*/; // Convert to seconds and adjust for precision
+        accumulatedLifetime = _calculateAccumulatedLifetime(blocksPassed, productionRate);
+
+        //accumulatedLifetime = (blocksPassed * productionRate * LibVillageStorage.BLOCK_TIME) /*/ 1e18*/; // Convert to seconds and adjust for precision
+    }
+
+    /// @notice Calculate the accumulated plant lifetime for a village
+    /// @dev This function performs the following steps:
+    ///      1. Convert blocks to seconds: blocksPassed * BLOCK_TIME
+    ///      2. Calculate the fraction of a day that has passed: (blocksPassed * BLOCK_TIME) / 1 days
+    ///      3. Multiply by the daily production rate: ... * productionRatePlantLifetimePerDay
+    ///      The operations are ordered to maximize precision before division.
+    /// @param blocksPassed The number of blocks that have passed since the last update
+    /// @param productionRatePlantLifetimePerDay The amount of plant lifetime produced per day
+    /// @return The accumulated plant lifetime
+    function _calculateAccumulatedLifetime(uint256 blocksPassed, uint256 productionRatePlantLifetimePerDay) private pure returns (uint256) {
+        // Perform multiplications before division to maintain precision
+        // (blocksPassed * BLOCK_TIME) converts blocks to seconds
+        // (... * productionRatePlantLifetimePerDay) calculates total lifetime for the time period
+        // Finally, divide by (1 days) to get the fraction of daily production
+        return (blocksPassed * LibConstants.BLOCK_TIME * productionRatePlantLifetimePerDay) / 1 days;
     }
 
 //    /// @notice Internal function to access AppStorage
