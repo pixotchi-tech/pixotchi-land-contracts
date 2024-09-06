@@ -24,54 +24,58 @@ library LibConstants {
     // New constant for plant point decimals
     uint256 internal constant PLANT_POINT_DECIMALS = 12;
 
-    error UnsupportedNetwork();
+    // error UnsupportedNetwork(); // Commented out
 
     /// @notice Get the seed token address based on the network
     /// @return The address of the seed token for the current network
     function paymentGetSeedToken() internal view returns (address) {
-        if (block.chainid == TESTNET_CHAIN_ID) { // Testnet chain ID
-            return TESTNET_SEED_TOKEN;
-        } else if (block.chainid == MAINNET_CHAIN_ID) { // Mainnet chain ID
+        if (block.chainid == MAINNET_CHAIN_ID) { // Mainnet chain ID
             return MAINNET_SEED_TOKEN;
         } else {
-            revert UnsupportedNetwork();
+            return TESTNET_SEED_TOKEN; // Use testnet for all other chain IDs
         }
+        // else {
+        //     revert UnsupportedNetwork();
+        // }
     }
 
     /// @notice Get the leaf token address based on the network
     /// @return The address of the leaf token for the current network
     function paymentGetLeafToken() internal view returns (address) {
-        if (block.chainid == TESTNET_CHAIN_ID) { // Testnet chain ID
-            return TESTNET_LEAF_TOKEN;
-        } else if (block.chainid == MAINNET_CHAIN_ID) { // Mainnet chain ID
+        if (block.chainid == MAINNET_CHAIN_ID) { // Mainnet chain ID
             return MAINNET_LEAF_TOKEN;
         } else {
-            revert UnsupportedNetwork();
+            return TESTNET_LEAF_TOKEN; // Use testnet for all other chain IDs
         }
+        // else {
+        //     revert UnsupportedNetwork();
+        // }
     }
 
     /// @notice Get the seed receive address based on the network
     /// @return The seed receive address for the current network
     function paymentGetSeedReceiveAddress() internal view returns (address) {
-        if (block.chainid == TESTNET_CHAIN_ID) { // Testnet chain ID
-            return TESTNET_SEED_RECEIVE_ADDRESS;
-        } else if (block.chainid == MAINNET_CHAIN_ID) { // Mainnet chain ID
+        if (block.chainid == MAINNET_CHAIN_ID) { // Mainnet chain ID
             return MAINNET_SEED_RECEIVE_ADDRESS;
         } else {
-            revert UnsupportedNetwork();
+            return TESTNET_SEED_RECEIVE_ADDRESS; // Use testnet for all other chain IDs
         }
+        // else {
+        //     revert UnsupportedNetwork();
+        // }
     }
 
     /// @notice Get the leaf receive address based on the network
     /// @return The leaf receive address for the current network
     function paymentGetLeafReceiveAddress() internal view returns (address) {
-        if (block.chainid == TESTNET_CHAIN_ID) { // Testnet chain ID
-            return TESTNET_LEAF_RECEIVE_ADDRESS;
-        } else if (block.chainid == MAINNET_CHAIN_ID) { // Mainnet chain ID
+        if (block.chainid == MAINNET_CHAIN_ID) { // Mainnet chain ID
             return MAINNET_LEAF_RECEIVE_ADDRESS;
         } else {
-            revert UnsupportedNetwork();
+            return TESTNET_LEAF_RECEIVE_ADDRESS; // Use testnet for all other chain IDs
         }
+        // else {
+        //     revert UnsupportedNetwork();
+        // }
     }
 
 }
