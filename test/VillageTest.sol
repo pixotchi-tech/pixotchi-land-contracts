@@ -18,6 +18,8 @@ contract MockERC20 is ERC20 {
 }
 
 contract VillageTest is TestBaseContract {
+
+    
     MockERC20 public seedToken;
     MockERC20 public leafToken;
     address public player;
@@ -44,61 +46,136 @@ contract VillageTest is TestBaseContract {
         vm.deal(player, 100 ether);
     }
 
-    function testExample() public {
-        string memory e = diamond.name();
-        assertEq(e, "Land02", "Invalid name");
-        console.log(e);
-    }
+    // function testExample() public {
+    //     string memory e = diamond.name();
+    //     assertEq(e, "Land02", "Invalid name");
+    //     console.log(e);
+    // }
 
     function testVillageUpgradeAndSpeedup() public {
-        // Switch to the player account
+        setupPlayerWithTokens(player);
         vm.startPrank(player);
-
-        // Mint 1 million LEAF tokens to the player
-        uint256 leafAmount = 1_000_000 * 10**18;
-        leafToken.mint(player, leafAmount);
-
-        // Mint 1 million SEED tokens to the player
-        uint256 seedAmount = 1_000_000 * 10**18;
-        seedToken.mint(player, seedAmount);
-
-        // Approve the diamond contract to spend LEAF and SEED tokens
-        leafToken.approve(address(diamond), leafAmount);
-        seedToken.approve(address(diamond), seedAmount);
-
+        
         // Mint a land
         diamond.mint();
+        uint256 _tokenId = 1;
+        uint8 _buildingId = 0;
 
-        // Upgrade village building (0, 0)
-        diamond.villageUpgradeWithLeaf(1, 0);
+        // Perform one upgrade and speed-up
+        performUpgradesAndSpeedups(_tokenId, _buildingId, 1);
 
-        // Advance the block number
-        vm.roll(block.number + 1);
+        logSpecificVillageBuilding(_tokenId, _buildingId);
+        vm.stopPrank();
+    }
 
-        // Speed up the upgrade
-        diamond.villageSpeedUpWithSeed(1, 0);
+    function testVillageDoubleUpgradeAndSpeedup() public {
+        setupPlayerWithTokens(player);
+        vm.startPrank(player);
+        
+        // Mint a land
+        diamond.mint();
+        uint256 _tokenId = 1;
+        uint8 _buildingId = 0;
 
-//        // Get village buildings for the land
-//        VillageBuilding[] memory buildings = diamond.villageGetVillageBuildingsByLandId(1);
-//
-//        // Log the buildings array
-//        console.log("Number of buildings:", buildings.length);
-//        for (uint i = 0; i < buildings.length; i++) {
-//            VillageBuilding memory building = buildings[i];
-//            console.log("Building", i);
-//            console.log("  ID:", building.id);
-//            console.log("  Level:", building.level);
-//            console.log("  Max Level:", building.maxLevel);
-//            console.log("  Is Upgrading:", building.isUpgrading);
-//            console.log("  Upgrade Cost (LEAF):", building.levelUpgradeCostLeaf);
-//            console.log("  Instant Upgrade Cost (SEED):", building.levelUpgradeCostSeedInstant);
-//            console.log("  Upgrade Block Interval:", building.levelUpgradeBlockInterval);
-//            console.log("  Production Rate (Lifetime):", building.productionRatePlantLifetimePerDay);
-//            console.log("  Production Rate (Points):", building.productionRatePlantPointsPerDay);
-//            console.log("  Claimed Block Height:", building.claimedBlockHeight);
-//        }
-//
-//        // Stop impersonating the player
-//        vm.stopPrank();
+        // Perform two upgrades and speed-ups
+        performUpgradesAndSpeedups(_tokenId, _buildingId, 2);
+
+        logSpecificVillageBuilding(_tokenId, _buildingId);
+        vm.stopPrank();
+    }
+
+    function testVillageTripleUpgradeAndSpeedup() public {
+        setupPlayerWithTokens(player);
+        vm.startPrank(player);
+        
+        // Mint a land
+        diamond.mint();
+        uint256 _tokenId = 1;
+        uint8 _buildingId = 0;
+
+        // Perform three upgrades and speed-ups
+        performUpgradesAndSpeedups(_tokenId, _buildingId, 3);
+
+        logSpecificVillageBuilding(_tokenId, _buildingId);
+        vm.stopPrank();
+    }
+
+    function performUpgradesAndSpeedups(uint256 _tokenId, uint8 _buildingId, uint8 levels) internal {
+        for (uint8 i = 0; i < levels; i++) {
+            // Upgrade village building
+            diamond.villageUpgradeWithLeaf(_tokenId, _buildingId);
+
+            // Advance the block number
+            vm.roll(block.number + 1);
+
+            // Speed up the upgrade
+            diamond.villageSpeedUpWithSeed(_tokenId, _buildingId);
+
+
+        }
+    }
+
+    function setupPlayerWithTokens(
+        address _player
+    ) internal {
+        vm.startPrank(_player);
+
+        uint256 _leafAmount = 1_000_000_000_000 * 10**18;
+        uint256 _seedAmount = 1_000_000 * 10**18;
+
+        // Mint LEAF tokens to the player
+        leafToken.mint(_player, _leafAmount);
+
+        // Mint SEED tokens to the player
+        seedToken.mint(_player, _seedAmount);
+
+        // Approve the diamond contract to spend LEAF and SEED tokens
+        leafToken.approve(address(diamond), _leafAmount);
+        seedToken.approve(address(diamond), _seedAmount);
+
+        vm.stopPrank();
+    }
+
+    function logVillageBuildings(uint256 landId) internal {
+        VillageBuilding[] memory buildings = diamond.villageGetVillageBuildingsByLandId(landId);
+
+        console2.log("Number of buildings for Land ID", landId, ":", buildings.length);
+        for (uint i = 0; i < buildings.length; i++) {
+            VillageBuilding memory building = buildings[i];
+            console2.log("Building", i);
+            console2.log("  ID:", building.id);
+            console2.log("  Level:", building.level);
+            console2.log("  Max Level:", building.maxLevel);
+            console2.log("  Is Upgrading:", building.isUpgrading);
+            console2.log("  Upgrade Cost (LEAF):", building.levelUpgradeCostLeaf);
+            console2.log("  Instant Upgrade Cost (SEED):", building.levelUpgradeCostSeedInstant);
+            console2.log("  Upgrade Block Interval:", building.levelUpgradeBlockInterval);
+            console2.log("  Production Rate (Lifetime):", building.productionRatePlantLifetimePerDay);
+            console2.log("  Production Rate (Points):", building.productionRatePlantPointsPerDay);
+            console2.log("  Claimed Block Height:", building.claimedBlockHeight);
+        }
+    }
+
+    function logSpecificVillageBuilding(uint256 landId, uint256 buildingId) internal {
+                    // Advance time by a day
+            vm.roll(block.number + 1 days / 2);
+        VillageBuilding[] memory buildings = diamond.villageGetVillageBuildingsByLandId(landId);
+
+        for (uint i = 0; i < buildings.length; i++) {
+            VillageBuilding memory building = buildings[i];
+            if (building.id == buildingId) {
+                console2.log("Building Details for ID:", buildingId);
+                console2.log("  Level:", building.level);
+                console2.log("  Max Level:", building.maxLevel);
+                console2.log("  Is Upgrading:", building.isUpgrading);
+                console2.log("  Upgrade Cost (LEAF):", building.levelUpgradeCostLeaf);
+                console2.log("  Instant Upgrade Cost (SEED):", building.levelUpgradeCostSeedInstant);
+                console2.log("  Upgrade Block Interval:", building.levelUpgradeBlockInterval);
+                console2.log("  Production Rate (Lifetime):", building.productionRatePlantLifetimePerDay);
+                console2.log("  Production Rate (Points):", building.productionRatePlantPointsPerDay);
+                console2.log("  Claimed Block Height:", building.claimedBlockHeight);
+                break;
+            }
+        }
     }
 }
