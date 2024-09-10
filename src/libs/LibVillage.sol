@@ -7,6 +7,7 @@ pragma solidity >=0.8.21;
 import "./LibVillageStorage.sol";
 import "../shared/Structs.sol";
 import "./LibLand.sol";
+import "./LibXP.sol";
 
 /// @title LibLand
 /// @notice A library for managing land-related operations in the Pixotchi game
@@ -17,7 +18,9 @@ library LibVillage {
     /// @notice Upgrades or builds a village building using leaves
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to upgrade or build
-    function _villageUpgradeWithLeaf(uint256 landId, uint8 buildingId) internal returns (uint256 upgradeCost) {
+    /// @return upgradeCost The cost of the upgrade in leaves
+    /// @return xp The amount of XP awarded for the upgrade
+    function _villageUpgradeWithLeaf(uint256 landId, uint8 buildingId) internal returns (uint256 upgradeCost, uint256 xp) {
         LibVillageStorage.Data storage s = _sNB();
         
         // Check if the building type is enabled
@@ -35,13 +38,6 @@ library LibVillage {
         upgradeCost = s.villageBuildingTypes[buildingId].levelData[nextLevel].levelUpgradeCostLeaf;
         uint256 upgradeBlockInterval = s.villageBuildingTypes[buildingId].levelData[nextLevel].levelUpgradeBlockInterval;
 
-        // Check if the user has enough leaves
-        //require(_sA().resources[msg.sender].leaves >= upgradeCost, "Not enough leaves");
-
-        // TODO: Implement safe transfer of leaves
-        // _safeTransferLeaves(msg.sender, address(this), upgradeCost);
-
-        // If upgrading from level 1 or higher, claim resources first
         if (currentLevel > 0) {
             _villageClaimProduction(landId, buildingId);
         }
@@ -53,10 +49,16 @@ library LibVillage {
         s.villageBuildings[landId][buildingId].claimedBlockHeight = upgradeCompletionBlock;
         s.villageBuildings[landId][buildingId].level = nextLevel;
 
+        // Calculate XP
+        xp = LibXP.calculateLeafUpgradeXP(currentLevel);
+
+        // Add XP to the land
+        //LibXP._pushExperiencePoints(landId, xp);
+
         // TODO: Emit an event for the upgrade initiation
         // emit VillageUpgradeInitiated(landId, buildingId, nextLevel, block.number, upgradeCompletionBlock);
 
-        return upgradeCost;
+        return (upgradeCost, xp);
     }
 
 
@@ -64,7 +66,9 @@ library LibVillage {
     /// @notice Speeds up a village building upgrade using a seed
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to speed up
-    function _villageSpeedUpWithSeed(uint256 landId, uint8 buildingId) internal returns (uint256 speedUpCost) {
+    /// @return speedUpCost The cost of speeding up in seeds
+    /// @return xp The amount of XP awarded for speeding up
+    function _villageSpeedUpWithSeed(uint256 landId, uint8 buildingId) internal returns (uint256 speedUpCost, uint256 xp) {
         LibVillageStorage.Data storage s = _sNB();
         
         // Check if the building is currently upgrading
@@ -73,19 +77,18 @@ library LibVillage {
         uint8 currentLevel = s.villageBuildings[landId][buildingId].level;
         speedUpCost = s.villageBuildingTypes[buildingId].levelData[currentLevel].levelUpgradeCostSeedInstant;
         
-        // Check if the user has enough seeds
-        //require(_sA().resources[msg.sender].seeds >= speedUpCost, "Not enough seeds");
-        
-        // Deduct seeds and complete the upgrade instantly
-        //_sA().resources[msg.sender].seeds -= speedUpCost;
-        //s.villageBuildings[landId][buildingId].blockHeightUpgradeInitiated = 0;
         s.villageBuildings[landId][buildingId].blockHeightUntilUpgradeDone = block.number;
-        //s.villageBuildings[landId][buildingId].level++;
         s.villageBuildings[landId][buildingId].claimedBlockHeight = block.number;
         
+        // Calculate XP
+        xp = LibXP.calculateSeedSpeedUpXP(currentLevel);
+
+        // Add XP to the land
+        //LibXP._pushExperiencePoints(landId, xp);
+
         // TODO: Update production rates or other relevant data
 
-        return speedUpCost;
+        return (speedUpCost, xp);
     }
 
     /// @notice Claims production from a village building
