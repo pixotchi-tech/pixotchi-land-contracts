@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.21;
 
-/// @title Game Structures
 /// @notice Defines the main data structures used in the game
+
+// Add this line at the beginning of the file, after the pragma statement
+error InvalidLevel();
 
 /// @notice Stores context for meta-transactions
 /// @dev Used for storing trusted forwarder address in EIP-2771 context
