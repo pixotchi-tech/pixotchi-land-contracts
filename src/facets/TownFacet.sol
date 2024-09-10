@@ -8,6 +8,7 @@ import {LibLand} from "../libs/LibLand.sol";
 import "../shared/Structs.sol";
 import {LibTown} from "../libs/LibTown.sol";
 import {LibPayment} from "../libs/LibPayment.sol";
+import {LibXP} from "../libs/LibXP.sol";
 
 contract TownFacet is NFTModifiers {
 
@@ -74,12 +75,14 @@ contract TownFacet is NFTModifiers {
     //write fn: swapLeafToSeed(uint256 amount)
 
     function townUpgradeWithLeaf(uint256 landId, uint8 buildingId) public exists(landId) {
-        uint256 upgradeCost = LibTown._upgradeWithLeaf(landId, buildingId);
+        (uint256 upgradeCost, uint256 xp) = LibTown._upgradeWithLeaf(landId, buildingId);
+        LibXP.pushExperiencePoints(landId, xp);
         LibPayment.paymentPayWithLeaf(msg.sender, upgradeCost);
     }
 
     function townSpeedUpWithSeed(uint256 landId, uint8 buildingId) public exists(landId) {
-        uint256 speedUpCost = LibTown._speedUpWithSeed(landId, buildingId);
+        (uint256 speedUpCost, uint256 xp) = LibTown._speedUpWithSeed(landId, buildingId);
+        LibXP.pushExperiencePoints(landId, xp);
         LibPayment.paymentPayWithSeed(msg.sender, speedUpCost);
     }
     
