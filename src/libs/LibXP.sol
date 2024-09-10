@@ -7,6 +7,7 @@ import { LibLandStorage } from "../libs/LibLandStorage.sol";
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 //import {IERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 //import {LibLandStorage} from "./LibLandStorage.sol";
+import {LibERC721} from "./LibERC721.sol";
 
 library LibXP {
 
@@ -45,8 +46,7 @@ library LibXP {
     /// @param tokenId The ID of the token to add experience points to
     /// @param points The amount of experience points to add
     function pushExperiencePoints(uint256 tokenId, uint256 points) internal {
-        // Checks
-        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+        require(LibERC721._exists(tokenId), "NFT: Token does not exist");
         require(points > 0, "LibLand: Experience points must be greater than zero");
 
         // Effects
