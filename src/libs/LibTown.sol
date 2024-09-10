@@ -3,6 +3,7 @@ pragma solidity >=0.8.21;
 
 import "./LibTownStorage.sol";
 import "../shared/Structs.sol";
+import "./LibXP.sol";
 
 /// @title LibTown
 /// @notice A library for managing town-related operations in the Pixotchi game
@@ -51,7 +52,8 @@ library LibTown {
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to upgrade
     /// @return upgradeCost The cost of the upgrade in leaves
-    function _upgradeWithLeaf(uint256 landId, uint8 buildingId) internal returns (uint256 upgradeCost) {
+    /// @return xp The amount of XP awarded for the upgrade
+    function _upgradeWithLeaf(uint256 landId, uint8 buildingId) internal returns (uint256 upgradeCost, uint256 xp) {
         LibTownStorage.Data storage s = LibTownStorage.data();
         
         // Check if the building type is enabled
@@ -69,6 +71,12 @@ library LibTown {
         upgradeCost = s.townBuildingTypes[buildingId].levelData[nextLevel].levelUpgradeCostLeaf;
         uint256 upgradeBlockInterval = s.townBuildingTypes[buildingId].levelData[nextLevel].levelUpgradeBlockInterval;
 
+        // Calculate XP
+        xp = LibXP.calculateLeafUpgradeXP(currentLevel);
+
+        // Add XP to the land
+        // LibXP._pushExperiencePoints(landId, xp);
+
         // Check if the user has enough leaves
         // require(_sA().resources[msg.sender].leaves >= upgradeCost, "Not enough leaves");
 
@@ -84,14 +92,15 @@ library LibTown {
         // TODO: Emit an event for the upgrade initiation
         // emit TownUpgradeInitiated(landId, buildingId, nextLevel, block.number, upgradeCompletionBlock);
 
-        return upgradeCost;
+        return (upgradeCost, xp);
     }
 
     /// @notice Speed up a town building upgrade using seeds
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to speed up
     /// @return speedUpCost The cost of speeding up the upgrade in seeds
-    function _speedUpWithSeed(uint256 landId, uint8 buildingId) internal returns (uint256 speedUpCost) {
+    /// @return xp The amount of XP awarded for speeding up
+    function _speedUpWithSeed(uint256 landId, uint8 buildingId) internal returns (uint256 speedUpCost, uint256 xp) {
         LibTownStorage.Data storage s = LibTownStorage.data();
         
         // Check if the building is currently upgrading
@@ -100,6 +109,12 @@ library LibTown {
         uint8 currentLevel = s.townBuildings[landId][buildingId].level;
         speedUpCost = s.townBuildingTypes[buildingId].levelData[currentLevel].levelUpgradeCostSeedInstant;
         
+        // Calculate XP
+        xp = LibXP.calculateSeedSpeedUpXP(currentLevel);
+
+        // Add XP to the land
+        // LibXP._pushExperiencePoints(landId, xp);
+
         // Check if the user has enough seeds
         // require(_sA().resources[msg.sender].seeds >= speedUpCost, "Not enough seeds");
         
@@ -112,7 +127,7 @@ library LibTown {
         // TODO: Update production rates or other relevant data
         // TODO: Emit an event for the speed-up
 
-        return speedUpCost;
+        return (speedUpCost, xp);
     }
 
     /// @notice Checks if a town building is currently in the process of upgrading
