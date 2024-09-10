@@ -44,7 +44,7 @@ library LibXP {
     /// @notice Adds experience points to a land
     /// @param tokenId The ID of the token to add experience points to
     /// @param points The amount of experience points to add
-    function pushExperiencePoints(uint256 tokenId, uint256 points) public {
+    function pushExperiencePoints(uint256 tokenId, uint256 points) internal {
         // Checks
         require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
         require(points > 0, "LibLand: Experience points must be greater than zero");
@@ -54,16 +54,6 @@ library LibXP {
         s.experiencePoints[tokenId] += points;
 
     }
-
-    // function addBySeed(uint256 tokenId, uint256 seedAmount) public {
-    //     uint256 points = _toDecimalXP(seedAmount);
-    //     _pushExperiencePoints(tokenId, points);
-    // }
-
-    // function addByLeaf(uint256 tokenId, uint256 leafAmount) public {
-    //     uint256 points = _toDecimalXP(leafAmount);
-    //     _pushExperiencePoints(tokenId, points);
-    // }
 
     // Constants for XP calculations
     uint256 private constant ETHER = 1e18;
@@ -100,30 +90,3 @@ library LibXP {
 
 }
 
-
-// contract XPManager {
-//     using LibXP for uint256;
-
-//     // Event to log XP additions
-//     event XPAdded(uint256 indexed tokenId, uint256 amount);
-
-//     // Modifier to add XP to a token
-//     modifier AddXP(uint256 tokenId, uint256 amount) {
-//         require(IERC721(address(this)).exists(tokenId), "XPManager: Token does not exist");
-//         require(amount > 0, "XPManager: XP amount must be greater than zero");
-
-//         uint256 decimalXP = LibXP._toDecimalXP(amount);
-//         LibXP._pushExperiencePoints(tokenId, decimalXP);
-
-//         emit XPAdded(tokenId, amount);
-//         _;
-//     }
-
-//     // Example function using the AddXP modifier
-//     function performActionAndAddXP(uint256 tokenId, uint256 xpAmount) external AddXP(tokenId, xpAmount) {
-//         // Perform some action here
-//         // The XP will be added automatically by the modifier
-//     }
-
-//     // Other contract functions...
-// }
