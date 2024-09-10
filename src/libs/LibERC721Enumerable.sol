@@ -34,7 +34,7 @@ library LibERC721Enumerable {
      * Tokens start existing when they are minted (`_mint`),
      * and stop existing when they are burned (`_burn`).
      */
-    function exists(uint256 tokenId) public view returns (bool) {
+    function exists(uint256 tokenId) internal view returns (bool) {
         return LibERC721._ownerOf(tokenId) != address(0);
     }
 
