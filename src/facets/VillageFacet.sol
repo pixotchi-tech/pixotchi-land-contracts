@@ -8,6 +8,7 @@ import {LibLand} from "../libs/LibLand.sol";
 import "../shared/Structs.sol";
 import {LibVillage} from "../libs/LibVillage.sol";
 import {LibPayment} from "../libs/LibPayment.sol";
+import {LibXP} from "../libs/LibXP.sol";
 
 contract VillageFacet is NFTModifiers {
 
@@ -39,7 +40,8 @@ contract VillageFacet is NFTModifiers {
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to upgrade
     function villageUpgradeWithLeaf(uint256 landId, uint8 buildingId) public exists(landId) {
-        uint256 upgradeCost = LibVillage._villageUpgradeWithLeaf(landId, buildingId);
+        (uint256 upgradeCost, uint256 xp) = LibVillage._villageUpgradeWithLeaf(landId, buildingId);
+        LibXP.pushExperiencePoints(landId, xp);
         LibPayment.paymentPayWithLeaf(msg.sender, upgradeCost);
     }
 
@@ -47,7 +49,8 @@ contract VillageFacet is NFTModifiers {
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to speed up
     function villageSpeedUpWithSeed(uint256 landId, uint8 buildingId) public exists(landId) {
-        uint256 speedUpCost = LibVillage._villageSpeedUpWithSeed(landId, buildingId);
+        (uint256 speedUpCost, uint256 xp) = LibVillage._villageSpeedUpWithSeed(landId, buildingId);
+        LibXP.pushExperiencePoints(landId, xp);
         LibPayment.paymentPayWithSeed(msg.sender, speedUpCost);
     }
 
