@@ -8,6 +8,7 @@ import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 //import {IERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 //import {LibLandStorage} from "./LibLandStorage.sol";
 import {LibERC721} from "./LibERC721.sol";
+import {LibXPStorage} from "./LibXPStorage.sol";
 
 library LibXP {
 
@@ -32,6 +33,10 @@ library LibXP {
     /// @return data The LibLandStorage.Data struct
     function _sN() internal pure returns (LibLandStorage.Data storage data) {
         data = LibLandStorage.data();
+    }
+
+    function _sXP() internal pure returns (LibXPStorage.Data storage data) {
+        data = LibXPStorage.data();
     }
 
 
@@ -59,16 +64,16 @@ library LibXP {
     uint256 private constant ETHER = 1e18;
 
     function getLeafUpgradeXP(uint8 level) internal pure returns (uint256) {
-        if (level == 0) return 1 * ETHER;
-        if (level == 1) return 2 * ETHER;
-        if (level == 2) return 3 * ETHER;
+        if (level == 0) return 10 * ETHER;
+        if (level == 1) return 20 * ETHER;
+        if (level == 2) return 30 * ETHER;
         revert("Invalid level");
     }
 
     function getSeedSpeedUpXP(uint8 level) internal pure returns (uint256) {
-        if (level == 0) return 2 * ETHER;
-        if (level == 1) return 4 * ETHER;
-        if (level == 2) return 6 * ETHER;
+        if (level == 0) return 20 * ETHER;
+        if (level == 1) return 40 * ETHER;
+        if (level == 2) return 60 * ETHER;
         revert("Invalid level");
     }
 
@@ -86,6 +91,47 @@ library LibXP {
     function calculateSeedSpeedUpXP(uint8 currentLevel) internal pure returns (uint256 xp) {
         //require(currentLevel < 3, "LibXP: Invalid level for XP calculation");
         return getSeedSpeedUpXP(currentLevel);
+    }
+
+    // Constant for cooldown period (24 hours)
+    uint256 private constant CLAIM_COOLDOWN_PERIOD = 24 hours;
+
+    // Constant for claim reward
+    uint256 private constant CLAIM_REWARD = 1 ether;
+
+    // Event for XP claim
+    event VillageProductionXPClaimed(uint256 indexed landId, uint256 indexed buildingId, uint256 claimTime, uint256 xpAwarded);
+
+    // Add this new event declaration
+    event VillageProductionXPClaimCooldownActive(uint256 indexed landId, uint256 indexed buildingId, uint256 currentTime, uint256 cooldownEndTime);
+
+    /// @notice Pushes experience points for village production claim and manages cooldown
+    /// @param landId The ID of the land
+    /// @param buildingId The ID of the building
+    /// @return cooldownActive Boolean indicating if the cooldown is still active
+    /// @return xpAwarded Amount of XP awarded
+    function pushExperiencePointsVillageClaimProduction(uint256 landId, uint256 buildingId) internal returns (bool cooldownActive, uint256 xpAwarded) {
+        LibXPStorage.Data storage s = _sXP();
+        uint256 currentTime = block.timestamp;
+        uint256 lastClaimTime = s.landVillageBuildingXPClaimCoolDown[landId][buildingId];
+
+        if (currentTime - lastClaimTime < CLAIM_COOLDOWN_PERIOD) {
+            // Emit an event to indicate that the cooldown is still active
+            emit VillageProductionXPClaimCooldownActive(landId, buildingId, currentTime, lastClaimTime + CLAIM_COOLDOWN_PERIOD);
+            return (true, 0); // Cooldown is still active, no XP awarded
+        }
+
+        // Update the last claim time
+        s.landVillageBuildingXPClaimCoolDown[landId][buildingId] = currentTime;
+
+        // Award XP
+        xpAwarded = CLAIM_REWARD;
+        pushExperiencePoints(landId, xpAwarded);
+
+        // Emit the event
+        emit VillageProductionXPClaimed(landId, buildingId, currentTime, xpAwarded);
+
+        return (false, xpAwarded); // Cooldown is not active, XP awarded
     }
 
 }
