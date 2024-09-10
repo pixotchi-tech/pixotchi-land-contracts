@@ -59,6 +59,7 @@ contract VillageFacet is NFTModifiers {
     /// @param buildingId The ID of the building to claim production from
     function villageClaimProduction(uint256 landId, uint8 buildingId) public exists(landId) {
         LibVillage._villageClaimProduction(landId, buildingId);
+        LibXP.pushExperiencePointsVillageClaimProduction(landId, buildingId);
     }
 
 //    function townUpgradeWithLeaf(uint256 landId, uint8 buildingId) public exists(landId) {
