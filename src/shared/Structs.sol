@@ -104,13 +104,45 @@ struct TownBuilding {
 //quest system. farmer house.
 //market place
 
-
 /// @notice Struct to hold basic land information for overview
 struct LandOverview {
   uint256 tokenId;
   int256 coordinateX;
   int256 coordinateY;
   string name;
+}
+
+// Enums
+enum QuestDifficultyLevel {
+  EASY,
+  MEDIUM,
+  HARD
+}
+enum RewardType {
+  SEED,
+  LEAF,
+  PLANT_LIFE_TIME,
+  PLANT_POINTS,
+  XP
+}
+
+// Structs
+struct QuestDifficulty {
+  QuestDifficultyLevel difficulty;
+  uint256 durationInBlocks;
+  uint256 cooldownInBlocks;
+  uint256 rewardMultiplier;
+}
+
+struct Quest {
+  QuestDifficultyLevel difficulty;
+  uint256 startBlock;
+  uint256 endBlock;
+  uint256 blockHeightPseudoRnd;
+  bool completed;
+  bool exists;
+  RewardType rewardType;
+  uint256 rewardAmount;
 }
 
 //TODO: discuss with wu potential question structs and edge cases, specially daiyl quests / threashold. edge quest daily quest consume -> user upgrade building
