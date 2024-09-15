@@ -24,6 +24,8 @@ library LibConstants {
     // New constant for plant point decimals
     uint256 internal constant PLANT_POINT_DECIMALS = 12;
 
+    uint256 internal constant XP_DECIMALS = 1 ether; // 1e18
+
     // error UnsupportedNetwork(); // Commented out
 
     /// @notice Get the seed token address based on the network
@@ -78,4 +80,7 @@ library LibConstants {
         // }
     }
 
+  function hoursToBlocks(uint256 _hours) internal pure returns (uint256) {
+    return (_hours * 3600) / BLOCK_TIME;
+  }
 }
