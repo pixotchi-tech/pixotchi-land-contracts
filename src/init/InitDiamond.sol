@@ -8,6 +8,7 @@ import {IERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions
 import {INFTFacet} from "../interfaces/INFTFacet.sol";
 import { LibVillageStorage } from "../libs/LibVillageStorage.sol"; 
 import { LibTownStorage } from "../libs/LibTownStorage.sol";
+import { LibQuestStorage } from "../libs/LibQuestStorage.sol";
 //import { LibPaymentStorage } from "../libs/LibPaymentStorage.sol"; 
 
 contract InitDiamond /*is NFTInit*/ {
@@ -36,6 +37,8 @@ contract InitDiamond /*is NFTInit*/ {
     LibVillageStorage.initializeVillageStorage();
     //LibPaymentStorage.initializePaymentStorage();
     LibTownStorage.initializeTownStorage();
+
+    LibQuestStorage.initializeQuestStorage();
 
 
     _sD().supportedInterfaces[0x01ffc9a7] = true; // ERC165 interface ID for ERC165.
