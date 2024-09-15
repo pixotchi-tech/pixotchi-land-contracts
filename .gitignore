@@ -27,3 +27,5 @@ gemforge.deployments.json
 .idea
 .history
 src/generated/abi-human.js
+
+.DS_Store
