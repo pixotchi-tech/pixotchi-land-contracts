@@ -157,4 +157,17 @@ library LibTown {
 
         return isUpgrading;
     }
+
+    /// @notice Gets the current level of a specific building in a town
+    /// @param landId The ID of the land where the building is located
+    /// @param buildingId The ID of the building to check
+    /// @return level The current level of the building
+    function getBuildingLevel(uint256 landId, LibTownStorage.TownBuildingNaming buildingId) internal view returns (uint8 level) {
+        LibTownStorage.Data storage s = LibTownStorage.data();
+        
+        // Check if the building exists and return its level
+        level = s.townBuildings[landId][uint8(buildingId)].level;
+        
+        return level;
+    }
 }
