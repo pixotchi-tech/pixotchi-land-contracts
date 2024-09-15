@@ -551,6 +551,48 @@ export const abi = [
   },
   {
     "type": "function",
+    "name": "questCommit",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "farmerSlotId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "questFinalize",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "farmerSlotId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "success",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "questGetByLandId",
     "inputs": [
       {
@@ -561,9 +603,9 @@ export const abi = [
     ],
     "outputs": [
       {
-        "name": "quest",
-        "type": "tuple",
-        "internalType": "struct Quest",
+        "name": "quests",
+        "type": "tuple[]",
+        "internalType": "struct Quest[]",
         "components": [
           {
             "name": "difficulty",
@@ -609,6 +651,29 @@ export const abi = [
       }
     ],
     "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "questStart",
+    "inputs": [
+      {
+        "name": "landId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "difficultyLevel",
+        "type": "uint8",
+        "internalType": "enum QuestDifficultyLevel"
+      },
+      {
+        "name": "farmerSlotId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -1529,82 +1594,6 @@ export const abi = [
   },
   {
     "type": "event",
-    "name": "OwnershipTransferred",
-    "inputs": [
-      {
-        "name": "previousOwner",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "newOwner",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ApprovalForAll",
-    "inputs": [
-      {
-        "name": "owner",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "operator",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "approved",
-        "type": "bool",
-        "indexed": false,
-        "internalType": "bool"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "Initialized",
-    "inputs": [
-      {
-        "name": "version",
-        "type": "uint64",
-        "indexed": false,
-        "internalType": "uint64"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "XPAdded",
-    "inputs": [
-      {
-        "name": "tokenId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
     "name": "QuestCommitted",
     "inputs": [
       {
@@ -1720,6 +1709,82 @@ export const abi = [
       },
       {
         "name": "endBlock",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "OwnershipTransferred",
+    "inputs": [
+      {
+        "name": "previousOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "newOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ApprovalForAll",
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "operator",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "approved",
+        "type": "bool",
+        "indexed": false,
+        "internalType": "bool"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Initialized",
+    "inputs": [
+      {
+        "name": "version",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "XPAdded",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "amount",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
