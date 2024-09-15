@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 import "../shared/Structs.sol";
 import "./LibQuestStorage.sol";
-
+import "./LibTown.sol";
 library LibQuest {
 
     /// @notice Internal function to access NFT Building storage
@@ -11,63 +11,25 @@ library LibQuest {
         data = LibQuestStorage.data();
     }
 
-    // Constants //TODO: Move to LibConstants
-    //uint256  constant BLOCK_TIME = 2; // Block time in seconds (assumed)
-    //uint256  constant MAX_LEVEL = 3;  // Max farmer level
-    uint256  constant MAX_FARMER_SLOTS = 3; // Max farmer slots per land
-    //uint256  constant PLANT_POINT_DECIMALS = 12;
-    //uint256  constant XP_DECIMALS = 1 ether; // 1e18
-
-
-    // // Enums
-    // enum QuestDifficultyLevel {EASY, MEDIUM, HARD}
-    // enum RewardType {SEED, LEAF, PLANT_LIFE_TIME, PLANT_POINTS, XP}
-
-    // // Structs
-    // struct QuestDifficulty {
-    //     QuestDifficultyLevel difficulty;
-    //     uint256 durationInBlocks;
-    //     uint256 cooldownInBlocks;
-    //     uint256 rewardMultiplier;
-    // }
-
-    // struct Quest {
-    //     QuestDifficultyLevel difficulty;
-    //     uint256 startBlock;
-    //     uint256 endBlock;
-    //     uint256 blockHeightPseudoRnd;
-    //     bool completed;
-    //     bool exists;
-    //     RewardType rewardType;
-    //     uint256 rewardAmount;
-    // }
-
-    // // Mappings
-    // mapping(QuestDifficultyLevel => QuestDifficulty) public questDifficulties;
-    // mapping(uint256 => mapping(uint256 => Quest)) public landQuests; // landId => farmerSlotId => Quest
-
     // Reward ranges
-    uint256  constant MIN_SEED_REWARD = 10 ether;
-    uint256  constant MAX_SEED_REWARD = 100 ether;
+    uint256 internal constant MIN_SEED_REWARD = 10 ether;
+    uint256 internal constant MAX_SEED_REWARD = 100 ether;
 
-    uint256  constant MIN_LEAF_REWARD = 10 ether * 3285; //3285 = 69 billion / 21 million
-    uint256  constant MAX_LEAF_REWARD = 100 ether * 3285; //3285 = 69 billion / 21 million
+    uint256 internal constant MIN_LEAF_REWARD = 10 ether * 3285; //3285 = 69 billion / 21 million
+    uint256 internal constant MAX_LEAF_REWARD = 100 ether * 3285; //3285 = 69 billion / 21 million
 
-    uint256  constant MIN_PLANT_LIFE_TIME_REWARD = 1 hours;
-    uint256  constant MAX_PLANT_LIFE_TIME_REWARD = 12 hours;
+    uint256 internal constant MIN_PLANT_LIFE_TIME_REWARD = 1 hours;
+    uint256 internal constant MAX_PLANT_LIFE_TIME_REWARD = 12 hours;
 
-    uint256  constant MIN_PLANT_POINTS_REWARD = 10 * 10 ** LibConstants.PLANT_POINT_DECIMALS;
-    uint256  constant MAX_PLANT_POINTS_REWARD = 100 * 10 ** LibConstants.PLANT_POINT_DECIMALS;
+    uint256 internal constant MIN_PLANT_POINTS_REWARD = 10 * 10 ** LibConstants.PLANT_POINT_DECIMALS;
+    uint256 internal constant MAX_PLANT_POINTS_REWARD = 100 * 10 ** LibConstants.PLANT_POINT_DECIMALS;
 
-    uint256  constant MIN_XP_REWARD = 1 * 10 ** LibConstants.XP_DECIMALS;
-    uint256  constant MAX_XP_REWARD = 5 * 10 ** LibConstants.XP_DECIMALS;
+    uint256 internal constant MIN_XP_REWARD = 1 * 10 ** LibConstants.XP_DECIMALS;
+    uint256 internal constant MAX_XP_REWARD = 5 * 10 ** LibConstants.XP_DECIMALS;
 
-    // Events
-    //
     event QuestStarted(
         uint256 indexed landId,
         uint256 indexed farmerSlotId,
-        //address indexed player,
         QuestDifficultyLevel difficulty,
         uint256 startBlock,
         uint256 endBlock
@@ -94,11 +56,11 @@ library LibQuest {
         address indexed player
     );
 
+    function _getQuestHouseLevel(uint256 landId) private view returns (uint256) {
+        return LibTown.getBuildingLevel(landId, LibTownStorage.TownBuildingNaming.QUEST_HOUSE);
+    }
 
 
-    // function hoursToBlocks(uint256 _hours) internal pure returns (uint256) {
-    //     return (_hours * 3600) / BLOCK_TIME;
-    // }
 
 
 // Transaction 1: Send farmer to a quest
@@ -106,8 +68,8 @@ library LibQuest {
         uint256 landId,
         QuestDifficultyLevel difficultyLevel,
         uint256 farmerSlotId
-    ) public {
-        require(farmerSlotId < MAX_FARMER_SLOTS, "Invalid farmer slot");
+    ) internal {
+        require(farmerSlotId < _getQuestHouseLevel(landId), "Farmer slot is too high");
 
         Quest storage quest = _sQ().landQuests[landId][farmerSlotId];
         require(
@@ -140,7 +102,9 @@ library LibQuest {
     }
 
     // Transaction 2: Commit quest (after quest duration has passed)
-    function commitQuest(uint256 landId, uint256 farmerSlotId) public {
+    function commitQuest(uint256 landId, uint256 farmerSlotId) internal {
+        require(farmerSlotId < _getQuestHouseLevel(landId), "Farmer slot is too high");
+
         Quest storage quest = _sQ().landQuests[landId][farmerSlotId];
 
         require(quest.exists, "No quest found");
@@ -158,8 +122,8 @@ library LibQuest {
     }
 
 // Transaction 3: Finalize quest and assign rewards
-    function finalizeQuest(uint256 landId, uint256 farmerSlotId)  public returns (bool success) {
-       
+    function finalizeQuest(uint256 landId, uint256 farmerSlotId)  internal returns (bool success) {
+        require(farmerSlotId < _getQuestHouseLevel(landId), "Farmer slot is too high");
         //uint256 landId = playerLandIds[msg.sender];
         //require(landId != 0, "Player has no land assigned");
         Quest storage quest = _sQ().landQuests[landId][farmerSlotId];
@@ -210,7 +174,7 @@ library LibQuest {
     function assignRewards(
         uint256 randomNumber,
         QuestDifficultyLevel difficultyLevel
-    ) internal returns (RewardType, uint256) {
+    ) private returns (RewardType, uint256) {
         // Randomly select one reward type
         uint256 rewardIndex = randomNumber % 5; // There are 5 reward types
         RewardType rewardType = RewardType(rewardIndex);
@@ -259,40 +223,44 @@ library LibQuest {
     }
 
     // Dummy reward assignment functions
-    function _assignSeedReward(uint256 amount) internal {
+    function _assignSeedReward(uint256 amount) private {
     // Implement ERC20 transfer logic or any other logic
     }
 
-    function _assignLeafReward(uint256 amount) internal {
+    function _assignLeafReward(uint256 amount) private {
     // Implement ERC20 transfer logic or any other logic
     }
 
-    function _assignPlantLifeTimeReward(uint256 amount) internal {
+    function _assignPlantLifeTimeReward(uint256 amount) private {
     // Implement logic to increase plant lifetime
     }
 
-    function _assignPlantPointsReward(uint256 amount) internal {
+    function _assignPlantPointsReward(uint256 amount) private {
     // Implement logic to add plant points
     }
 
-    function _assignXpReward(uint256 amount) internal {
+    function _assignXpReward(uint256 amount) private {
     // Implement logic to add experience points
     }
 
     // Reset quest
-    function resetQuest(uint256 landId, uint256 farmerSlotId) internal {
+    function resetQuest(uint256 landId, uint256 farmerSlotId) private {
         delete _sQ().landQuests[landId][farmerSlotId];
     }
 
     // Get quest details for a specific landId and farmerSlotId
-    function getQuest(uint256 landId, uint256 farmerSlotId) public view returns (Quest memory) {
+    function getQuest(uint256 landId, uint256 farmerSlotId) internal view returns (Quest memory) {
         return _sQ().landQuests[landId][farmerSlotId];
     }
 
     // Get all quests for a landId
-    function getQuests(uint256 landId) public view returns (Quest[] memory) {
-        Quest[] memory quests = new Quest[](MAX_FARMER_SLOTS);
-        for (uint256 i = 0; i < MAX_FARMER_SLOTS; i++) {
+    function getQuests(uint256 landId) internal view returns (Quest[] memory) {
+        uint256 questHouseLevel = _getQuestHouseLevel(landId);
+        if(questHouseLevel == 0) {
+            return new Quest[](0);
+        }
+        Quest[] memory quests = new Quest[](questHouseLevel);
+        for (uint256 i = 0; i < questHouseLevel; i++) {
             quests[i] = _sQ().landQuests[landId][i];
         }
         return quests;
