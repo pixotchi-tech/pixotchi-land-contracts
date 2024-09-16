@@ -83,4 +83,8 @@ library LibConstants {
   function hoursToBlocks(uint256 _hours) internal pure returns (uint256) {
     return (_hours * 3600) / BLOCK_TIME;
   }
+
+    function minutesToBlocks(uint256 _minutes) internal pure returns (uint256) {
+        return (_minutes * 60) / BLOCK_TIME;
+    }
 }
