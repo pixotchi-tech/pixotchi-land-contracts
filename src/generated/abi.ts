@@ -677,6 +677,13 @@ export const abi = [
   },
   {
     "type": "function",
+    "name": "questStorageUpdate",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "safeTransferFrom",
     "inputs": [
       {
