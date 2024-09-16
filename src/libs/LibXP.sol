@@ -64,17 +64,17 @@ library LibXP {
     uint256 private constant ETHER = 1e18;
 
     function getLeafUpgradeXP(uint8 level) internal pure returns (uint256) {
-        if (level == 0) return 10 * ETHER;
-        if (level == 1) return 20 * ETHER;
-        if (level == 2) return 30 * ETHER;
-        revert("Invalid level");
+        if (level == 1) return 10 * ETHER;
+        if (level == 2) return 20 * ETHER;
+        if (level == 3) return 30 * ETHER;
+        revert("LibXP: Invalid level");
     }
 
     function getSeedSpeedUpXP(uint8 level) internal pure returns (uint256) {
-        if (level == 0) return 20 * ETHER;
-        if (level == 1) return 40 * ETHER;
-        if (level == 2) return 60 * ETHER;
-        revert("Invalid level");
+        if (level == 1) return 20 * ETHER;
+        if (level == 2) return 40 * ETHER;
+        if (level == 3) return 60 * ETHER;
+        revert("LibXP: Invalid level");
     }
 
     /// @notice Calculates XP for leaf upgrades
