@@ -138,11 +138,8 @@ struct Quest {
   QuestDifficultyLevel difficulty;
   uint256 startBlock;
   uint256 endBlock;
-  uint256 blockHeightPseudoRnd;
-  bool completed;
-  bool exists;
-  RewardType rewardType;
-  uint256 rewardAmount;
+  uint256 pseudoRndBlock;
+  uint256 coolDownBlock;
 }
 
 //TODO: discuss with wu potential question structs and edge cases, specially daiyl quests / threashold. edge quest daily quest consume -> user upgrade building
