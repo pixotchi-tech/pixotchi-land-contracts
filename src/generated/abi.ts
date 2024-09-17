@@ -587,6 +587,16 @@ export const abi = [
         "name": "success",
         "type": "bool",
         "internalType": "bool"
+      },
+      {
+        "name": "rewardType",
+        "type": "uint8",
+        "internalType": "enum RewardType"
+      },
+      {
+        "name": "rewardAmount",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "nonpayable"
@@ -623,27 +633,12 @@ export const abi = [
             "internalType": "uint256"
           },
           {
-            "name": "blockHeightPseudoRnd",
+            "name": "pseudoRndBlock",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "completed",
-            "type": "bool",
-            "internalType": "bool"
-          },
-          {
-            "name": "exists",
-            "type": "bool",
-            "internalType": "bool"
-          },
-          {
-            "name": "rewardType",
-            "type": "uint8",
-            "internalType": "enum RewardType"
-          },
-          {
-            "name": "rewardAmount",
+            "name": "coolDownBlock",
             "type": "uint256",
             "internalType": "uint256"
           }
@@ -1616,7 +1611,7 @@ export const abi = [
         "internalType": "uint256"
       },
       {
-        "name": "blockHeightPseudoRnd",
+        "name": "pseudoRndBlock",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"

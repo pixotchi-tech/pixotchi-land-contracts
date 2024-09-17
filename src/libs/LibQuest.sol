@@ -12,20 +12,20 @@ library LibQuest {
     }
 
     // Reward ranges
-    uint256 internal constant MIN_SEED_REWARD = 10 ether;
-    uint256 internal constant MAX_SEED_REWARD = 100 ether;
+    uint256 internal constant MIN_SEED_REWARD = 10;// ether;
+    uint256 internal constant MAX_SEED_REWARD = 100;// ether;
 
-    uint256 internal constant MIN_LEAF_REWARD = 10 ether * 3285; //3285 = 69 billion / 21 million
-    uint256 internal constant MAX_LEAF_REWARD = 100 ether * 3285; //3285 = 69 billion / 21 million
+    uint256 internal constant MIN_LEAF_REWARD = 10;// ether * 3285; //3285 = 69 billion / 21 million
+    uint256 internal constant MAX_LEAF_REWARD = 100;// ether * 3285; //3285 = 69 billion / 21 million
 
     uint256 internal constant MIN_PLANT_LIFE_TIME_REWARD = 1 hours;
     uint256 internal constant MAX_PLANT_LIFE_TIME_REWARD = 12 hours;
 
-    uint256 internal constant MIN_PLANT_POINTS_REWARD = 10 * 10 ** LibConstants.PLANT_POINT_DECIMALS;
-    uint256 internal constant MAX_PLANT_POINTS_REWARD = 100 * 10 ** LibConstants.PLANT_POINT_DECIMALS;
+    uint256 internal constant MIN_PLANT_POINTS_REWARD = 10 ;//* 10 ** LibConstants.PLANT_POINT_DECIMALS;
+    uint256 internal constant MAX_PLANT_POINTS_REWARD = 100 ;//* 10 ** LibConstants.PLANT_POINT_DECIMALS;
 
-    uint256 internal constant MIN_XP_REWARD = 1 * 10 ** LibConstants.XP_DECIMALS;
-    uint256 internal constant MAX_XP_REWARD = 5 * 10 ** LibConstants.XP_DECIMALS;
+    uint256 internal constant MIN_XP_REWARD = 1 ;//* 10 ** LibConstants.XP_DECIMALS;
+    uint256 internal constant MAX_XP_REWARD = 5 ;//* 10 ** LibConstants.XP_DECIMALS;
 
     event QuestStarted(
         uint256 indexed landId,
@@ -39,7 +39,7 @@ library LibQuest {
         uint256 indexed landId,
         uint256 indexed farmerSlotId,
         //address indexed player,
-        uint256 blockHeightPseudoRnd
+        uint256 pseudoRndBlock
     );
 
     event QuestFinalized(
@@ -70,12 +70,19 @@ library LibQuest {
         uint256 farmerSlotId
     ) internal {
         require(farmerSlotId < _getQuestHouseLevel(landId), "Farmer slot is too high");
-
         Quest storage quest = _sQ().landQuests[landId][farmerSlotId];
-        require(
+
+        require(block.number >= quest.coolDownBlock, "Farmer is on cooldown");
+
+/*        require(
             !quest.exists || quest.completed,
             "Previous quest not completed"
+        );*/
+        require(
+            quest.startBlock == 0,
+            "Quest already in progress"
         );
+        //require(!quest.exists, "Previous quest not completed");
         // require(
         //     !quest.exists,
         //     "Quest already in progress"
@@ -86,11 +93,11 @@ library LibQuest {
         quest.difficulty = difficultyLevel;
         quest.startBlock = block.number;
         quest.endBlock = block.number + difficulty.durationInBlocks;
-        quest.blockHeightPseudoRnd = 0;
-        quest.completed = false;
-        quest.exists = true;
-        quest.rewardType = RewardType.SEED; // Default value, will be set later
-        quest.rewardAmount = 0;
+        quest.pseudoRndBlock = 0;
+        //quest.completed = false;
+        //quest.exists = true;
+        //quest.rewardType = RewardType.SEED; // Default value, will be set later
+        //quest.rewardAmount = 0;
 
         emit QuestStarted(
             landId,
@@ -107,67 +114,83 @@ library LibQuest {
 
         Quest storage quest = _sQ().landQuests[landId][farmerSlotId];
 
-        require(quest.exists, "No quest found");
+        require(quest.startBlock != 0, "No quest found");
+        //require(quest.exists, "No quest found");
         require(quest.endBlock <= block.number, "Quest not yet ended");
-        require(quest.blockHeightPseudoRnd == 0, "Quest already committed");
+        require(quest.pseudoRndBlock == 0, "Quest already committed");
 
-        // Assign blockHeightPseudoRnd as current block number + 1
-        quest.blockHeightPseudoRnd = block.number + 1;
+        // Assign pseudoRndBlock as current block number + 1
+        quest.pseudoRndBlock = block.number + 1;
 
         emit QuestCommitted(
             landId,
             farmerSlotId,
-            quest.blockHeightPseudoRnd
+            quest.pseudoRndBlock
         );
     }
 
 // Transaction 3: Finalize quest and assign rewards
-    function finalizeQuest(uint256 landId, uint256 farmerSlotId)  internal returns (bool success) {
+    function finalizeQuest(uint256 landId, uint256 farmerSlotId)  internal returns (bool success, RewardType rewardType, uint256 rewardAmount) {
         require(farmerSlotId < _getQuestHouseLevel(landId), "Farmer slot is too high");
         //uint256 landId = playerLandIds[msg.sender];
         //require(landId != 0, "Player has no land assigned");
         Quest storage quest = _sQ().landQuests[landId][farmerSlotId];
 
-        require(quest.exists, "No quest found");
+        //require(quest.exists, "No quest found");
+        require(quest.startBlock != 0, "No quest found");
         require(
-            quest.blockHeightPseudoRnd != 0,
+            quest.pseudoRndBlock != 0,
             "Quest has not been committed"
         );
-        if (block.number > quest.blockHeightPseudoRnd + 256) {
+        require(
+            block.number >= quest.pseudoRndBlock,
+            "Too early to finalize"
+        );
+
+        if (block.number > quest.pseudoRndBlock + 256) {
         // Too late to finalize, reset the quest
             resetQuest(landId, farmerSlotId);
             emit QuestReset(landId, farmerSlotId, msg.sender);
-            return false;
-        
+            return (false, RewardType.SEED, 0);
         }
-        require(
-            block.number >= quest.blockHeightPseudoRnd,
-            "Too early to finalize"
-        );
-        require(!quest.completed, "Quest already finalized");
+
+        //require(!quest.completed, "Quest already finalized");
 
         // Get a pseudo-random number using the block hash
-        bytes32 randomHash = blockhash(quest.blockHeightPseudoRnd);
+        bytes32 randomHash = blockhash(quest.pseudoRndBlock);
         uint256 randomNumber = uint256(randomHash);
 
         // Use the random number to assign a single reward
         (RewardType rewardType, uint256 rewardAmount) = assignRewards(randomNumber, quest.difficulty);
 
         // Record the reward in the quest struct
-        quest.rewardType = rewardType;
-        quest.rewardAmount = rewardAmount;
+        //quest.rewardType = rewardType;
+        //quest.rewardAmount = rewardAmount;
 
         // Mark quest as completed
-        quest.completed = true;
+        //quest.completed = true;
+        quest.startBlock = 0;
+        quest.endBlock = 0;
+        //quest.exists = false;
+        //quest.rewardType = 0;
+        //quest.rewardAmount = 0;
+        quest.difficulty = QuestDifficultyLevel.EASY;
+        quest.pseudoRndBlock = 0;
+        quest.coolDownBlock = block.number + _sQ().questDifficulties[quest.difficulty].cooldownInBlocks;
 
-        emit QuestFinalized(
+
+    emit QuestFinalized(
             landId,
             farmerSlotId,
             msg.sender,
             rewardType,
             rewardAmount
         );
-        return true;
+
+
+
+
+        return (true, rewardType, rewardAmount);
     }
 
         // Assign a single reward based on random number and difficulty
@@ -245,7 +268,15 @@ library LibQuest {
 
     // Reset quest
     function resetQuest(uint256 landId, uint256 farmerSlotId) private {
-        delete _sQ().landQuests[landId][farmerSlotId];
+        //delete _sQ().landQuests[landId][farmerSlotId];
+        //_sQ().landQuests[landId][farmerSlotId].exists = false;
+        //_sQ().landQuests[landId][farmerSlotId].rewardType = 0;
+        _sQ().landQuests[landId][farmerSlotId].startBlock = 0;
+        _sQ().landQuests[landId][farmerSlotId].coolDownBlock = 0;
+        _sQ().landQuests[landId][farmerSlotId].endBlock = 0;
+        _sQ().landQuests[landId][farmerSlotId].pseudoRndBlock = 0;
+        _sQ().landQuests[landId][farmerSlotId].difficulty = QuestDifficultyLevel.EASY;
+        //_sQ().landQuests[landId][farmerSlotId].rewardAmount = 0;
     }
 
     // Get quest details for a specific landId and farmerSlotId

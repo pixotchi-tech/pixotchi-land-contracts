@@ -40,7 +40,7 @@ contract QuestFacet is NFTModifiers {
         LibQuest.commitQuest(landId, farmerSlotId);
     }
 
-    function questFinalize(uint256 landId, uint256 farmerSlotId) public returns (bool success) {
+    function questFinalize(uint256 landId, uint256 farmerSlotId) public returns (bool success, RewardType rewardType, uint256 rewardAmount) {
         return LibQuest.finalizeQuest(landId, farmerSlotId);
     }
 
