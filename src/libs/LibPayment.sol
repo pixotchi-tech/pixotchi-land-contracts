@@ -52,4 +52,41 @@ library LibPayment {
         // Interactions
         SafeERC20.safeTransferFrom(IERC20(tokenAddress), from, receiveAddress, amount);
     }
+
+    /// @notice Rewards with Leaf token
+    /// @param to The address to receive the tokens
+    /// @param amount The amount of tokens to transfer
+    function rewardWithLeaf(address to, uint256 amount) internal {
+        address tokenAddress = LibConstants.paymentGetLeafToken();
+        address fromAddress = LibConstants.rewardGetLeafToken();
+
+        _rewardExecute(fromAddress, to, amount, tokenAddress);
+    }
+
+    /// @notice Rewards with Seed token
+    /// @param to The address to receive the tokens
+    /// @param amount The amount of tokens to transfer
+    function rewardWithSeed(address to, uint256 amount) internal {
+        address tokenAddress = LibConstants.paymentGetSeedToken();
+        address fromAddress = LibConstants.rewardGetSeedToken();
+
+        _rewardExecute(fromAddress, to, amount, tokenAddress);
+    }
+
+    /// @notice Executes the reward transfer
+    /// @param from The address to transfer the tokens from
+    /// @param to The address to receive the tokens
+    /// @param amount The amount of tokens to transfer
+    /// @param tokenAddress The address of the token to use for the reward
+    function _rewardExecute(address from, address to, uint256 amount, address tokenAddress) private {
+        // Checks
+        if (amount <= 0) revert AmountMustBeGreaterThanZero();
+        if (IERC20(tokenAddress).balanceOf(from) < amount) revert InsufficientBalance();
+
+        // Effects
+        // No state variables to update in this case
+
+        // Interactions
+        SafeERC20.safeTransfer(IERC20(tokenAddress), to, amount);
+    }
 }
