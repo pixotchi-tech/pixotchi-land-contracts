@@ -81,4 +81,25 @@ library LibERC721 {
         return _ownerOf(tokenId) != address(0);
     }
 
+/*
+    */
+/**
+     * @dev See {IERC721-getApproved}.
+     *//*
+
+    function getApproved(uint256 tokenId) public view virtual returns (address) {
+        _requireOwned(tokenId);
+
+        return _getApproved(tokenId);
+    }
+*/
+
+    /**
+ * @dev Returns the approved address for `tokenId`. Returns 0 if `tokenId` is not minted.
+     */
+    function _getApproved(uint256 tokenId) internal view returns (address) {
+        ERC721Storage storage $ = _getERC721Storage();
+        return $._tokenApprovals[tokenId];
+    }
+
 }
