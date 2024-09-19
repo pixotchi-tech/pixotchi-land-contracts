@@ -11,24 +11,26 @@ import {LibPayment} from "../libs/LibPayment.sol";
 import {LibXP} from "../libs/LibXP.sol";
 import {LibQuest} from "../libs/LibQuest.sol";
 import {LibERC721} from "../libs/LibERC721.sol";
+import {AccessControl2} from "../libs/libAccessControl2.sol";
 
-contract QuestFacet is NFTModifiers {
+contract QuestFacet is AccessControl2 {
 
-    function questGetByLandId(uint256 landId) public view returns (Quest[] memory quests) {
+    function questGetByLandId(uint256 landId) public view exists(landId) returns (Quest[] memory quests) {
         return LibQuest.getQuests(landId);
     }
 
-    function questStart(uint256 landId, QuestDifficultyLevel difficultyLevel, uint256 farmerSlotId) public {
+    function questStart(uint256 landId, QuestDifficultyLevel difficultyLevel, uint256 farmerSlotId) public isApproved(landId) {
         LibQuest.startQuest(landId, difficultyLevel, farmerSlotId);
     }
 
-    function questCommit(uint256 landId, uint256 farmerSlotId) public {
+    function questCommit(uint256 landId, uint256 farmerSlotId) public isApproved(landId) {
         LibQuest.commitQuest(landId, farmerSlotId);
     }
 
-    function questFinalize(uint256 landId, uint256 farmerSlotId) public returns (bool success, RewardType rewardType, uint256 rewardAmount) {
+    function questFinalize(uint256 landId, uint256 farmerSlotId) public isApproved(landId)
+    returns (bool success, RewardType rewardType, uint256 rewardAmount) {
         (success, rewardType, rewardAmount) = LibQuest.finalizeQuest(landId, farmerSlotId);
-        
+
         if (success && rewardAmount > 0) {
             if (rewardType == RewardType.SEED) {
                 address owner = LibERC721._requireOwned(landId);
@@ -46,17 +48,9 @@ contract QuestFacet is NFTModifiers {
                 revert("Invalid reward type");
             }
         }
-        
+
         return (success, rewardType, rewardAmount);
     }
-
-    
-
-
-
-
-
-
 
 //     /// @notice Get all village buildings for a given land ID
 //     /// @param landId The ID of the land
@@ -102,13 +96,6 @@ contract QuestFacet is NFTModifiers {
 // //    function claimVillageProduction(uint256 landId, uint8 buildingId) public exists(landId) {
 // //        //TODO: implement actual logic to claim village production
 // //    }
-
-    
-
-
-
-
-
 
 
 }
