@@ -72,7 +72,7 @@ library LibTown {
         uint256 upgradeBlockInterval = s.townBuildingTypes[buildingId].levelData[nextLevel].levelUpgradeBlockInterval;
 
         // Calculate XP
-        xp = LibXP.calculateLeafUpgradeXP(currentLevel);
+        xp = LibXP.calculateLeafUpgradeXP(nextLevel);
 
         // Add XP to the land
         // LibXP._pushExperiencePoints(landId, xp);
@@ -147,10 +147,10 @@ library LibTown {
         
         // Check if the building is currently upgrading
         // Step 1: Check if the upgrade end block is in the future
-        bool upgradeNotFinished = s.townBuildings[landId][buildingId].blockHeightUntilUpgradeDone > block.number;
+        bool upgradeNotFinished = s.townBuildings[landId][buildingId].blockHeightUntilUpgradeDone >= block.number;
         
         // Step 2: Check if the upgrade start block is in the past
-        bool upgradeStarted = s.townBuildings[landId][buildingId].blockHeightUpgradeInitiated < block.number;
+        bool upgradeStarted = s.townBuildings[landId][buildingId].blockHeightUpgradeInitiated <= block.number;
         
         // Step 3: Combine both conditions to determine if the building is currently upgrading
         isUpgrading = upgradeNotFinished && upgradeStarted;
