@@ -18,6 +18,14 @@ abstract contract NFTModifiers {
         require(LibERC721._exists(tokenId), "NFT: Token does not exist");
         _;
     }
+
+//    modifier approved(uint256 tokenId) {
+//        //IERC721(address(this)).exists(tokenId)
+//        //require(IERC721(address(this)).exists(tokenId), "NFT: Token does not exist");
+//        //
+//        require(((LibERC721._requireOwned(tokenId) == msg.sender) || (LibERC721._getApproved(tokenId) == msg.sender)), "NFT: require owner or approval");
+//        _;
+//    }
 }
 
 /*
