@@ -65,7 +65,7 @@ contract TownFacet is AccessControl2 {
     /// @notice Get all town buildings for a given land ID
     /// @param landId The ID of the land
     /// @return townBuildings An array of TownBuilding structs containing the building information
-    function townGetBuildingsByLandId(uint256 landId) public view exists(landId) returns (TownBuilding[] memory townBuildings) {
+    function townGetBuildingsByLandId(uint256 landId) public view isMinted(landId) returns (TownBuilding[] memory townBuildings) {
         return LibTown._getBuildingsByLandId(landId);
     }
 

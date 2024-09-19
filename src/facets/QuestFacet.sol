@@ -15,7 +15,7 @@ import {AccessControl2} from "../libs/libAccessControl2.sol";
 
 contract QuestFacet is AccessControl2 {
 
-    function questGetByLandId(uint256 landId) public view exists(landId) returns (Quest[] memory quests) {
+    function questGetByLandId(uint256 landId) public view isMinted(landId) returns (Quest[] memory quests) {
         return LibQuest.getQuests(landId);
     }
 

@@ -47,7 +47,7 @@ abstract contract AccessControl2 {
         _;
     }
 
-    modifier exists(uint256 tokenId) {
+    modifier isMinted(uint256 tokenId) {
         //IERC721(address(this)).exists(tokenId)
         //require(IERC721(address(this)).exists(tokenId), "NFT: Token does not exist");
         require(LibERC721._exists(tokenId), "NFT: Token does not exist");

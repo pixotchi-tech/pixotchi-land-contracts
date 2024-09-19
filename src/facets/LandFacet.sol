@@ -14,7 +14,7 @@ contract LandFacet is AccessControl2/*, NFTModifiers*/ {
     /// @param tokenId The ID of the token to get coordinates for
     /// @return x The x-coordinate of the land
     /// @return y The y-coordinate of the land
-    function landGetCoordinates(uint256 tokenId) public view exists(tokenId) returns (int256 x, int256 y, bool occupied) {
+    function landGetCoordinates(uint256 tokenId) public view isMinted(tokenId) returns (int256 x, int256 y, bool occupied) {
         LibLandStorage.Coordinates memory coords = _sN().tokenCoordinates[tokenId];
         //require(coords.occupied, "Coordinates not assigned");
         return (coords.x, coords.y, coords.occupied);
@@ -45,7 +45,7 @@ contract LandFacet is AccessControl2/*, NFTModifiers*/ {
     /// @notice Get land information by token ID
     /// @param tokenId The ID of the land token
     /// @return land The Land struct containing the land information
-    function landGetById(uint256 tokenId) public view exists(tokenId) returns (Land memory land) {
+    function landGetById(uint256 tokenId) public view isMinted(tokenId) returns (Land memory land) {
         return LibLand._getLand(tokenId);
 
     }

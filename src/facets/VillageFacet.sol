@@ -33,7 +33,7 @@ contract VillageFacet is AccessControl2 {
     /// @notice Get all village buildings for a given land ID
     /// @param landId The ID of the land
     /// @return villageBuildings An array of VillageBuilding structs containing the building information
-    function villageGetVillageBuildingsByLandId(uint256 landId) public view exists(landId) returns (VillageBuilding[] memory villageBuildings) {
+    function villageGetVillageBuildingsByLandId(uint256 landId) public view isMinted(landId) returns (VillageBuilding[] memory villageBuildings) {
         return LibVillage._villageGetBuildingsByLandId(landId);
     }
 
