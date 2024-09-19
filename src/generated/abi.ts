@@ -2465,6 +2465,11 @@ export const abi = [
   },
   {
     "type": "error",
+    "name": "MintControlMintNotActive",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "NFTCoordinateOccupied",
     "inputs": [
       {
