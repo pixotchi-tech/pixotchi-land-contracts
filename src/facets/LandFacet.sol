@@ -3,11 +3,12 @@ pragma solidity >=0.8.21;
 
 import {LibLandStorage} from "../libs/LibLandStorage.sol";
 import {LibAppStorage, AppStorage} from "../libs/LibAppStorage.sol";
-import {NFTModifiers} from "../libs/LibNFT.sol";
+//import {NFTModifiers} from "../libs/LibNFT.sol";
 import {LibLand} from "../libs/LibLand.sol";
 import "../shared/Structs.sol";
+import {AccessControl2} from "../libs/libAccessControl2.sol";
 
-contract LandFacet is NFTModifiers {
+contract LandFacet is AccessControl2/*, NFTModifiers*/ {
 
     /// @notice Get the coordinates of a specific land token
     /// @param tokenId The ID of the token to get coordinates for
@@ -70,10 +71,10 @@ contract LandFacet is NFTModifiers {
     }
 
     //TODO: add authorised function to set name. And owner of land can set name. And for all the other setters
-    function landSetName(uint256 tokenId, string memory name) public exists(tokenId) {
-        LibLandStorage.Data storage s = _sN();
+    function landSetName(uint256 tokenId, string memory name) public isApproved(tokenId) {
         require(bytes(name).length >= 3, "Name must be at least 3 characters");
         require(bytes(name).length <= 10, "Name must be at most 10 characters");
+        LibLandStorage.Data storage s = _sN();
         s.name[tokenId] = name;
     }
 
