@@ -12,10 +12,17 @@ library LibConstants {
     address internal constant MAINNET_LEAF_TOKEN = address(0xE78ee52349D7b031E2A6633E07c037C3147DB116);
 
     // Constants for receive addresses
-    address internal constant TESTNET_SEED_RECEIVE_ADDRESS = address(0x64cce0f734cF9379cca2Ffa8137ddcFE0D64f67d);
-    address internal constant TESTNET_LEAF_RECEIVE_ADDRESS = address(0x64cce0f734cF9379cca2Ffa8137ddcFE0D64f67d);
-    address internal constant MAINNET_SEED_RECEIVE_ADDRESS = address(0x64cce0f734cF9379cca2Ffa8137ddcFE0D64f67d); //TODO: Change this
-    address internal constant MAINNET_LEAF_RECEIVE_ADDRESS = address(0x64cce0f734cF9379cca2Ffa8137ddcFE0D64f67d); //TODO: Change this
+    address internal constant TESTNET_SEED_RECEIVE_ADDRESS = address(0x1b6742E960d77F416D1b14F1f837523103CAccB4);
+    address internal constant TESTNET_LEAF_RECEIVE_ADDRESS = address(0x1b6742E960d77F416D1b14F1f837523103CAccB4);
+    address internal constant MAINNET_SEED_RECEIVE_ADDRESS = address(0x1b6742E960d77F416D1b14F1f837523103CAccB4); //TODO: Change this
+    address internal constant MAINNET_LEAF_RECEIVE_ADDRESS = address(0x1b6742E960d77F416D1b14F1f837523103CAccB4); //TODO: Change this
+
+    // Constants for receive addresses
+    address internal constant TESTNET_SEED_SEND_ADDRESS = address(0x1b6742E960d77F416D1b14F1f837523103CAccB4);
+    address internal constant TESTNET_LEAF_SEND_ADDRESS = address(0x1b6742E960d77F416D1b14F1f837523103CAccB4);
+    address internal constant MAINNET_SEED_SEND_ADDRESS = address(0x1b6742E960d77F416D1b14F1f837523103CAccB4); //TODO: Change this
+    address internal constant MAINNET_LEAF_SEND_ADDRESS = address(0x1b6742E960d77F416D1b14F1f837523103CAccB4); //TODO: Change this
+
 
     // Constants for chain IDs
     uint256 internal constant TESTNET_CHAIN_ID = 84532;
@@ -78,6 +85,26 @@ library LibConstants {
         // else {
         //     revert UnsupportedNetwork();
         // }
+    }
+
+    /// @notice Get the seed token address for rewards based on the network
+    /// @return The address of the seed token for rewards on the current network
+    function rewardGetSeedToken() internal view returns (address) {
+        if (block.chainid == MAINNET_CHAIN_ID) {
+            return MAINNET_SEED_SEND_ADDRESS;
+        } else {
+            return TESTNET_SEED_SEND_ADDRESS; // Use testnet for all other chain IDs
+        }
+    }
+
+    /// @notice Get the leaf token address for rewards based on the network
+    /// @return The address of the leaf token for rewards on the current network
+    function rewardGetLeafToken() internal view returns (address) {
+        if (block.chainid == MAINNET_CHAIN_ID) {
+            return MAINNET_LEAF_SEND_ADDRESS;
+        } else {
+            return TESTNET_LEAF_SEND_ADDRESS; // Use testnet for all other chain IDs
+        }
     }
 
   function hoursToBlocks(uint256 _hours) internal pure returns (uint256) {
