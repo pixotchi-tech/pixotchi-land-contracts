@@ -4,11 +4,11 @@ pragma solidity >=0.8.21;
 //import {LibLandStorage} from "../libs/LibLandStorage.sol";
 //import {LibAppStorage, AppStorage} from "../libs/LibAppStorage.sol";
 import {NFTModifiers} from "../libs/LibNFT.sol";
-//import {LibLand} from "../libs/LibLand.sol";
+import {LibLand} from "../libs/LibLand.sol";
 import "../shared/Structs.sol";
 //import {LibVillage} from "../libs/LibVillage.sol";
-//import {LibPayment} from "../libs/LibPayment.sol";
-//import {LibXP} from "../libs/LibXP.sol";
+import {LibPayment} from "../libs/LibPayment.sol";
+import {LibXP} from "../libs/LibXP.sol";
 import {LibQuest} from "../libs/LibQuest.sol";
 
 contract QuestFacet is NFTModifiers {
@@ -41,16 +41,28 @@ contract QuestFacet is NFTModifiers {
     }
 
     function questFinalize(uint256 landId, uint256 farmerSlotId) public returns (bool success, RewardType rewardType, uint256 rewardAmount) {
-        return LibQuest.finalizeQuest(landId, farmerSlotId);
+        (success, rewardType, rewardAmount) = LibQuest.finalizeQuest(landId, farmerSlotId);
+        
+        if (success) {
+            if (rewardType == RewardType.SEED) {
+                LibPayment.rewardWithLeaf(msg.sender, rewardAmount);
+            } else if (rewardType == RewardType.LEAF) {
+                LibPayment.rewardWithLeaf(msg.sender, rewardAmount);
+            } else if (rewardType == RewardType.XP) {
+                LibXP.pushExperiencePoints(landId, rewardAmount);
+            } else if (rewardType == RewardType.PLANT_POINTS) {
+                LibLand._pushAccumulatedPlantPoints(landId, rewardAmount);
+            } else if (rewardType == RewardType.PLANT_LIFE_TIME) {
+                LibLand._pushAccumulatedPlantLifetime(landId, rewardAmount);
+            } else {
+                revert("Invalid reward type");
+            }
+        }
+        
+        return (success, rewardType, rewardAmount);
     }
 
     
-
-
-
-
-
-
 
 
 
