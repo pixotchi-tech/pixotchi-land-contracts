@@ -10,23 +10,9 @@ import "../shared/Structs.sol";
 import {LibPayment} from "../libs/LibPayment.sol";
 import {LibXP} from "../libs/LibXP.sol";
 import {LibQuest} from "../libs/LibQuest.sol";
+import {LibERC721} from "../libs/LibERC721.sol";
 
 contract QuestFacet is NFTModifiers {
-
-
-    // enum QuestDifficultyLevel { EASY, MEDIUM, HARD }
-
-    // struct QuestDifficulty {
-    // QuestDifficultyLevel difficulty;
-    // uint256 duration;
-    // }
-
-    // struct Quest {
-    // QuestDifficulty difficulty;
-    // uint256 startBlock;
-    // uint256 endBlock;
-    // }
-
 
     function questGetByLandId(uint256 landId) public view returns (Quest[] memory quests) {
         return LibQuest.getQuests(landId);
@@ -43,11 +29,13 @@ contract QuestFacet is NFTModifiers {
     function questFinalize(uint256 landId, uint256 farmerSlotId) public returns (bool success, RewardType rewardType, uint256 rewardAmount) {
         (success, rewardType, rewardAmount) = LibQuest.finalizeQuest(landId, farmerSlotId);
         
-        if (success) {
+        if (success && rewardAmount > 0) {
             if (rewardType == RewardType.SEED) {
-                LibPayment.rewardWithLeaf(msg.sender, rewardAmount);
+                address owner = LibERC721._requireOwned(landId);
+                LibPayment.rewardWithLeaf(owner, rewardAmount);
             } else if (rewardType == RewardType.LEAF) {
-                LibPayment.rewardWithLeaf(msg.sender, rewardAmount);
+                address owner = LibERC721._requireOwned(landId);
+                LibPayment.rewardWithLeaf(owner, rewardAmount);
             } else if (rewardType == RewardType.XP) {
                 LibXP.pushExperiencePoints(landId, rewardAmount);
             } else if (rewardType == RewardType.PLANT_POINTS) {
