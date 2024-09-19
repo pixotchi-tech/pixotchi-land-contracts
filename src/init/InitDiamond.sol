@@ -9,6 +9,7 @@ import {INFTFacet} from "../interfaces/INFTFacet.sol";
 import { LibVillageStorage } from "../libs/LibVillageStorage.sol"; 
 import { LibTownStorage } from "../libs/LibTownStorage.sol";
 import { LibQuestStorage } from "../libs/LibQuestStorage.sol";
+import { LibAccessControl2Storage } from "../libs/LibAccessControl2Storage.sol";
 //import { LibPaymentStorage } from "../libs/LibPaymentStorage.sol"; 
 
 contract InitDiamond /*is NFTInit*/ {
@@ -39,6 +40,8 @@ contract InitDiamond /*is NFTInit*/ {
     LibTownStorage.initializeTownStorage();
 
     LibQuestStorage.initializeQuestStorage();
+
+    LibAccessControl2Storage.initAccessControl2Storage();
 
 
     _sD().supportedInterfaces[0x01ffc9a7] = true; // ERC165 interface ID for ERC165.
