@@ -229,42 +229,42 @@ library LibQuest {
         rewardAmount = (randomNumber % rewardRange) + minReward;
         rewardAmount *= _sQ().questDifficulties[difficultyLevel].rewardMultiplier;
 
-    // Assign the reward (call dummy functions)
-        if (rewardType == RewardType.SEED) {
-            _assignSeedReward(rewardAmount);
-        } else if (rewardType == RewardType.LEAF) {
-            _assignLeafReward(rewardAmount);
-        } else if (rewardType == RewardType.PLANT_LIFE_TIME) {
-            _assignPlantLifeTimeReward(rewardAmount);
-        } else if (rewardType == RewardType.PLANT_POINTS) {
-            _assignPlantPointsReward(rewardAmount);
-        } else if (rewardType == RewardType.XP) {
-            _assignXpReward(rewardAmount);
-        }
+    // // Assign the reward (call dummy functions)
+    //     if (rewardType == RewardType.SEED) {
+    //         _assignSeedReward(rewardAmount);
+    //     } else if (rewardType == RewardType.LEAF) {
+    //         _assignLeafReward(rewardAmount);
+    //     } else if (rewardType == RewardType.PLANT_LIFE_TIME) {
+    //         _assignPlantLifeTimeReward(rewardAmount);
+    //     } else if (rewardType == RewardType.PLANT_POINTS) {
+    //         _assignPlantPointsReward(rewardAmount);
+    //     } else if (rewardType == RewardType.XP) {
+    //         _assignXpReward(rewardAmount);
+    //     }
 
         return (rewardType, rewardAmount);
     }
 
-    // Dummy reward assignment functions
-    function _assignSeedReward(uint256 amount) private {
-    // Implement ERC20 transfer logic or any other logic
-    }
+    // // Dummy reward assignment functions
+    // function _assignSeedReward(uint256 amount) private {
+    // // Implement ERC20 transfer logic or any other logic
+    // }
 
-    function _assignLeafReward(uint256 amount) private {
-    // Implement ERC20 transfer logic or any other logic
-    }
+    // function _assignLeafReward(uint256 amount) private {
+    // // Implement ERC20 transfer logic or any other logic
+    // }
 
-    function _assignPlantLifeTimeReward(uint256 amount) private {
-    // Implement logic to increase plant lifetime
-    }
+    // function _assignPlantLifeTimeReward(uint256 amount) private {
+    // // Implement logic to increase plant lifetime
+    // }
 
-    function _assignPlantPointsReward(uint256 amount) private {
-    // Implement logic to add plant points
-    }
+    // function _assignPlantPointsReward(uint256 amount) private {
+    // // Implement logic to add plant points
+    // }
 
-    function _assignXpReward(uint256 amount) private {
-    // Implement logic to add experience points
-    }
+    // function _assignXpReward(uint256 amount) private {
+    // // Implement logic to add experience points
+    // }
 
     // Reset quest
     function resetQuest(uint256 landId, uint256 farmerSlotId) private {
