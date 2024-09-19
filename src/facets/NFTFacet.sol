@@ -8,34 +8,38 @@ import { ERC721Upgradeable } from "@openzeppelin/contracts-upgradeable/token/ERC
 import { ERC721EnumerableUpgradeable } from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import { INFTFacet } from "../interfaces/INFTFacet.sol";
 import { AccessControl2 } from "../libs/libAccessControl2.sol";
+import { MintControl, LibMintControl } from "../libs/libMintControl.sol";
+import {LibPayment} from "../libs/LibPayment.sol";
 
 contract NFTFacet is
   ERC721EnumerableUpgradeable,
   INFTFacet,
-  AccessControl2 /*is ERC721Upgradeable, ERC721QueryableUpgradeable*/
+  AccessControl2, MintControl /*is ERC721Upgradeable, ERC721QueryableUpgradeable*/
 {
   function initNFTFacet() external initializer {
     __ERC721_init("Land02", "LAND02");
     _mint(msg.sender, _sN().nextTokenId++);
   }
 
-  function mint() external isGranted {
-    _nftMint(msg.sender, 1);
+  function mint() external isGranted isMintActive {
+    _nftMintPayed(msg.sender);
+    
   }
 
   /// @notice Internal function to mint NFTs with specific coordinate assignment
   /// @param to The address to mint the NFT to
-  /// @param quantity The number of NFTs to mint
-  function _nftMint(address to, uint256 quantity) internal {
+  function _nftMintPayed(address to) internal {
     uint256 supply = totalSupply();
-    require(supply + quantity <= _sN().maxSupply, "Exceeds max supply");
+    require(supply + 1 <= _sN().maxSupply, "Exceeds max supply");
 
-    _safeMint(to, _sN().nextTokenId++);
+    uint256 _tokenId = _sN().nextTokenId++;
 
-    for (uint256 i = 0; i < quantity; i++) {
-      uint256 tokenId = supply + i + 1;
-      LibLand._AssignLand(tokenId);
-    }
+    LibLand._AssignLand(_tokenId);
+
+    uint256 _mintPrice = LibMintControl.getMintPrice();
+    LibPayment.paymentPayWithSeed(msg.sender, _mintPrice);
+
+    _safeMint(to, _sN().nextTokenId);
   }
 
   function _sN() internal pure returns (LibLandStorage.Data storage data) {
