@@ -50,7 +50,7 @@ library LibVillage {
         s.villageBuildings[landId][buildingId].level = nextLevel;
 
         // Calculate XP
-        xp = LibXP.calculateLeafUpgradeXP(currentLevel);
+        xp = LibXP.calculateLeafUpgradeXP(nextLevel);
 
         // Add XP to the land
         //LibXP._pushExperiencePoints(landId, xp);
@@ -141,10 +141,10 @@ library LibVillage {
         
         // Check if the building is currently upgrading
         // Step 1: Check if the upgrade end block is in the future
-        bool upgradeNotFinished = s.villageBuildings[landId][buildingId].blockHeightUntilUpgradeDone > block.number;
+        bool upgradeNotFinished = s.villageBuildings[landId][buildingId].blockHeightUntilUpgradeDone >= block.number;
         
         // Step 2: Check if the upgrade start block is in the past
-        bool upgradeStarted = s.villageBuildings[landId][buildingId].blockHeightUpgradeInitiated < block.number;
+        bool upgradeStarted = s.villageBuildings[landId][buildingId].blockHeightUpgradeInitiated <= block.number;
         
         // Step 3: Combine both conditions to determine if the building is currently upgrading
         isUpgrading = upgradeNotFinished && upgradeStarted;
