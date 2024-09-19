@@ -9,8 +9,9 @@ import "../shared/Structs.sol";
 import {LibVillage} from "../libs/LibVillage.sol";
 import {LibPayment} from "../libs/LibPayment.sol";
 import {LibXP} from "../libs/LibXP.sol";
+import {AccessControl2} from "../libs/libAccessControl2.sol";
 
-contract VillageFacet is NFTModifiers {
+contract VillageFacet is AccessControl2 {
 
 
     /// @notice Internal function to access NFT storage
@@ -39,7 +40,7 @@ contract VillageFacet is NFTModifiers {
     /// @notice Upgrade a village building using leaves
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to upgrade
-    function villageUpgradeWithLeaf(uint256 landId, uint8 buildingId) public exists(landId) {
+    function villageUpgradeWithLeaf(uint256 landId, uint8 buildingId) public isApproved(landId) {
         (uint256 upgradeCost, uint256 xp) = LibVillage._villageUpgradeWithLeaf(landId, buildingId);
         LibXP.pushExperiencePoints(landId, xp);
         LibPayment.paymentPayWithLeaf(msg.sender, upgradeCost);
@@ -48,7 +49,7 @@ contract VillageFacet is NFTModifiers {
     /// @notice Speed up a village building upgrade using seeds
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to speed up
-    function villageSpeedUpWithSeed(uint256 landId, uint8 buildingId) public exists(landId) {
+    function villageSpeedUpWithSeed(uint256 landId, uint8 buildingId) public isApproved(landId) {
         (uint256 speedUpCost, uint256 xp) = LibVillage._villageSpeedUpWithSeed(landId, buildingId);
         LibXP.pushExperiencePoints(landId, xp);
         LibPayment.paymentPayWithSeed(msg.sender, speedUpCost);
@@ -57,7 +58,7 @@ contract VillageFacet is NFTModifiers {
     /// @notice Claim production from a village building
     /// @param landId The ID of the land
     /// @param buildingId The ID of the building to claim production from
-    function villageClaimProduction(uint256 landId, uint8 buildingId) public exists(landId) {
+    function villageClaimProduction(uint256 landId, uint8 buildingId) public isApproved(landId) {
         LibVillage._villageClaimProduction(landId, buildingId);
         LibXP.pushExperiencePointsVillageClaimProduction(landId, buildingId);
     }
