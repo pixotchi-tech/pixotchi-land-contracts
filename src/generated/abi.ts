@@ -2349,6 +2349,31 @@ export const abi = [
   },
   {
     "type": "error",
+    "name": "AccessControlNotOwnerOrApproved",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "AccessControlNotWhitelisted",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "AccessControlPaused",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "AccessControlTokenDoesNotExist",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "AccessControlCallerMustBeAdmin",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "FailedCall",
     "inputs": []
   },
