@@ -5,9 +5,11 @@ pragma solidity >=0.8.21;
 //import { LibAppStorage, AppStorage } from "../libs/LibAppStorage.sol";
 //import { LibDiamond } from 'lib/diamond-2-hardhat/contracts/libraries/LibDiamond.sol';
 import  "../libs/LibQuestStorage.sol";
+//import {AccessControl} from "../shared/AccessControl.sol";
+import {AccessControl2} from "../libs/libAccessControl2.sol";
 
 
-contract InitFacetTesting {
+contract InitFacetTesting is AccessControl2 {
 
     /// @notice Internal function to access NFT Building storage
     /// @return data The LibLandBuildingStorage.Data struct
@@ -15,7 +17,7 @@ contract InitFacetTesting {
         data = LibQuestStorage.data();
     }
 
- function questStorageUpdate() external  {
+ function questStorageUpdate() isAdmin() external   {
 
         _sQ().questDifficulties[QuestDifficultyLevel.EASY] = QuestDifficulty({
             difficulty: QuestDifficultyLevel.EASY,
