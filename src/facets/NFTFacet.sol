@@ -39,7 +39,7 @@ contract NFTFacet is
     uint256 _mintPrice = LibMintControl.getMintPrice();
     LibPayment.paymentPayWithSeed(msg.sender, _mintPrice);
 
-    _safeMint(to, _sN().nextTokenId);
+    _safeMint(to, _tokenId);
   }
 
   function _sN() internal pure returns (LibLandStorage.Data storage data) {
@@ -158,6 +158,17 @@ contract NFTFacet is
   function tokensOfOwner(address owner) public view returns (uint256[] memory) {
     return _tokensOfOwner(owner);
   }
+
+
+  function exists(uint256 tokenId)  public view override returns (bool) {
+    return super.exists(tokenId);
+  }
+
+  /*
+      function exists(uint256 tokenId) public view virtual returns (bool) {
+        return _ownerOf(tokenId) != address(0);
+    }
+  */
 
   //    function explicitOwnershipOf(uint256 tokenId) public view virtual override returns (TokenOwnership memory) {
   //        return super.explicitOwnershipOf(tokenId);
