@@ -214,6 +214,25 @@ export const abi = [
   },
   {
     "type": "function",
+    "name": "exists",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "facetAddress",
     "inputs": [
       {
