@@ -7,8 +7,15 @@ import {LibAppStorage, AppStorage} from "../libs/LibAppStorage.sol";
 import {LibLand} from "../libs/LibLand.sol";
 import "../shared/Structs.sol";
 import {AccessControl2} from "../libs/libAccessControl2.sol";
+import {  LibMintControl } from "../libs/libMintControl.sol";
 
 contract LandFacet is AccessControl2/*, NFTModifiers*/ {
+
+
+    function landGetMintPrice() public view returns (uint256) {
+        uint256 _mintPrice = LibMintControl.getMintPrice();
+        return _mintPrice;
+    }
 
     /// @notice Get the coordinates of a specific land token
     /// @param tokenId The ID of the token to get coordinates for
