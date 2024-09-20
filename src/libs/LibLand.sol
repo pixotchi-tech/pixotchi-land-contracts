@@ -7,6 +7,7 @@ import   "../shared/Structs.sol";
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {IERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 import {LibLandStorage} from "./LibLandStorage.sol";
+import {LibERC721} from "./LibERC721.sol";
 
 /// @title LibLand
 /// @notice A library for managing land-related operations in the Pixotchi game
@@ -173,7 +174,8 @@ library LibLand {
     /// @param tokenId The ID of the token to retrieve land information for
     /// @return land The Land struct containing the land information
     function _getLand(uint256 tokenId) internal view returns (Land memory land) {
-        require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+        //require(IERC721(address(this)).exists(tokenId), "LibLand: Token does not exist");
+        require(LibERC721._exists(tokenId), "NFT: Token does not exist");
 
         LibLandStorage.Data storage s = _sN();
         LibLandStorage.Coordinates memory coords = s.tokenCoordinates[tokenId];
