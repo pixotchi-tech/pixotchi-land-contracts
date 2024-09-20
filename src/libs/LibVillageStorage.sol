@@ -202,12 +202,12 @@ library LibVillageStorage {
 
     /// @notice Enum representing different types of village buildings
     enum VillageBuildingNaming {
-        SOLAR,
+        SOLAR, //0
         UNDEFINED_1,
         UNDEFINED_2,
-        SOIL_FACTORY,
+        SOIL_FACTORY, //3
         UNDEFINED_4,
-        BEE_FARM,
+        BEE_FARM, //5
         UNDEFINED_6,
         UNDEFINED_7
     }
