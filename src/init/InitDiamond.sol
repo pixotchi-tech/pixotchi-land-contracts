@@ -53,7 +53,7 @@ contract InitDiamond /*is NFTInit*/ {
     _sD().supportedInterfaces[type(IERC721Enumerable).interfaceId] = true; // ERC165 interface ID for IERC721Enumerable.
 
     //NFTInit.__ERC721A_init("Land01", "LAND01");
-    INFTFacet(address(this)).initNFTFacet();
+    INFTFacet(address(this)).initNFTFacet(); //not optimal
     emit InitializeDiamond(msg.sender);
 
   }
