@@ -142,6 +142,13 @@ struct Quest {
   uint256 coolDownBlock;
 }
 
+struct Leaderboard {
+  uint256 landId;
+  uint256 experiencePoints;
+  //address owner;
+  string name;
+}
+
 //TODO: discuss with wu potential question structs and edge cases, specially daiyl quests / threashold. edge quest daily quest consume -> user upgrade building
 //TODO: prevent user from upgrading quest buliding if he is questing.
 
